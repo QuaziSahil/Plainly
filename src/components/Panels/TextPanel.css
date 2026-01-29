@@ -1,0 +1,200 @@
+.text-panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    color: var(--text-muted);
+    padding: var(--spacing-xl);
+    text-align: center;
+}
+
+/* Text Input */
+.text-input {
+    width: 100%;
+    resize: none;
+    font-size: var(--font-size-md);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--glass-border);
+}
+
+.text-input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+}
+
+/* Font Row */
+.font-row {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.font-select {
+    flex: 1;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+}
+
+/* Size Control */
+.size-control {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xs);
+}
+
+.size-control button {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.size-control button:hover {
+    background: var(--bg-secondary);
+    color: var(--accent-primary);
+}
+
+.size-value {
+    min-width: 50px;
+    text-align: center;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+/* Style Buttons */
+.style-buttons {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.style-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.style-btn:hover {
+    color: var(--text-primary);
+}
+
+.style-btn.active {
+    background: rgba(236, 72, 153, 0.1);
+    color: var(--accent-primary);
+}
+
+/* Align Buttons */
+.align-buttons {
+    display: flex;
+    gap: var(--spacing-xs);
+    background: var(--bg-tertiary);
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-md);
+}
+
+.align-btn {
+    flex: 1;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.align-btn:hover {
+    color: var(--text-primary);
+}
+
+.align-btn.active {
+    background: rgba(236, 72, 153, 0.1);
+    color: var(--accent-primary);
+}
+
+/* Color Grid */
+.color-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.color-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.color-btn:hover {
+    transform: scale(1.1);
+}
+
+.color-btn.active {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.3);
+}
+
+.color-picker {
+    width: 32px;
+    height: 32px;
+    border: none;
+    padding: 0;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-picker::-webkit-color-swatch {
+    border: none;
+    border-radius: var(--radius-md);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .size-control button,
+    .style-btn,
+    .align-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .color-btn {
+        width: 40px;
+        height: 40px;
+    }
+}
