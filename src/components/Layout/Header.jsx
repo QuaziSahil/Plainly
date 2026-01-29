@@ -20,7 +20,7 @@ function Header() {
         <header className="app-header">
             <div className="header-left">
                 <div className="header-logo">
-                    <div className="logo-icon">P</div>
+                    <img src="/logo.jpg" alt="Plainly" className="logo-img" />
                     <span className="logo-text">Plainly</span>
                 </div>
             </div>

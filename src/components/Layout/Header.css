@@ -27,17 +27,11 @@
     gap: var(--spacing-sm);
 }
 
-.logo-icon {
+.logo-img {
     width: 36px;
     height: 36px;
-    background: var(--accent-gradient);
     border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: var(--font-size-lg);
-    color: white;
+    object-fit: cover;
 }
 
 .logo-text {
