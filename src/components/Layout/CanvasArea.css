@@ -11,15 +11,16 @@
 }
 
 .app-canvas-area.drag-active {
-    background-color: rgba(59, 130, 246, 0.05);
+    background-color: rgba(236, 72, 153, 0.05);
 }
 
 /* Upload Zone */
 .upload-zone {
     width: 100%;
     max-width: 500px;
-    background: var(--bg-elevated);
-    border: 2px dashed var(--border-color);
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 2px dashed var(--accent-secondary);
     border-radius: var(--radius-xl);
     padding: var(--spacing-2xl);
     cursor: pointer;
@@ -30,7 +31,7 @@
 .upload-zone:hover {
     border-color: var(--accent-primary);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-glow);
 }
 
 .upload-zone-content {
@@ -80,7 +81,7 @@
 .upload-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(59, 130, 246, 0.1);
+    background: rgba(236, 72, 153, 0.1);
     border: 2px dashed var(--accent-primary);
     border-radius: var(--radius-xl);
     display: flex;
@@ -98,7 +99,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: var(--bg-elevated);
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
     padding: var(--spacing-lg) var(--spacing-xl);
     border-radius: var(--radius-lg);
     display: flex;
@@ -145,15 +147,15 @@
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.1),
         0 25px 50px -12px rgba(0, 0, 0, 0.5),
-        0 0 60px -15px rgba(59, 130, 246, 0.3);
-    transition: box-shadow 0.3s ease;
+        0 0 60px -15px rgba(236, 72, 153, 0.3);
+    transition: box-shadow 0.3s ease, filter 0.3s ease;
 }
 
 .canvas-image:hover {
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.15),
         0 25px 50px -12px rgba(0, 0, 0, 0.6),
-        0 0 80px -10px rgba(59, 130, 246, 0.4);
+        0 0 80px -10px rgba(236, 72, 153, 0.4);
 }
 
 /* Image thumbnails (for bulk mode) */
@@ -164,7 +166,8 @@
     transform: translateX(-50%);
     display: flex;
     gap: var(--spacing-sm);
-    background: var(--bg-elevated);
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
     padding: var(--spacing-sm);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
@@ -189,7 +192,7 @@
 
 .image-thumbnail.active {
     border-color: var(--accent-primary);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.3);
 }
 
 .image-thumbnail img {
@@ -198,8 +201,32 @@
     object-fit: cover;
 }
 
-/* Responsive */
+/* ==========================================
+   MOBILE RESPONSIVE - Image always visible
+   ========================================== */
+
 @media (max-width: 768px) {
+    .app-canvas-area {
+        /* Take upper portion of screen, leave room for panel + nav */
+        padding-bottom: 0;
+    }
+
+    /* When panel is open, canvas area still shows image */
+    .app-canvas-area.has-image {
+        align-items: flex-start;
+        padding-top: var(--spacing-md);
+    }
+
+    .canvas-container {
+        /* Limit image size so it doesn't get cut off when panel opens */
+        max-height: calc(100% - 20px);
+    }
+
+    .canvas-image {
+        max-height: calc(45vh - 80px);
+        object-fit: contain;
+    }
+
     .upload-zone {
         max-width: 90%;
         padding: var(--spacing-xl);
@@ -207,5 +234,24 @@
 
     .upload-title {
         font-size: var(--font-size-xl);
+    }
+
+    /* Thumbnails above panel */
+    .image-thumbnails {
+        bottom: 10px;
+        padding: var(--spacing-xs);
+        gap: var(--spacing-xs);
+    }
+
+    .image-thumbnail {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* Landscape mobile */
+@media (max-width: 768px) and (max-height: 500px) {
+    .canvas-image {
+        max-height: calc(55vh - 60px);
     }
 }

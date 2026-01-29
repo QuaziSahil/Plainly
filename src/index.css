@@ -714,20 +714,28 @@ input[type="range"]::-moz-range-thumb {
     transform: translateX(0);
   }
 
+  /* Panel becomes bottom sheet - always shows image above */
   .app-panel {
     position: fixed;
+    left: 0;
     right: 0;
-    top: var(--header-height);
-    bottom: 0;
+    bottom: 72px;
+    /* Above mobile nav */
+    top: auto;
+    max-height: 55vh;
+    min-height: 180px;
     width: 100%;
-    max-width: 360px;
-    transform: translateX(100%);
+    max-width: 100%;
+    transform: translateY(100%);
     transition: transform var(--transition-base);
     z-index: 200;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
+    border-top: 1px solid var(--glass-border);
   }
 
   .app-panel.open {
-    transform: translateX(0);
+    transform: translateY(0);
   }
 
   /* Mobile overlay */
