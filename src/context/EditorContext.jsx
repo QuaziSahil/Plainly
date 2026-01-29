@@ -51,7 +51,7 @@ const initialState = {
     showPanel: true,
 
     // Zoom
-    zoom: 50,
+    zoom: 100,
 };
 
 // Action types

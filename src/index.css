@@ -699,19 +699,14 @@ input[type="range"]::-moz-range-thumb {
     --panel-width: 100%;
   }
 
-  .app-sidebar {
-    position: fixed;
-    left: 0;
-    top: var(--header-height);
-    bottom: 0;
-    width: 280px;
-    transform: translateX(-100%);
-    transition: transform var(--transition-base);
-    z-index: 200;
+  /* Main layout becomes vertical stack on mobile */
+  .app-main {
+    flex-direction: column;
+    overflow: visible;
   }
 
-  .app-sidebar.open {
-    transform: translateX(0);
+  .app-sidebar {
+    display: none;
   }
 
   /* Panel becomes bottom sheet - always shows image above */
@@ -722,15 +717,15 @@ input[type="range"]::-moz-range-thumb {
     bottom: 72px;
     /* Above mobile nav */
     top: auto;
-    max-height: 55vh;
-    min-height: 180px;
+    max-height: 50vh;
+    min-height: 160px;
     width: 100%;
     max-width: 100%;
     transform: translateY(100%);
     transition: transform var(--transition-base);
     z-index: 200;
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
     border-top: 1px solid var(--glass-border);
   }
 
