@@ -104,7 +104,7 @@ function About() {
                     <h2>The Creator</h2>
                     <div className="creator-card">
                         <div className="creator-info">
-                            <h3>Sahil Kazi</h3>
+                            <h3>Quazi Sahil Mahammad</h3>
                             <p className="creator-role">Developer & Designer</p>
                             <p className="creator-bio">
                                 A developer passionate about creating tools that are both
