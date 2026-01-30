@@ -1,0 +1,496 @@
+/* =====================================================
+   PLAINLY CALCULATE - MOBILE OPTIMIZATION STYLES
+   Following user rules: 44px touch targets, 16px min spacing
+   ===================================================== */
+
+/* ===== MOBILE BASE OPTIMIZATIONS ===== */
+@media (max-width: 768px) {
+
+    /* Ensure proper touch targets */
+    button,
+    a,
+    input,
+    select,
+    .nav-link,
+    .filter-btn,
+    .calc-card,
+    .category-card {
+        min-height: 44px;
+    }
+
+    /* Input fields - minimum 16px font to prevent zoom on iOS */
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+
+    /* Better spacing */
+    .container {
+        padding: 0 var(--space-4);
+    }
+}
+
+/* ===== HEADER MOBILE ===== */
+@media (max-width: 768px) {
+    .header {
+        padding: 0;
+    }
+
+    .header-container {
+        height: 60px;
+        padding: 0 var(--space-4);
+    }
+
+    .logo-text {
+        font-size: var(--font-size-body-sm);
+    }
+
+    /* Hide desktop elements on mobile */
+    .nav-desktop,
+    .search-bar,
+    .header-icon-btn {
+        display: none !important;
+    }
+
+    .mobile-menu-btn {
+        display: flex !important;
+        width: 44px;
+        height: 44px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Mobile menu full screen */
+    .mobile-menu {
+        display: block;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--bg-primary);
+        padding: var(--space-6) var(--space-4);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .mobile-nav {
+        gap: 0;
+    }
+
+    .mobile-nav-link {
+        display: flex;
+        align-items: center;
+        min-height: 52px;
+        padding: var(--space-4);
+        font-size: var(--font-size-body);
+        border-bottom: 1px solid var(--border-primary);
+    }
+
+    /* Mobile search in menu */
+    .mobile-search {
+        margin-bottom: var(--space-6);
+    }
+
+    .mobile-search-input {
+        width: 100%;
+        padding: var(--space-4) var(--space-4) var(--space-4) var(--space-12);
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-primary);
+        border-radius: var(--radius-lg);
+        font-size: 16px;
+        color: var(--text-primary);
+    }
+}
+
+/* ===== HOMEPAGE MOBILE ===== */
+@media (max-width: 768px) {
+    .hero {
+        padding: var(--space-10) 0 var(--space-8);
+    }
+
+    .hero-title {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    .hero-subtitle {
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        line-height: 1.6;
+    }
+
+    .hero-subtitle br {
+        display: none;
+    }
+
+    .hero-search-container {
+        max-width: 100%;
+    }
+
+    .hero-search {
+        width: 100%;
+    }
+
+    .search-input {
+        padding: var(--space-4) var(--space-4) var(--space-4) var(--space-12);
+        font-size: 16px !important;
+    }
+
+    /* Search Dropdown Mobile */
+    .search-dropdown {
+        left: 0;
+        right: 0;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .search-result {
+        padding: var(--space-4);
+        min-height: 56px;
+    }
+
+    .search-result-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .search-result-name {
+        font-size: var(--font-size-body-sm);
+    }
+
+    .search-view-all {
+        padding: var(--space-4);
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Categories */
+    .categories-section {
+        padding: var(--space-8) 0;
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: var(--space-2);
+        margin-bottom: var(--space-6);
+    }
+
+    .section-title {
+        font-size: var(--font-size-h3);
+    }
+
+    .expand-link {
+        align-self: flex-start;
+    }
+
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-3);
+    }
+
+    .category-card {
+        padding: var(--space-5) var(--space-3);
+        min-height: 100px;
+    }
+
+    .category-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .category-name {
+        font-size: 10px;
+    }
+
+    /* Trending */
+    .trending-section {
+        padding: var(--space-8) 0 var(--space-12);
+    }
+
+    .trending-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+    }
+
+    .trending-card {
+        padding: var(--space-5);
+        min-height: auto;
+    }
+
+    .trending-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .trending-name {
+        font-size: var(--font-size-body);
+    }
+}
+
+/* ===== ALL CALCULATORS PAGE MOBILE ===== */
+@media (max-width: 768px) {
+    .all-calculators {
+        padding: var(--space-4) 0 var(--space-10);
+    }
+
+    .filters-bar {
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+
+    .search-wrapper {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .category-filters {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: var(--space-2);
+        gap: var(--space-2);
+        flex-wrap: nowrap;
+    }
+
+    .filter-btn {
+        min-height: 44px;
+        padding: var(--space-3) var(--space-4);
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .results-info {
+        margin-bottom: var(--space-4);
+    }
+
+    .calculators-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+    }
+
+    .calc-card {
+        padding: var(--space-5);
+        min-height: auto;
+    }
+
+    .calc-card-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .calc-card-title {
+        font-size: var(--font-size-body);
+    }
+
+    .calc-card-footer {
+        padding-top: var(--space-4);
+    }
+}
+
+/* ===== CATEGORY PAGES MOBILE ===== */
+@media (max-width: 768px) {
+    .category-page {
+        padding: var(--space-4) 0 var(--space-10);
+    }
+
+    .category-layout {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+
+    .category-sidebar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: var(--space-4);
+        padding-bottom: var(--space-4);
+        border-bottom: 1px solid var(--border-primary);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .sidebar-section {
+        min-width: auto;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        gap: var(--space-2);
+        flex-wrap: wrap;
+    }
+
+    .sidebar-link {
+        padding: var(--space-2) var(--space-3);
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-primary);
+        border-radius: var(--radius-lg);
+        min-height: 44px;
+        white-space: nowrap;
+    }
+
+    .sidebar-link.active {
+        background: var(--accent-primary-glow);
+        border-color: var(--accent-primary);
+    }
+
+    .sidebar-count {
+        display: none;
+    }
+
+    .complexity-options {
+        flex-direction: row;
+        gap: var(--space-3);
+    }
+
+    .complexity-option {
+        min-height: 44px;
+        padding: var(--space-2) var(--space-3);
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-primary);
+        border-radius: var(--radius-lg);
+    }
+
+    .calculator-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+    }
+}
+
+/* ===== CALCULATOR TOOL PAGES MOBILE ===== */
+@media (max-width: 768px) {
+
+    .calculator-layout,
+    .calc-layout {
+        flex-direction: column;
+        gap: var(--space-6);
+    }
+
+    .calculator-form,
+    .calc-form,
+    .calc-inputs {
+        width: 100%;
+        padding: var(--space-5);
+    }
+
+    .calculator-result,
+    .calc-result,
+    .calc-output {
+        width: 100%;
+        padding: var(--space-5);
+    }
+
+    .calculator-header,
+    .calc-header {
+        padding: var(--space-4) 0;
+    }
+
+    .calculator-title,
+    .calc-title {
+        font-size: var(--font-size-h3);
+    }
+
+    /* Form inputs */
+    .form-group,
+    .input-group {
+        margin-bottom: var(--space-4);
+    }
+
+    .form-label,
+    .input-label {
+        font-size: var(--font-size-body-sm);
+        margin-bottom: var(--space-2);
+    }
+
+    .form-input,
+    .input-field {
+        min-height: 48px;
+        padding: var(--space-4);
+        font-size: 16px !important;
+    }
+
+    /* Buttons */
+    .btn,
+    .calculate-btn,
+    .submit-btn {
+        min-height: 52px;
+        font-size: var(--font-size-body);
+        width: 100%;
+    }
+
+    /* Results */
+    .result-value,
+    .result-number {
+        font-size: var(--font-size-h2);
+    }
+
+    .result-label {
+        font-size: var(--font-size-caption);
+    }
+}
+
+/* ===== FOOTER MOBILE ===== */
+@media (max-width: 768px) {
+    .footer {
+        padding: var(--space-8) 0;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: var(--space-6);
+        text-align: center;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+
+    .footer-link {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* ===== TOUCH DEVICE OPTIMIZATIONS ===== */
+@media (hover: none) and (pointer: coarse) {
+
+    /* Increase touch targets on touch devices */
+    button,
+    a,
+    .nav-link,
+    .filter-btn {
+        min-height: 44px;
+    }
+
+    /* Remove hover effects on touch */
+    .calc-card:hover,
+    .category-card:hover,
+    .trending-card:hover {
+        transform: none;
+    }
+
+    /* Better active states for touch */
+    .calc-card:active,
+    .category-card:active,
+    .trending-card:active,
+    button:active {
+        opacity: 0.8;
+        transform: scale(0.98);
+    }
+}
+
+/* ===== SAFE AREA INSETS (NOTCH/HOME INDICATOR) ===== */
+@supports (padding: max(0px)) {
+    .mobile-menu {
+        padding-bottom: max(var(--space-6), env(safe-area-inset-bottom));
+    }
+
+    .footer {
+        padding-bottom: max(var(--space-8), env(safe-area-inset-bottom));
+    }
+}

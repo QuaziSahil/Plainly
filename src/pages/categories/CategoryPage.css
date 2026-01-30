@@ -1,0 +1,236 @@
+/* =====================================================
+   CATEGORY PAGE - STARK/PLAINLY STYLE
+   With sidebar and calculator cards
+   ===================================================== */
+
+.category-page {
+    padding: var(--space-8) 0 var(--space-16);
+}
+
+.category-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--space-10);
+}
+
+/* ===== SIDEBAR ===== */
+.category-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+
+.sidebar-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-title {
+    font-size: var(--font-size-micro);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-muted);
+    letter-spacing: var(--letter-spacing-widest);
+    margin-bottom: var(--space-4);
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.sidebar-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3) 0;
+    font-size: var(--font-size-body-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+    text-align: left;
+    background: none;
+    border: none;
+}
+
+.sidebar-link:hover {
+    color: var(--text-primary);
+}
+
+.sidebar-link.active {
+    color: var(--text-primary);
+}
+
+.sidebar-count {
+    font-size: var(--font-size-caption);
+    color: var(--text-muted);
+    font-family: var(--font-family-mono);
+}
+
+/* Complexity Checkboxes */
+.complexity-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.complexity-option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--font-size-body-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.complexity-option input {
+    display: none;
+}
+
+.checkbox-custom {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.complexity-option input:checked+.checkbox-custom {
+    background: #a78bfa;
+    border-color: #a78bfa;
+}
+
+.complexity-option input:checked+.checkbox-custom::after {
+    content: '✓';
+    color: white;
+    font-size: 10px;
+}
+
+/* ===== MAIN CONTENT ===== */
+.category-main {
+    min-width: 0;
+}
+
+.calculator-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-4);
+}
+
+/* ===== CALCULATOR CARD ===== */
+.calc-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-6);
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    transition: all var(--transition-fast);
+    min-height: 200px;
+}
+
+.calc-card:hover {
+    border-color: var(--border-secondary);
+    background: var(--bg-tertiary);
+}
+
+.calc-card-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-5);
+    transition: all var(--transition-fast);
+}
+
+.calc-card:hover .calc-card-icon {
+    background: #a78bfa20;
+    border-color: #a78bfa40;
+    color: #a78bfa;
+}
+
+.calc-card-title {
+    font-family: var(--font-family-serif);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.calc-card-description {
+    font-size: var(--font-size-caption);
+    color: var(--text-muted);
+    line-height: var(--line-height-relaxed);
+    flex: 1;
+}
+
+.calc-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-5);
+    margin-top: auto;
+}
+
+.calc-card-complexity {
+    font-size: var(--font-size-micro);
+    color: var(--text-muted);
+    letter-spacing: var(--letter-spacing-wider);
+}
+
+.calc-card-action {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--font-size-micro);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-tertiary);
+    letter-spacing: var(--letter-spacing-wider);
+    transition: color var(--transition-fast);
+}
+
+.calc-card:hover .calc-card-action {
+    color: #a78bfa;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1023px) {
+    .category-layout {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+    }
+
+    .category-sidebar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: var(--space-6);
+        padding-bottom: var(--space-6);
+        border-bottom: 1px solid var(--border-primary);
+    }
+
+    .sidebar-section {
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 639px) {
+    .category-page {
+        padding: var(--space-4) 0 var(--space-10);
+    }
+
+    .calculator-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .calc-card {
+        min-height: auto;
+    }
+}

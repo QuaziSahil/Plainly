@@ -1,74 +1,261 @@
-import { useEditor } from '../../context/EditorContext';
-import { Sun, Moon, Upload, Download, Trash2, FolderOpen } from 'lucide-react';
-import './Header.css';
+import { useState, useEffect, useRef } from 'react'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { Search, Menu, X, Settings, User, ArrowRight } from 'lucide-react'
+import { allCalculators } from '../../data/calculators'
+import './Header.css'
 
 function Header() {
-    const {
-        theme,
-        toggleTheme,
-        images,
-        clearImages,
-        isProcessing
-    } = useEditor();
+    const [isScrolled, setIsScrolled] = useState(false)
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const [showDropdown, setShowDropdown] = useState(false)
+    const [mobileSearchQuery, setMobileSearchQuery] = useState('')
+    const searchRef = useRef(null)
+    const mobileSearchRef = useRef(null)
+    const location = useLocation()
+    const navigate = useNavigate()
 
-    const handleExport = () => {
-        // Will be implemented in compression phase
-        console.log('Export clicked');
-    };
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 10)
+        }
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
+
+    useEffect(() => {
+        setIsMobileMenuOpen(false)
+        setShowDropdown(false)
+        setSearchQuery('')
+        setMobileSearchQuery('')
+    }, [location])
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (searchRef.current && !searchRef.current.contains(e.target)) {
+                setShowDropdown(false)
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
+
+    // Lock body scroll when mobile menu is open
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = ''
+        }
+        return () => {
+            document.body.style.overflow = ''
+        }
+    }, [isMobileMenuOpen])
+
+    // Filter calculators based on search query
+    const filteredCalculators = searchQuery.trim()
+        ? allCalculators.filter(calc =>
+            calc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            calc.description.toLowerCase().includes(searchQuery.toLowerCase())
+        ).slice(0, 5)
+        : []
+
+    // Filter for mobile search
+    const mobileFilteredCalculators = mobileSearchQuery.trim()
+        ? allCalculators.filter(calc =>
+            calc.name.toLowerCase().includes(mobileSearchQuery.toLowerCase()) ||
+            calc.description.toLowerCase().includes(mobileSearchQuery.toLowerCase())
+        ).slice(0, 5)
+        : []
+
+    const handleSearch = (e) => {
+        e.preventDefault()
+        if (searchQuery.trim()) {
+            navigate(`/calculators?search=${encodeURIComponent(searchQuery.trim())}`)
+            setSearchQuery('')
+            setShowDropdown(false)
+        }
+    }
+
+    const handleMobileSearch = (e) => {
+        e.preventDefault()
+        if (mobileSearchQuery.trim()) {
+            navigate(`/calculators?search=${encodeURIComponent(mobileSearchQuery.trim())}`)
+            setMobileSearchQuery('')
+            setIsMobileMenuOpen(false)
+        }
+    }
+
+    const handleInputChange = (e) => {
+        setSearchQuery(e.target.value)
+        setShowDropdown(e.target.value.trim().length > 0)
+    }
+
+    const handleMobileInputChange = (e) => {
+        setMobileSearchQuery(e.target.value)
+    }
+
+    const handleResultClick = () => {
+        setShowDropdown(false)
+        setSearchQuery('')
+    }
+
+    const handleMobileResultClick = () => {
+        setMobileSearchQuery('')
+        setIsMobileMenuOpen(false)
+    }
+
+    const navLinks = [
+        { name: 'FINANCE', path: '/finance' },
+        { name: 'HEALTH', path: '/health' },
+        { name: 'MATH', path: '/math' },
+        { name: 'SCIENCE', path: '/converter' },
+    ]
 
     return (
-        <header className="app-header">
-            <div className="header-left">
-                <div className="header-logo">
-                    <img src="/logo.jpg" alt="Plainly" className="logo-img" />
-                    <span className="logo-text">Plainly</span>
+        <header className={`header ${isScrolled ? 'header-scrolled' : ''}`}>
+            <div className="container header-container">
+                {/* Logo */}
+                <Link to="/" className="logo">
+                    <span className="logo-icon">◇</span>
+                    <span className="logo-text">PLAINLY</span>
+                </Link>
+
+                {/* Desktop Navigation */}
+                <nav className="nav-desktop">
+                    {navLinks.map((link) => (
+                        <NavLink
+                            key={link.path}
+                            to={link.path}
+                            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                        >
+                            {link.name}
+                        </NavLink>
+                    ))}
+                </nav>
+
+                {/* Right Actions */}
+                <div className="header-actions">
+                    <div className="header-search-container" ref={searchRef}>
+                        <form className="search-bar" onSubmit={handleSearch}>
+                            <Search size={16} className="search-bar-icon" />
+                            <input
+                                type="text"
+                                placeholder="Search instruments..."
+                                value={searchQuery}
+                                onChange={handleInputChange}
+                                onFocus={() => searchQuery.trim() && setShowDropdown(true)}
+                                className="search-bar-input"
+                            />
+                        </form>
+
+                        {/* Search Dropdown */}
+                        {showDropdown && filteredCalculators.length > 0 && (
+                            <div className="header-search-dropdown">
+                                {filteredCalculators.map((calc) => (
+                                    <Link
+                                        to={calc.path}
+                                        key={calc.path}
+                                        className="header-search-result"
+                                        onClick={handleResultClick}
+                                    >
+                                        <div className="header-search-result-icon">
+                                            <calc.icon size={14} />
+                                        </div>
+                                        <div className="header-search-result-info">
+                                            <span className="header-search-result-name">{calc.name}</span>
+                                            <span className="header-search-result-category">{calc.category}</span>
+                                        </div>
+                                        <ArrowRight size={12} className="header-search-result-arrow" />
+                                    </Link>
+                                ))}
+                                <Link
+                                    to={`/calculators?search=${encodeURIComponent(searchQuery)}`}
+                                    className="header-search-view-all"
+                                    onClick={handleResultClick}
+                                >
+                                    View all results →
+                                </Link>
+                            </div>
+                        )}
+                    </div>
+
+                    <button className="header-icon-btn" aria-label="Settings">
+                        <Settings size={18} />
+                    </button>
+                    <button className="header-icon-btn" aria-label="Account">
+                        <User size={18} />
+                    </button>
+
+                    {/* Mobile Menu Toggle */}
+                    <button
+                        className="mobile-menu-btn"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-label="Toggle menu"
+                    >
+                        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
                 </div>
             </div>
 
-            <div className="header-center">
-                {images.length > 0 && (
-                    <div className="header-actions">
-                        <button className="btn btn-ghost" disabled>
-                            <FolderOpen size={18} />
-                            <span>{images.length} file{images.length !== 1 ? 's' : ''}</span>
-                        </button>
-                    </div>
-                )}
-            </div>
+            {/* Mobile Menu */}
+            <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
+                {/* Mobile Search */}
+                <div className="mobile-search" ref={mobileSearchRef}>
+                    <form onSubmit={handleMobileSearch}>
+                        <div className="mobile-search-wrapper">
+                            <Search size={18} className="mobile-search-icon" />
+                            <input
+                                type="text"
+                                placeholder="Search calculators..."
+                                value={mobileSearchQuery}
+                                onChange={handleMobileInputChange}
+                                className="mobile-search-input"
+                            />
+                        </div>
+                    </form>
 
-            <div className="header-right">
-                {images.length > 0 && (
-                    <>
-                        <button
-                            className="btn btn-ghost tooltip"
-                            data-tooltip="Clear all images"
-                            onClick={clearImages}
-                            disabled={isProcessing}
+                    {/* Mobile Search Results */}
+                    {mobileSearchQuery.trim() && mobileFilteredCalculators.length > 0 && (
+                        <div className="mobile-search-results">
+                            {mobileFilteredCalculators.map((calc) => (
+                                <Link
+                                    to={calc.path}
+                                    key={calc.path}
+                                    className="mobile-search-result"
+                                    onClick={handleMobileResultClick}
+                                >
+                                    <div className="mobile-search-result-icon">
+                                        <calc.icon size={18} />
+                                    </div>
+                                    <div className="mobile-search-result-info">
+                                        <span className="mobile-search-result-name">{calc.name}</span>
+                                        <span className="mobile-search-result-category">{calc.category}</span>
+                                    </div>
+                                    <ArrowRight size={16} />
+                                </Link>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <nav className="mobile-nav">
+                    {navLinks.map((link) => (
+                        <NavLink
+                            key={link.path}
+                            to={link.path}
+                            className={({ isActive }) => `mobile-nav-link ${isActive ? 'active' : ''}`}
                         >
-                            <Trash2 size={18} />
-                        </button>
-
-                        <button
-                            className="btn btn-primary"
-                            onClick={handleExport}
-                            disabled={isProcessing}
-                        >
-                            <Download size={18} />
-                            <span>Export</span>
-                        </button>
-                    </>
-                )}
-
-                <button
-                    className="btn btn-icon btn-ghost tooltip"
-                    data-tooltip={theme === 'dark' ? 'Light mode' : 'Dark mode'}
-                    onClick={toggleTheme}
-                >
-                    {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-                </button>
+                            {link.name}
+                        </NavLink>
+                    ))}
+                    <div className="mobile-nav-divider" />
+                    <NavLink to="/calculators" className="mobile-nav-link">ALL CALCULATORS</NavLink>
+                </nav>
             </div>
         </header>
-    );
+    )
 }
 
-export default Header;
+export default Header
