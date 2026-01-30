@@ -83,7 +83,7 @@ function Privacy() {
                     <h3>Questions?</h3>
                     <p>
                         If you have any questions about our privacy practices, please contact us at{' '}
-                        <a href="mailto:sahilkazi629@gmail.com">sahilkazi629@gmail.com</a>
+                        <a href="mailto:peakliterature@gmail.com">peakliterature@gmail.com</a>
                     </p>
                 </section>
             </div>

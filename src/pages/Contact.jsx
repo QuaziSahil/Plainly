@@ -34,7 +34,7 @@ function Contact() {
                     from_name: formData.name,
                     from_email: formData.email,
                     message: formData.message,
-                    to_email: 'sahilkazi629@gmail.com'
+                    to_email: 'peakliterature@gmail.com'
                 },
                 EMAILJS_PUBLIC_KEY
             )
@@ -88,9 +88,9 @@ function Contact() {
                         </div>
 
                         <div className="contact-details">
-                            <a href="mailto:sahilkazi629@gmail.com" className="contact-detail">
+                            <a href="mailto:peakliterature@gmail.com" className="contact-detail">
                                 <Mail size={18} />
-                                <span>sahilkazi629@gmail.com</span>
+                                <span>peakliterature@gmail.com</span>
                                 <ArrowRight size={14} />
                             </a>
                             <div className="contact-detail">
