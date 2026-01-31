@@ -43,6 +43,12 @@ function LoanCalculator() {
         }).format(value)
     }
 
+    const handleReset = () => {
+        setLoanAmount(20000)
+        setInterestRate(8)
+        setLoanTerm(5)
+    }
+
     return (
         <CalculatorLayout
             title="Loan Calculator"
@@ -52,6 +58,7 @@ function LoanCalculator() {
             icon={CreditCard}
             result={formatCurrency(results.monthlyPayment)}
             resultLabel="Monthly Payment"
+            onReset={handleReset}
         >
             <div className="input-group">
                 <label className="input-label">Loan Amount</label>

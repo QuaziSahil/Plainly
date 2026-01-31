@@ -85,11 +85,14 @@ function CalculatorLayout({
                         >
                             <Star size={18} fill={isCurrentFavorite ? 'currentColor' : 'none'} />
                         </button>
-                        {onReset && (
-                            <button className="action-btn" onClick={onReset} aria-label="Reset">
-                                <RotateCcw size={18} />
-                            </button>
-                        )}
+                        <button
+                            className="action-btn"
+                            onClick={onReset || (() => window.location.reload())}
+                            aria-label="Reset"
+                            title="Reset values"
+                        >
+                            <RotateCcw size={18} />
+                        </button>
                     </div>
                 </header>
 

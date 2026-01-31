@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Scale } from 'lucide-react'
+import { Scale, RotateCcw } from 'lucide-react'
 import Button from '../../../components/UI/Button'
 import './BMICalculator.css'
 
@@ -7,6 +7,16 @@ function BMICalculator() {
     const [weight, setWeight] = useState(70)
     const [height, setHeight] = useState(170)
     const [unit, setUnit] = useState('metric') // metric or imperial
+
+    const handleReset = () => {
+        if (unit === 'metric') {
+            setWeight(70)
+            setHeight(170)
+        } else {
+            setWeight(154)
+            setHeight(67)
+        }
+    }
 
     const bmi = useMemo(() => {
         if (unit === 'metric') {
@@ -41,6 +51,24 @@ function BMICalculator() {
                     <nav className="bmi-nav">
                         <span className="bmi-brand">Luxe BMI</span>
                         <div className="bmi-nav-links">
+                            <button
+                                onClick={handleReset}
+                                style={{
+                                    background: 'transparent',
+                                    border: '1px solid rgba(255,255,255,0.2)',
+                                    color: 'white',
+                                    padding: '8px 16px',
+                                    borderRadius: '8px',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    fontSize: '14px'
+                                }}
+                            >
+                                <RotateCcw size={14} />
+                                Reset
+                            </button>
                             <a href="/health">Analytics</a>
                             <a href="/calculators">Collection</a>
                         </div>
