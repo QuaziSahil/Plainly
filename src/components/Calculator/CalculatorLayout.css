@@ -50,12 +50,12 @@
     margin-bottom: var(--space-8);
 }
 
-/* Header Title Row - Icon + Title side by side */
-.calc-header-row {
+/* Header Main - Icon + Text Container */
+.calc-header-main {
     display: flex;
     align-items: flex-start;
     gap: var(--space-4);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
 }
 
 .calc-icon {
@@ -65,24 +65,35 @@
     width: 48px;
     height: 48px;
     min-width: 48px;
+    flex-shrink: 0;
     background: linear-gradient(135deg, #a78bfa20 0%, #8b5cf620 100%);
     border: 1px solid #a78bfa40;
     border-radius: var(--radius-lg);
     color: #a78bfa;
 }
 
+/* Text container - stacks title and description */
+.calc-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+    /* Enables text truncation if needed */
+}
+
 .calc-title {
     font-family: var(--font-family-serif);
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
     font-weight: var(--font-weight-medium);
     color: var(--text-primary);
     line-height: 1.2;
+    word-wrap: break-word;
 }
 
 .calc-description {
     font-size: var(--font-size-body-sm);
     color: var(--text-tertiary);
-    margin-bottom: var(--space-4);
+    line-height: 1.4;
     max-width: 500px;
 }
 
@@ -407,20 +418,31 @@
         margin-bottom: var(--space-6);
     }
 
-    /* Icon + Title side by side on mobile with proper gap */
-    .calc-header-row {
-        gap: var(--space-4);
-        align-items: center;
+    /* Mobile header layout */
+    .calc-header-main {
+        gap: var(--space-3);
+        align-items: flex-start;
     }
 
     .calc-icon {
-        width: 44px;
-        height: 44px;
-        min-width: 44px;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+    }
+
+    .calc-icon svg {
+        width: 18px;
+        height: 18px;
     }
 
     .calc-title {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
+        line-height: 1.3;
+    }
+
+    .calc-description {
+        font-size: 0.8125rem;
+        line-height: 1.4;
     }
 
     .input-row {
