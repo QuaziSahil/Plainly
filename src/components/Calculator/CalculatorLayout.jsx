@@ -32,12 +32,14 @@ function CalculatorLayout({
 
                 {/* Header */}
                 <header className="calc-header">
-                    {Icon && (
-                        <div className="calc-icon">
-                            <Icon size={24} />
-                        </div>
-                    )}
-                    <h1 className="calc-title">{title}</h1>
+                    <div className="calc-header-row">
+                        {Icon && (
+                            <div className="calc-icon">
+                                <Icon size={24} />
+                            </div>
+                        )}
+                        <h1 className="calc-title">{title}</h1>
+                    </div>
                     <p className="calc-description">{description}</p>
                     <div className="calc-actions">
                         <button className="action-btn" aria-label="Share">
@@ -53,6 +55,7 @@ function CalculatorLayout({
                         )}
                     </div>
                 </header>
+
 
                 {/* Main Content Grid */}
                 <div className="calc-grid">
