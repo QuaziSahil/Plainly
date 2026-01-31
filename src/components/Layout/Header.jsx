@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { Search, Menu, X, Settings, User, ArrowRight, ChevronDown } from 'lucide-react'
+import { Search, Menu, X, Settings, User, ArrowRight, ChevronDown, Coffee } from 'lucide-react'
 import { allCalculators } from '../../data/calculators'
 import './Header.css'
 
@@ -226,6 +226,16 @@ function Header() {
                         )}
                     </div>
 
+                    <a
+                        href="https://buymeacoffee.com/plainly"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="header-icon-btn bmc-btn"
+                        aria-label="Buy Me a Coffee"
+                        title="Support us"
+                    >
+                        <Coffee size={18} />
+                    </a>
                     <button className="header-icon-btn" aria-label="Settings">
                         <Settings size={18} />
                     </button>
@@ -297,6 +307,15 @@ function Header() {
                     ))}
                     <div className="mobile-nav-divider" />
                     <NavLink to="/calculators" className="mobile-nav-link">ALL CALCULATORS</NavLink>
+                    <a
+                        href="https://buymeacoffee.com/plainly"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mobile-nav-link bmc-link"
+                    >
+                        <Coffee size={18} />
+                        SUPPORT US
+                    </a>
                 </nav>
             </div>
         </header>

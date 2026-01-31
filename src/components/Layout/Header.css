@@ -287,6 +287,12 @@
     color: var(--text-primary);
 }
 
+.header-icon-btn.bmc-btn:hover {
+    color: #FFDD00;
+    /* Buy Me a Coffee brand yellow */
+    background: rgba(255, 221, 0, 0.1);
+}
+
 /* Mobile Menu Button */
 .mobile-menu-btn {
     display: none;
@@ -485,5 +491,14 @@
 
     .mobile-nav-link:active {
         color: var(--accent-primary);
+    }
+
+    .mobile-nav-link.bmc-link {
+        color: #FFDD00;
+        gap: var(--space-3);
+    }
+
+    .mobile-nav-link.bmc-link:active {
+        background: rgba(255, 221, 0, 0.1);
     }
 }
