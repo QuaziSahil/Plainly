@@ -229,9 +229,6 @@ function Header() {
                     <button className="header-icon-btn" aria-label="Settings">
                         <Settings size={18} />
                     </button>
-                    <button className="header-icon-btn" aria-label="Account">
-                        <User size={18} />
-                    </button>
 
                     <a
                         href="https://buymeacoffee.com/plainlyy"
