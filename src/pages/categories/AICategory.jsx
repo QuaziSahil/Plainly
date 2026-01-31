@@ -72,13 +72,23 @@ function AICategory() {
                         <div className="calculator-grid">
                             {aiCalculators.map((calc) => (
                                 <Link to={calc.path} key={calc.name} className="calc-card">
-                                    <div className="calc-card-icon" style={{ background: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)' }}>
-                                        <calc.icon size={20} />
+                                    <div className="calc-card-icon" style={{
+                                        background: 'rgba(139, 92, 246, 0.15)',
+                                        border: '1px solid rgba(167, 139, 250, 0.3)',
+                                        boxShadow: '0 0 20px rgba(139, 92, 246, 0.2)',
+                                    }}>
+                                        <calc.icon size={20} style={{ color: '#c4b5fd' }} />
                                     </div>
                                     <h3 className="calc-card-title">{calc.name.replace('AI ', '').replace(' Generator', '')}</h3>
                                     <p className="calc-card-description">{calc.description}</p>
                                     <div className="calc-card-footer">
-                                        <span className="calc-card-complexity" style={{ color: '#a78bfa' }}>AI POWERED</span>
+                                        <span className="calc-card-complexity" style={{
+                                            color: '#a78bfa',
+                                            background: 'rgba(167, 139, 250, 0.1)',
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            fontSize: '10px'
+                                        }}>✨ AI POWERED</span>
                                         <span className="calc-card-action">
                                             LAUNCH <ArrowRight size={14} />
                                         </span>
