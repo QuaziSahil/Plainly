@@ -10,12 +10,20 @@ function Home() {
     const searchRef = useRef(null)
     const navigate = useNavigate()
 
-    // Get first 4 trending calculators
+    // Get 12 trending/most useful calculators
     const trendingCalculators = [
-        financeCalculators[0], // Mortgage
-        healthCalculators[0],  // BMI
-        financeCalculators[2], // Compound Interest
-        mathCalculators[1],    // Percentage
+        financeCalculators[0],  // Mortgage Calculator
+        healthCalculators[0],   // BMI Calculator
+        financeCalculators[2],  // Compound Interest
+        mathCalculators[1],     // Percentage Calculator
+        financeCalculators[5],  // Tip Calculator
+        healthCalculators[1],   // Calorie Calculator
+        financeCalculators[1],  // Loan Calculator
+        mathCalculators[0],     // Scientific Calculator
+        converterCalculators[0], // Unit Converter
+        financeCalculators[9],  // Retirement Calculator
+        healthCalculators[6],   // Pregnancy Calculator
+        financeCalculators[3],  // Investment Calculator
     ]
 
     const categories = [
