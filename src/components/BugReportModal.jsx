@@ -25,7 +25,7 @@ function BugReportModal({ isOpen, onClose, calculatorName, calculatorPath }) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    access_key: 'YOUR_ACCESS_KEY', // User needs to replace this
+                    access_key: 'f9e0f867-ad62-44d0-8996-2101d22e9281',
                     subject: `🐛 Bug Report: ${calculatorName}`,
                     from_name: 'Plainly Bug Report',
                     calculator: calculatorName,
