@@ -560,14 +560,33 @@ export async function generateCreativeContent(type, topic, details = '', tone = 
         poem: `Write a ${tone} poem about "${topic}". ${details ? `Style: ${details}` : ''}`,
         lyrics: `Write song lyrics about "${topic}" in the style of ${details || 'modern pop'}.`,
         joke: `Tell me 5 funny jokes about "${topic}".`,
-        quote: `Generate 5 inspirational or thought-provoking quotes about "${topic}".`
+        quote: `Generate 5 inspirational or thought-provoking quotes about "${topic}".`,
+        pickupLine: `Generate 5 clever pickup lines about "${topic}".`,
+        rapName: `Generate 7 unique rap/hip-hop stage names inspired by "${topic}".`,
+        bandName: `Generate 7 creative band names inspired by "${topic}".`,
+        username: `Generate 7 creative usernames inspired by "${topic}".`
+    }
+
+    // Distribute load across different models based on content type
+    const modelsByType = {
+        storyStarter: MODELS.babyNames,      // Maverick - creative
+        plot: MODELS.businessNames,           // Maverick - creative  
+        poem: 'llama-3.1-8b-instant',         // 8B - fast
+        lyrics: MODELS.translate,             // 70B - versatile
+        joke: 'llama-3.1-8b-instant',         // 8B - fast for simple content
+        quote: MODELS.summarize,              // Scout - analytical
+        pickupLine: 'llama-3.1-8b-instant',   // 8B - fast for short content
+        rapName: MODELS.randomNames,          // 8B - names
+        bandName: MODELS.randomNames,         // 8B - names
+        username: MODELS.randomNames          // 8B - names
     }
 
     const prompt = prompts[type] || `Write something creative about ${topic}.`
     const systemPrompt = `You are a highly creative writer. Write engaging, imaginative, and original content.`
+    const selectedModel = modelsByType[type] || MODELS.default
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.babyNames, // Using Maverick model for creativity
+        model: selectedModel,
         temperature: 0.9,
         maxTokens: 1500
     })
