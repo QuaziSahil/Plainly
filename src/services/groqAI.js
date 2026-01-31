@@ -1,36 +1,31 @@
 // Groq AI Service for Plainly
-// Using DIFFERENT MODELS per function to distribute rate limits
+// PRIORITIZE high-limit models for maximum daily capacity!
 
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
-// Model assignments - spread load across different models
-// Each model has 14,400 req/day limit so using multiple = more capacity
+// Model rate limits (from Groq console):
+// llama-3.1-8b-instant:     14,400 req/day  ← PRIMARY
+// allam-2-7b:                7,000 req/day  ← SECONDARY (for variety)
+// llama-3.3-70b-versatile:   1,000 req/day  ← Premium quality
+// Llama 4 Scout/Maverick:    1,000 req/day  ← Premium creative
+// groq/compound-mini:          250 req/day  ← Complex tasks only
+
 const MODELS = {
-    // Creative tasks - Maverick is good for creative writing
-    babyNames: 'meta-llama/llama-4-maverick-17b-128e-instruct',
-    businessNames: 'meta-llama/llama-4-maverick-17b-128e-instruct',
+    // HIGH LIMIT - Use these for most tasks (21.4K combined/day!)
+    primary: 'llama-3.1-8b-instant',      // 14.4K/day - MAIN model
+    secondary: 'allam-2-7b',               // 7K/day - ALTERNATE model
 
-    // Email generation - Good balance of professionalism and creativity
-    email: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    // MEDIUM LIMIT - Use when needed (1K/day each)
+    creative: 'meta-llama/llama-4-maverick-17b-128e-instruct',
+    analytical: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    versatile: 'llama-3.3-70b-versatile',
 
-    // Summarization - Scout is good for analysis
-    summarize: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    // LOW LIMIT - Use sparingly (250/day)
+    complex: 'groq/compound-mini',
 
-    // Paragraph generation - Fast instant model
-    paragraph: 'llama-3.1-8b-instant',
-
-    // Translation - Main versatile model
-    translate: 'llama-3.3-70b-versatile',
-
-    // Text improvement - Compound for complex tasks
-    improve: 'groq/compound-mini',
-
-    // Random names - Fast model
-    randomNames: 'llama-3.1-8b-instant',
-
-    // Default fallback
-    default: 'llama-3.3-70b-versatile'
+    // Default = primary (highest limit)
+    default: 'llama-3.1-8b-instant'
 }
 
 /**
@@ -101,7 +96,7 @@ Return ONLY a JSON array of objects with this exact format, no other text:
 
     try {
         const response = await askGroq(prompt, systemPrompt, {
-            model: MODELS.babyNames,
+            model: MODELS.primary,
             temperature: 0.9,
             maxTokens: 500
         })
@@ -134,7 +129,7 @@ Return ONLY a JSON array with this format, no other text:
 
     try {
         const response = await askGroq(prompt, systemPrompt, {
-            model: MODELS.businessNames,
+            model: MODELS.primary,
             temperature: 0.9,
             maxTokens: 500
         })
@@ -169,7 +164,7 @@ ${styleInstructions[style] || styleInstructions.concise}`
     const systemPrompt = 'You are an expert summarizer. Be accurate and capture the essence of the text.'
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.summarize,
+        model: MODELS.primary,
         temperature: 0.3,
         maxTokens: 500
     })
@@ -194,7 +189,7 @@ Make it engaging, informative, and well-written.`
     const systemPrompt = `You are an expert content writer. Write in a ${tone} tone.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.paragraph,
+        model: MODELS.primary,
         temperature: 0.7,
         maxTokens: 500
     })
@@ -214,7 +209,7 @@ Provide only the translation, no explanations.`
     const systemPrompt = 'You are an expert translator. Provide accurate, natural-sounding translations.'
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.translate,
+        model: MODELS.primary,
         temperature: 0.3,
         maxTokens: 1000
     })
@@ -234,7 +229,7 @@ Keep the same meaning but improve clarity, grammar, and flow.`
     const systemPrompt = 'You are an expert editor. Improve text while maintaining its original meaning.'
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.improve,
+        model: MODELS.primary,
         temperature: 0.5,
         maxTokens: 1000
     })
@@ -257,7 +252,7 @@ export async function generateRandomName(type, options = {}) {
 
     try {
         const response = await askGroq(prompt, systemPrompt, {
-            model: MODELS.randomNames,
+            model: MODELS.primary,
             temperature: 0.9,
             maxTokens: 400
         })
@@ -300,7 +295,7 @@ Return the subject and the body clearly separated.`
     const systemPrompt = `You are a professional communication expert. Write emails that are ${tone}, effective, and impactful. Ensure there is a clear Subject line at the beginning.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.email,
+        model: MODELS.primary,
         temperature: 0.7,
         maxTokens: 1000
     })
@@ -320,7 +315,7 @@ The letter should be professional, persuasive, and tailored to the job. Include 
     const systemPrompt = `You are a career coaching expert. Write compelling, professional cover letters that help candidates stand out.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.email, // Using same model as email
+        model: MODELS.primary, // Using same model as email
         temperature: 0.7,
         maxTokens: 1500
     })
@@ -340,7 +335,7 @@ Provide 3 options: 1. Concise, 2. Achievement-focused, 3. Skills-focused.`
     const systemPrompt = `You are an expert resume writer. Create impactful, keyword-rich summaries that grab attention.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.improve,
+        model: MODELS.primary,
         temperature: 0.7,
         maxTokens: 800
     })
@@ -360,7 +355,7 @@ Make it engaging and focus on benefits, not just features.`
     const systemPrompt = `You are a professional copywriter. Create compelling product descriptions that drive conversions.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.paragraph,
+        model: MODELS.primary,
         temperature: 0.8,
         maxTokens: 800
     })
@@ -380,7 +375,7 @@ Return as a list.`
     const systemPrompt = `You are a creative branding expert. Create short, punchy, and memorable slogans.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.businessNames,
+        model: MODELS.primary,
         temperature: 0.9,
         maxTokens: 500
     })
@@ -398,7 +393,7 @@ Include relevant hashtags.`
     const systemPrompt = `You are a social media marketing expert. Create high-engagement content for ${platform}.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.paragraph,
+        model: MODELS.primary,
         temperature: 0.8,
         maxTokens: 800
     })
@@ -417,7 +412,7 @@ Length: ${length === 'short' ? '400-600 words' : length === 'long' ? '1000-1500 
     const systemPrompt = `You are an expert blog writer. Write engaging, SEO-optimized, and high-quality content.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.paragraph,
+        model: MODELS.primary,
         temperature: 0.7,
         maxTokens: 2048
     })
@@ -438,7 +433,7 @@ Each description must be under 160 characters and include a call to action.`
     const systemPrompt = `You are an SEO expert. Write descriptions that improve click-through rates while staying within character limits.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.summarize,
+        model: MODELS.primary,
         temperature: 0.5,
         maxTokens: 500
     })
@@ -455,7 +450,7 @@ Make them catchy with high click-through potential.`
     const systemPrompt = `You are a viral content strategist. Create titles that are irresistible to click but not clickbaity.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.businessNames,
+        model: MODELS.primary,
         temperature: 0.9,
         maxTokens: 500
     })
@@ -475,7 +470,7 @@ Provide the corrected version and a brief list of the main improvements made.`
     const systemPrompt = `You are an expert English teacher and editor. Fix all errors while keeping the original meaning.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.improve,
+        model: MODELS.primary,
         temperature: 0.3,
         maxTokens: 1000
     })
@@ -489,7 +484,7 @@ export async function transformVoice(text, targetVoice = 'active') {
     const systemPrompt = `You are an expert editor who specializes in clear, direct writing. Convert passive sentences to active ones for better impact.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.improve,
+        model: MODELS.primary,
         temperature: 0.3,
         maxTokens: 1000
     })
@@ -504,7 +499,7 @@ export async function adjustSentenceLength(text, target = 'expand') {
     const systemPrompt = `You are an expert writer. ${target === 'expand' ? 'Add relevant detail and depth' : 'Remove fluff and optimize for brevity'}.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.improve,
+        model: MODELS.primary,
         temperature: 0.6,
         maxTokens: 1000
     })
@@ -527,7 +522,7 @@ Include:
     const systemPrompt = `You are an academic writing coach. Create logical, well-structured outlines for students.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.summarize,
+        model: MODELS.primary,
         temperature: 0.5,
         maxTokens: 1000
     })
@@ -543,7 +538,7 @@ Format: ${format === 'bullets' ? 'Concise bullet points' : 'Detailed sections wi
     const systemPrompt = `You are a professional secretary. Extract key information, action items, and decisions from meeting transcripts.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.summarize,
+        model: MODELS.primary,
         temperature: 0.4,
         maxTokens: 1500
     })
@@ -569,16 +564,16 @@ export async function generateCreativeContent(type, topic, details = '', tone = 
 
     // Distribute load across different models based on content type
     const modelsByType = {
-        storyStarter: MODELS.babyNames,      // Maverick - creative
-        plot: MODELS.businessNames,           // Maverick - creative  
+        storyStarter: MODELS.primary,      // Maverick - creative
+        plot: MODELS.primary,           // Maverick - creative  
         poem: 'llama-3.1-8b-instant',         // 8B - fast
-        lyrics: MODELS.translate,             // 70B - versatile
+        lyrics: MODELS.primary,             // 70B - versatile
         joke: 'llama-3.1-8b-instant',         // 8B - fast for simple content
-        quote: MODELS.summarize,              // Scout - analytical
+        quote: MODELS.primary,              // Scout - analytical
         pickupLine: 'llama-3.1-8b-instant',   // 8B - fast for short content
-        rapName: MODELS.randomNames,          // 8B - names
-        bandName: MODELS.randomNames,         // 8B - names
-        username: MODELS.randomNames          // 8B - names
+        rapName: MODELS.primary,          // 8B - names
+        bandName: MODELS.primary,         // 8B - names
+        username: MODELS.primary          // 8B - names
     }
 
     const prompt = prompts[type] || `Write something creative about ${topic}.`
@@ -606,7 +601,7 @@ Include:
     const systemPrompt = `You are a productivity expert. Create efficient, goal-oriented meeting agendas.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.summarize,
+        model: MODELS.primary,
         temperature: 0.5,
         maxTokens: 1000
     })
@@ -620,7 +615,7 @@ Return the colors as a list of hex codes with brief descriptions of why they fit
     const systemPrompt = `You are a professional UI/UX designer and color theorist. Create harmonious and modern color palettes.`
 
     return await askGroq(prompt, systemPrompt, {
-        model: MODELS.businessNames,
+        model: MODELS.primary,
         temperature: 0.8,
         maxTokens: 800
     })
