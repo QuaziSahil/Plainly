@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Palette, Loader2, Wand2, Copy, Check, RefreshCw, Layout } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateColorPalette } from '../../../services/groqAI'
 
 function AIColorPaletteGenerator() {
@@ -202,7 +203,7 @@ function AIColorPaletteGenerator() {
                         lineHeight: '1.8',
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

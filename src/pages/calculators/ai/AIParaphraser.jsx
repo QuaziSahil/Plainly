@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { RefreshCw, Loader2, Wand2, Copy, Check, FileText } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { improveText } from '../../../services/groqAI'
 
 function AIParaphraser() {
@@ -182,7 +183,7 @@ function AIParaphraser() {
                         lineHeight: '1.7',
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

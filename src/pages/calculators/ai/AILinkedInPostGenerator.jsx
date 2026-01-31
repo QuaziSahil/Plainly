@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Linkedin, Loader2, Wand2, Copy, Check, RefreshCw, Share2 } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateSocialContent } from '../../../services/groqAI'
 
 function AILinkedInPostGenerator() {
@@ -196,7 +197,7 @@ function AILinkedInPostGenerator() {
                         lineHeight: '1.8',
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

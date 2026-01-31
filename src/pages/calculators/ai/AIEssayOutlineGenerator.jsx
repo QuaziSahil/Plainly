@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FileText, Loader2, Wand2, Copy, Check, RefreshCw, BookOpen } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateEssayOutline } from '../../../services/groqAI'
 
 function AIEssayOutlineGenerator() {
@@ -174,7 +175,7 @@ function AIEssayOutlineGenerator() {
                         lineHeight: '1.8',
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

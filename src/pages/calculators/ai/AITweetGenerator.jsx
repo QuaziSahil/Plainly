@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Twitter, Loader2, Wand2, Copy, Check, RefreshCw, Hash } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateSocialContent } from '../../../services/groqAI'
 
 function AITweetGenerator() {
@@ -195,7 +196,7 @@ function AITweetGenerator() {
                         fontSize: '15px',
                         lineHeight: '1.8'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

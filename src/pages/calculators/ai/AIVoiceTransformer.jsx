@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Volume2, Loader2, Wand2, Copy, Check, RefreshCw, Zap } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { transformVoice } from '../../../services/groqAI'
 
 function AIVoiceTransformer() {
@@ -179,7 +180,7 @@ function AIVoiceTransformer() {
                         lineHeight: '1.7',
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

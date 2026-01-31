@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FileEdit, Loader2, Wand2, Copy, Check, RefreshCw, BookOpen } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateBlogPost } from '../../../services/groqAI'
 
 function AIBlogPostGenerator() {
@@ -210,7 +211,7 @@ function AIBlogPostGenerator() {
                         whiteSpace: 'pre-wrap',
                         textAlign: 'justify'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

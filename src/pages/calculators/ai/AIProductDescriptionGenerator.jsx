@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ShoppingBag, Loader2, Wand2, Copy, Check, RefreshCw, Tag } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateProductDescription } from '../../../services/groqAI'
 
 function AIProductDescriptionGenerator() {
@@ -209,7 +210,7 @@ function AIProductDescriptionGenerator() {
                         lineHeight: '1.7',
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

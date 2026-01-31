@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FileText, Loader2, Wand2, Copy, Check, RefreshCw } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateParagraph } from '../../../services/groqAI'
 
 function ParagraphGenerator() {
@@ -201,7 +202,7 @@ function ParagraphGenerator() {
                         lineHeight: '1.7',
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

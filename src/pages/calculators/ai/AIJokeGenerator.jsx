@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Laugh, Loader2, Wand2, Copy, Check, RefreshCw, Smartphone } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateCreativeContent } from '../../../services/groqAI'
 
 function AIJokeGenerator() {
@@ -168,7 +169,7 @@ function AIJokeGenerator() {
                         textAlign: 'center',
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

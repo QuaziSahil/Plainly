@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Sparkles, Loader2, Wand2, Copy, Check, RefreshCw, Zap } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateSlogans } from '../../../services/groqAI'
 
 function AISloganGenerator() {
@@ -195,7 +196,7 @@ function AISloganGenerator() {
                         fontSize: '16px',
                         lineHeight: '2.0'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

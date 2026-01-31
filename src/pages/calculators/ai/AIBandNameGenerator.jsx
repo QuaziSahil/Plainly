@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Disc, Loader2, Wand2, Copy, Check, RefreshCw, Music2 } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateCreativeContent } from '../../../services/groqAI'
 
 function AIBandNameGenerator() {
@@ -175,7 +176,7 @@ function AIBandNameGenerator() {
                         letterSpacing: '1px',
                         textTransform: 'uppercase'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

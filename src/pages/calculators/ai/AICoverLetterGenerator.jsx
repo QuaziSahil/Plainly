@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FileText, Loader2, Wand2, Copy, Check, RefreshCw, Briefcase } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateCoverLetter } from '../../../services/groqAI'
 
 function AICoverLetterGenerator() {
@@ -222,7 +223,7 @@ function AICoverLetterGenerator() {
                         whiteSpace: 'pre-wrap',
                         fontFamily: 'serif'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

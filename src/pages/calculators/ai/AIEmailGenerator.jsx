@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Mail, Loader2, Wand2, Copy, Check, RefreshCw, Send } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateEmail } from '../../../services/groqAI'
 
 function AIEmailGenerator() {
@@ -214,7 +215,7 @@ function AIEmailGenerator() {
                         whiteSpace: 'pre-wrap',
                         fontFamily: 'inherit'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

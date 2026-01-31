@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Instagram, Loader2, Wand2, Copy, Check, RefreshCw, Heart } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateSocialContent } from '../../../services/groqAI'
 
 function AIInstagramCaptionGenerator() {
@@ -196,7 +197,7 @@ function AIInstagramCaptionGenerator() {
                         lineHeight: '1.8',
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

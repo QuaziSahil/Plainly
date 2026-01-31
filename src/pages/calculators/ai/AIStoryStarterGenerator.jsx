@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { PenTool, Loader2, Wand2, Copy, Check, RefreshCw, Sparkles } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateCreativeContent } from '../../../services/groqAI'
 
 function AIStoryStarterGenerator() {
@@ -181,7 +182,7 @@ function AIStoryStarterGenerator() {
                         fontStyle: 'italic',
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

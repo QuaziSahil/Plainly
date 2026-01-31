@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AtSign, Loader2, Wand2, Copy, Check, RefreshCw, UserCheck } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateCreativeContent } from '../../../services/groqAI'
 
 function AIUsernameGenerator() {
@@ -171,7 +172,7 @@ function AIUsernameGenerator() {
                         whiteSpace: 'pre-wrap',
                         fontFamily: 'monospace'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

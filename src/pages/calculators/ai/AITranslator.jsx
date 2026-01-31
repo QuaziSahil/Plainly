@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Languages, Loader2, Copy, Check, ArrowRight } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { translateText } from '../../../services/groqAI'
 
 function AITranslator() {
@@ -189,7 +190,7 @@ function AITranslator() {
                         lineHeight: '1.7',
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

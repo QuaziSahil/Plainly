@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Feather, Loader2, Wand2, Copy, Check, RefreshCw, PenTool } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateCreativeContent } from '../../../services/groqAI'
 
 function AIPoemGenerator() {
@@ -190,7 +191,7 @@ function AIPoemGenerator() {
                         whiteSpace: 'pre-wrap',
                         textAlign: 'center'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

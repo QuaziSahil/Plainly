@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Mic, Loader2, Wand2, Copy, Check, RefreshCw, AudioLines } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateCreativeContent } from '../../../services/groqAI'
 
 function AIRapNameGenerator() {
@@ -171,7 +172,7 @@ function AIRapNameGenerator() {
                         whiteSpace: 'pre-wrap',
                         fontWeight: '800'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}

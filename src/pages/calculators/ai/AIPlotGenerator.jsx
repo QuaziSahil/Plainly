@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Ghost, Loader2, Wand2, Copy, Check, RefreshCw, Map } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { generateCreativeContent } from '../../../services/groqAI'
 
 function AIPlotGenerator() {
@@ -179,7 +180,7 @@ function AIPlotGenerator() {
                         lineHeight: '1.8',
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {result}
+                        <AIOutputFormatter content={result} />
                     </div>
                 </div>
             )}
