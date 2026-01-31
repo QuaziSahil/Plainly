@@ -226,22 +226,22 @@ function Header() {
                         )}
                     </div>
 
-                    <a
-                        href="https://buymeacoffee.com/plainly"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="header-icon-btn bmc-btn"
-                        aria-label="Buy Me a Coffee"
-                        title="Support us"
-                    >
-                        <Coffee size={18} />
-                    </a>
                     <button className="header-icon-btn" aria-label="Settings">
                         <Settings size={18} />
                     </button>
                     <button className="header-icon-btn" aria-label="Account">
                         <User size={18} />
                     </button>
+
+                    <a
+                        href="https://buymeacoffee.com/plainlyy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="header-bmc-link"
+                    >
+                        <Coffee size={16} />
+                        <span>Buy me a coffee</span>
+                    </a>
 
                     {/* Mobile Menu Toggle */}
                     <button
@@ -308,7 +308,7 @@ function Header() {
                     <div className="mobile-nav-divider" />
                     <NavLink to="/calculators" className="mobile-nav-link">ALL CALCULATORS</NavLink>
                     <a
-                        href="https://buymeacoffee.com/plainly"
+                        href="https://buymeacoffee.com/plainlyy"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="mobile-nav-link bmc-link"
