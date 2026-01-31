@@ -134,126 +134,128 @@ function Header() {
     ]
 
     return (
-        <header className={`header ${isScrolled ? 'header-scrolled' : ''}`}>
-            <div className="container header-container">
-                {/* Logo */}
-                <Link to="/" className="logo">
-                    <span className="logo-icon">◇</span>
-                    <span className="logo-text">PLAINLY</span>
-                </Link>
+        <>
+            <header className={`header ${isScrolled ? 'header-scrolled' : ''}`}>
+                <div className="container header-container">
+                    {/* Logo */}
+                    <Link to="/" className="logo">
+                        <span className="logo-icon">◇</span>
+                        <span className="logo-text">PLAINLY</span>
+                    </Link>
 
-                {/* Desktop Navigation */}
-                <nav className="nav-desktop">
-                    <NavLink to="/calculators" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                        ALL TOOLS
-                    </NavLink>
-                    {navLinks.map((link) => (
-                        <NavLink
-                            key={link.path}
-                            to={link.path}
-                            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                        >
-                            {link.name}
+                    {/* Desktop Navigation */}
+                    <nav className="nav-desktop">
+                        <NavLink to="/calculators" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                            ALL TOOLS
                         </NavLink>
-                    ))}
-                    {/* Categories Dropdown */}
-                    <div className="nav-dropdown-container" ref={categoryRef}>
-                        <button
-                            className={`nav-link nav-dropdown-toggle ${showCategoryDropdown ? 'active' : ''}`}
-                            onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-                        >
-                            CATEGORIES
-                            <ChevronDown size={14} className={`nav-dropdown-icon ${showCategoryDropdown ? 'rotate' : ''}`} />
-                        </button>
-                        {showCategoryDropdown && (
-                            <div className="nav-dropdown-menu">
-                                {categories.map((cat) => (
-                                    <Link
-                                        key={cat.name}
-                                        to={cat.path}
-                                        className="nav-dropdown-item"
-                                        onClick={() => setShowCategoryDropdown(false)}
-                                    >
-                                        {cat.name}
-                                    </Link>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </nav>
+                        {navLinks.map((link) => (
+                            <NavLink
+                                key={link.path}
+                                to={link.path}
+                                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                            >
+                                {link.name}
+                            </NavLink>
+                        ))}
+                        {/* Categories Dropdown */}
+                        <div className="nav-dropdown-container" ref={categoryRef}>
+                            <button
+                                className={`nav-link nav-dropdown-toggle ${showCategoryDropdown ? 'active' : ''}`}
+                                onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                            >
+                                CATEGORIES
+                                <ChevronDown size={14} className={`nav-dropdown-icon ${showCategoryDropdown ? 'rotate' : ''}`} />
+                            </button>
+                            {showCategoryDropdown && (
+                                <div className="nav-dropdown-menu">
+                                    {categories.map((cat) => (
+                                        <Link
+                                            key={cat.name}
+                                            to={cat.path}
+                                            className="nav-dropdown-item"
+                                            onClick={() => setShowCategoryDropdown(false)}
+                                        >
+                                            {cat.name}
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </nav>
 
-                {/* Right Actions */}
-                <div className="header-actions">
-                    <div className="header-search-container" ref={searchRef}>
-                        <form className="search-bar" onSubmit={handleSearch}>
-                            <Search size={16} className="search-bar-icon" />
-                            <input
-                                type="text"
-                                placeholder="Search instruments..."
-                                value={searchQuery}
-                                onChange={handleInputChange}
-                                onFocus={() => searchQuery.trim() && setShowDropdown(true)}
-                                className="search-bar-input"
-                            />
-                        </form>
+                    {/* Right Actions */}
+                    <div className="header-actions">
+                        <div className="header-search-container" ref={searchRef}>
+                            <form className="search-bar" onSubmit={handleSearch}>
+                                <Search size={16} className="search-bar-icon" />
+                                <input
+                                    type="text"
+                                    placeholder="Search instruments..."
+                                    value={searchQuery}
+                                    onChange={handleInputChange}
+                                    onFocus={() => searchQuery.trim() && setShowDropdown(true)}
+                                    className="search-bar-input"
+                                />
+                            </form>
 
-                        {/* Search Dropdown */}
-                        {showDropdown && filteredCalculators.length > 0 && (
-                            <div className="header-search-dropdown">
-                                {filteredCalculators.map((calc) => (
+                            {/* Search Dropdown */}
+                            {showDropdown && filteredCalculators.length > 0 && (
+                                <div className="header-search-dropdown">
+                                    {filteredCalculators.map((calc) => (
+                                        <Link
+                                            to={calc.path}
+                                            key={calc.path}
+                                            className="header-search-result"
+                                            onClick={handleResultClick}
+                                        >
+                                            <div className="header-search-result-icon">
+                                                <calc.icon size={14} />
+                                            </div>
+                                            <div className="header-search-result-info">
+                                                <span className="header-search-result-name">{calc.name}</span>
+                                                <span className="header-search-result-category">{calc.category}</span>
+                                            </div>
+                                            <ArrowRight size={12} className="header-search-result-arrow" />
+                                        </Link>
+                                    ))}
                                     <Link
-                                        to={calc.path}
-                                        key={calc.path}
-                                        className="header-search-result"
+                                        to={`/calculators?search=${encodeURIComponent(searchQuery)}`}
+                                        className="header-search-view-all"
                                         onClick={handleResultClick}
                                     >
-                                        <div className="header-search-result-icon">
-                                            <calc.icon size={14} />
-                                        </div>
-                                        <div className="header-search-result-info">
-                                            <span className="header-search-result-name">{calc.name}</span>
-                                            <span className="header-search-result-category">{calc.category}</span>
-                                        </div>
-                                        <ArrowRight size={12} className="header-search-result-arrow" />
+                                        View all results →
                                     </Link>
-                                ))}
-                                <Link
-                                    to={`/calculators?search=${encodeURIComponent(searchQuery)}`}
-                                    className="header-search-view-all"
-                                    onClick={handleResultClick}
-                                >
-                                    View all results →
-                                </Link>
-                            </div>
-                        )}
+                                </div>
+                            )}
+                        </div>
+
+                        <button className="header-icon-btn" aria-label="Settings" onClick={openSettings}>
+                            <Settings size={18} />
+                        </button>
+
+                        <a
+                            href="https://buymeacoffee.com/plainlyy"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="header-bmc-link"
+                        >
+                            <Coffee size={16} />
+                            <span>Buy me a coffee</span>
+                        </a>
+
+                        {/* Mobile Menu Toggle */}
+                        <button
+                            className="mobile-menu-btn"
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            aria-label="Toggle menu"
+                        >
+                            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                        </button>
                     </div>
-
-                    <button className="header-icon-btn" aria-label="Settings" onClick={openSettings}>
-                        <Settings size={18} />
-                    </button>
-
-                    <a
-                        href="https://buymeacoffee.com/plainlyy"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="header-bmc-link"
-                    >
-                        <Coffee size={16} />
-                        <span>Buy me a coffee</span>
-                    </a>
-
-                    {/* Mobile Menu Toggle */}
-                    <button
-                        className="mobile-menu-btn"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        aria-label="Toggle menu"
-                    >
-                        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
                 </div>
-            </div>
+            </header>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu - Outside header to fix backdrop-filter issue */}
             <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
                 {/* Mobile Search */}
                 <div className="mobile-search" ref={mobileSearchRef}>
@@ -317,7 +319,7 @@ function Header() {
                     </a>
                 </nav>
             </div>
-        </header>
+        </>
     )
 }
 
