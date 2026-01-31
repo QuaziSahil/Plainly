@@ -1,13 +1,15 @@
 import { useState } from 'react'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, Wand2, Loader2 } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import { askGroq, MODELS } from '../../../services/groqAI'
 
 function MagicEightBall() {
     const [question, setQuestion] = useState('')
     const [answer, setAnswer] = useState(null)
     const [isShaking, setIsShaking] = useState(false)
+    const [useAI, setUseAI] = useState(true)
 
-    const responses = [
+    const classicResponses = [
         { text: 'It is certain', type: 'positive' },
         { text: 'It is decidedly so', type: 'positive' },
         { text: 'Without a doubt', type: 'positive' },
@@ -30,30 +32,97 @@ function MagicEightBall() {
         { text: 'Very doubtful', type: 'negative' }
     ]
 
-    const shake = () => {
+    const shake = async () => {
         if (!question.trim()) return
         setIsShaking(true)
         setAnswer(null)
 
-        setTimeout(() => {
-            const randomIndex = Math.floor(Math.random() * responses.length)
-            setAnswer(responses[randomIndex])
-            setIsShaking(false)
-        }, 1500)
+        if (useAI) {
+            try {
+                const prompt = `You are a mystical Magic 8 Ball. The user asks: "${question}"
+
+Give a mystical, fun, and slightly cryptic answer in ONE short sentence (max 8 words). 
+Be playful but decisive - give a clear yes/no type direction.
+Don't repeat the question. Just the mystical answer.`
+
+                const response = await askGroq(prompt, 'You are a mystical fortune-telling Magic 8 Ball. Be brief and mysterious.', {
+                    model: MODELS.randomNames,
+                    temperature: 0.9,
+                    maxTokens: 50
+                })
+
+                const text = response.trim().replace(/^["']|["']$/g, '')
+                const isPositive = /yes|certain|definitely|will|good|luck|destiny|fate|favor/i.test(text)
+                const isNegative = /no|don't|never|avoid|unlikely|doubt|bad/i.test(text)
+
+                setAnswer({
+                    text,
+                    type: isPositive ? 'positive' : isNegative ? 'negative' : 'neutral'
+                })
+            } catch (err) {
+                console.error('AI error:', err)
+                // Fallback to classic
+                const randomIndex = Math.floor(Math.random() * classicResponses.length)
+                setAnswer(classicResponses[randomIndex])
+            }
+        } else {
+            await new Promise(r => setTimeout(r, 1000))
+            const randomIndex = Math.floor(Math.random() * classicResponses.length)
+            setAnswer(classicResponses[randomIndex])
+        }
+
+        setIsShaking(false)
     }
 
     return (
         <CalculatorLayout
             title="Magic 8 Ball"
-            description="Ask a question, get an answer"
+            description="Ask a question, get a mystical answer"
             category="Fun"
             categoryPath="/calculators?category=Fun"
             icon={Sparkles}
             result={answer?.text || '—'}
             resultLabel="The Answer"
         >
+            {/* AI Toggle */}
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '10px 14px',
+                background: useAI ? '#8b5cf620' : '#33333350',
+                borderRadius: '10px',
+                marginBottom: '16px',
+                border: `1px solid ${useAI ? '#8b5cf640' : '#444'}`
+            }}>
+                <Wand2 size={18} color={useAI ? '#8b5cf6' : '#666'} />
+                <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '13px', fontWeight: 600 }}>
+                        {useAI ? '✨ AI-Powered Answers' : 'Classic Mode'}
+                    </div>
+                    <div style={{ fontSize: '11px', opacity: 0.6 }}>
+                        {useAI ? 'Unique mystical responses' : 'Traditional 8-ball answers'}
+                    </div>
+                </div>
+                <button
+                    onClick={() => setUseAI(!useAI)}
+                    style={{
+                        padding: '6px 14px',
+                        background: useAI ? '#8b5cf6' : '#444',
+                        border: 'none',
+                        borderRadius: '20px',
+                        color: 'white',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        cursor: 'pointer'
+                    }}
+                >
+                    {useAI ? 'ON' : 'OFF'}
+                </button>
+            </div>
+
             <div className="input-group">
-                <label className="input-label">Ask a yes/no question</label>
+                <label className="input-label">Ask a question</label>
                 <input
                     type="text"
                     value={question}
@@ -73,9 +142,9 @@ function MagicEightBall() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    cursor: question.trim() ? 'pointer' : 'not-allowed',
+                    cursor: question.trim() && !isShaking ? 'pointer' : 'not-allowed',
                     animation: isShaking ? 'shake 0.5s infinite' : 'none',
-                    boxShadow: '0 10px 40px rgba(0,0,0,0.5)'
+                    boxShadow: useAI ? '0 10px 40px rgba(139, 92, 246, 0.3)' : '0 10px 40px rgba(0,0,0,0.5)'
                 }}
             >
                 <div style={{
@@ -92,7 +161,9 @@ function MagicEightBall() {
                     padding: '8px',
                     color: answer ? (answer.type === 'positive' ? '#10b981' : answer.type === 'negative' ? '#ef4444' : '#f59e0b') : '#fff'
                 }}>
-                    {isShaking ? '...' : answer?.text || '8'}
+                    {isShaking ? (
+                        <Loader2 size={24} style={{ animation: 'spin 1s linear infinite' }} />
+                    ) : answer?.text || '8'}
                 </div>
             </div>
             <button
@@ -101,22 +172,37 @@ function MagicEightBall() {
                 style={{
                     width: '100%',
                     padding: '14px',
-                    background: question.trim() && !isShaking ? '#a78bfa' : '#333',
+                    background: question.trim() && !isShaking ? (useAI ? '#8b5cf6' : '#a78bfa') : '#333',
                     border: 'none',
                     borderRadius: '8px',
-                    color: question.trim() && !isShaking ? '#000' : '#666',
+                    color: question.trim() && !isShaking ? '#fff' : '#666',
                     fontWeight: 600,
                     cursor: question.trim() && !isShaking ? 'pointer' : 'not-allowed',
-                    fontSize: '15px'
+                    fontSize: '15px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px'
                 }}
             >
-                {isShaking ? 'Shaking...' : '🎱 Shake the Ball'}
+                {isShaking ? (
+                    <>
+                        <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
+                        Consulting the spirits...
+                    </>
+                ) : (
+                    <>🎱 Shake the Ball</>
+                )}
             </button>
             <style>{`
                 @keyframes shake {
                     0%, 100% { transform: translateX(0) rotate(0); }
                     25% { transform: translateX(-5px) rotate(-5deg); }
                     75% { transform: translateX(5px) rotate(5deg); }
+                }
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
                 }
             `}</style>
         </CalculatorLayout>

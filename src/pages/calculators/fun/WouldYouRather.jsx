@@ -1,13 +1,17 @@
 import { useState } from 'react'
-import { ShuffleIcon } from 'lucide-react'
+import { ShuffleIcon, Wand2, Loader2, Sparkles } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
+import { askGroq, MODELS } from '../../../services/groqAI'
 
 function WouldYouRather() {
     const [customOption1, setCustomOption1] = useState('')
     const [customOption2, setCustomOption2] = useState('')
     const [currentQuestion, setCurrentQuestion] = useState(null)
+    const [useAI, setUseAI] = useState(true)
+    const [loading, setLoading] = useState(false)
+    const [category, setCategory] = useState('random')
 
-    const questions = [
+    const classicQuestions = [
         ['Have the ability to fly', 'Have the ability to read minds'],
         ['Live in a treehouse', 'Live in a submarine'],
         ['Be able to speak all languages', 'Be able to talk to animals'],
@@ -20,9 +24,42 @@ function WouldYouRather() {
         ['Only eat pizza forever', 'Only eat tacos forever']
     ]
 
-    const generateRandom = () => {
-        const randomIndex = Math.floor(Math.random() * questions.length)
-        setCurrentQuestion(questions[randomIndex])
+    const generateRandom = async () => {
+        if (useAI) {
+            setLoading(true)
+            try {
+                const categoryPrompt = category === 'random' ? 'any fun topic' : category
+                const prompt = `Generate ONE unique "Would You Rather" question about ${categoryPrompt}.
+
+Format: Return ONLY a JSON array with exactly 2 options:
+["option A", "option B"]
+
+Make it fun, thought-provoking, and creative. No explanations, just the JSON.`
+
+                const response = await askGroq(prompt, 'You create fun Would You Rather questions. Return valid JSON only.', {
+                    model: MODELS.randomNames,
+                    temperature: 0.95,
+                    maxTokens: 100
+                })
+
+                const jsonMatch = response.match(/\[[\s\S]*\]/)
+                if (jsonMatch) {
+                    const parsed = JSON.parse(jsonMatch[0])
+                    if (parsed.length >= 2) {
+                        setCurrentQuestion([parsed[0], parsed[1]])
+                    }
+                }
+            } catch (err) {
+                console.error('AI error:', err)
+                // Fallback
+                const randomIndex = Math.floor(Math.random() * classicQuestions.length)
+                setCurrentQuestion(classicQuestions[randomIndex])
+            }
+            setLoading(false)
+        } else {
+            const randomIndex = Math.floor(Math.random() * classicQuestions.length)
+            setCurrentQuestion(classicQuestions[randomIndex])
+        }
     }
 
     const generateCustom = () => {
@@ -41,23 +78,94 @@ function WouldYouRather() {
             result={currentQuestion ? 'Choose!' : '—'}
             resultLabel="Start Playing"
         >
+            {/* AI Toggle */}
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '10px 14px',
+                background: useAI ? '#a78bfa20' : '#33333350',
+                borderRadius: '10px',
+                marginBottom: '16px',
+                border: `1px solid ${useAI ? '#a78bfa40' : '#444'}`
+            }}>
+                <Wand2 size={18} color={useAI ? '#a78bfa' : '#666'} />
+                <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '13px', fontWeight: 600 }}>
+                        {useAI ? '✨ AI-Generated Questions' : 'Classic Mode'}
+                    </div>
+                    <div style={{ fontSize: '11px', opacity: 0.6 }}>
+                        {useAI ? 'Unlimited unique questions' : '10 classic questions'}
+                    </div>
+                </div>
+                <button
+                    onClick={() => setUseAI(!useAI)}
+                    style={{
+                        padding: '6px 14px',
+                        background: useAI ? '#a78bfa' : '#444',
+                        border: 'none',
+                        borderRadius: '20px',
+                        color: 'white',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        cursor: 'pointer'
+                    }}
+                >
+                    {useAI ? 'ON' : 'OFF'}
+                </button>
+            </div>
+
+            {/* Category selector (AI only) */}
+            {useAI && (
+                <div className="input-group" style={{ marginBottom: '16px' }}>
+                    <label className="input-label">Question Category</label>
+                    <select value={category} onChange={(e) => setCategory(e.target.value)}>
+                        <option value="random">🎲 Random</option>
+                        <option value="superpowers">⚡ Superpowers</option>
+                        <option value="food">🍕 Food</option>
+                        <option value="travel">✈️ Travel</option>
+                        <option value="money">💰 Money</option>
+                        <option value="technology">🤖 Technology</option>
+                        <option value="relationships">💕 Relationships</option>
+                        <option value="silly">🤪 Silly</option>
+                        <option value="deep">🧠 Deep/Philosophical</option>
+                    </select>
+                </div>
+            )}
+
             <button
                 onClick={generateRandom}
+                disabled={loading}
                 style={{
                     width: '100%',
                     padding: '14px',
-                    background: '#a78bfa',
+                    background: loading ? '#333' : (useAI ? 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)' : '#a78bfa'),
                     border: 'none',
                     borderRadius: '8px',
-                    color: '#000',
+                    color: loading ? '#666' : '#fff',
                     fontWeight: 600,
-                    cursor: 'pointer',
+                    cursor: loading ? 'not-allowed' : 'pointer',
                     marginBottom: '16px',
-                    fontSize: '15px'
+                    fontSize: '15px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px'
                 }}
             >
-                🎲 Random Question
+                {loading ? (
+                    <>
+                        <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
+                        Generating...
+                    </>
+                ) : (
+                    <>
+                        {useAI ? <Sparkles size={18} /> : '🎲'}
+                        {useAI ? 'Generate AI Question' : 'Random Question'}
+                    </>
+                )}
             </button>
+
             {currentQuestion && (
                 <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
                     <div style={{
@@ -102,6 +210,7 @@ function WouldYouRather() {
                     </div>
                 </div>
             )}
+
             <div style={{ fontSize: '12px', opacity: 0.6, marginBottom: '8px' }}>CREATE YOUR OWN</div>
             <div className="input-row">
                 <div className="input-group">
@@ -137,6 +246,13 @@ function WouldYouRather() {
             >
                 Use Custom Options
             </button>
+
+            <style>{`
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            `}</style>
         </CalculatorLayout>
     )
 }
