@@ -34,7 +34,11 @@ import {
     Network,
     Key,
     BadgePercent,
-    Building2
+    Building2,
+    FileSpreadsheet,
+    Cuboid,
+    Clock3,
+    ShoppingCart
 } from 'lucide-react'
 
 export const allCalculators = [
@@ -81,6 +85,76 @@ export const allCalculators = [
         path: '/tip-calculator',
         category: 'Finance'
     },
+    {
+        name: 'Auto Loan Calculator',
+        description: 'Calculate auto loan payments with down payment and trade-in values.',
+        icon: Car,
+        path: '/auto-loan-calculator',
+        category: 'Finance'
+    },
+    {
+        name: 'Interest Calculator',
+        description: 'Calculate simple and compound interest with various frequencies.',
+        icon: Percent,
+        path: '/interest-calculator',
+        category: 'Finance'
+    },
+    {
+        name: 'Payment Calculator',
+        description: 'Calculate loan payments for monthly, bi-weekly, or weekly schedules.',
+        icon: DollarSign,
+        path: '/payment-calculator',
+        category: 'Finance'
+    },
+    {
+        name: 'Retirement Calculator',
+        description: 'Plan retirement savings and estimate future income with the 4% rule.',
+        icon: Landmark,
+        path: '/retirement-calculator',
+        category: 'Finance'
+    },
+    {
+        name: 'Amortization Calculator',
+        description: 'Calculate loan amortization and see how extra payments save money.',
+        icon: FileSpreadsheet,
+        path: '/amortization-calculator',
+        category: 'Finance'
+    },
+    {
+        name: 'Inflation Calculator',
+        description: 'Calculate how inflation affects purchasing power over time.',
+        icon: TrendingUp,
+        path: '/inflation-calculator',
+        category: 'Finance'
+    },
+    {
+        name: 'Finance Calculator',
+        description: 'General purpose financial calculations for loans, savings, and present value.',
+        icon: Calculator,
+        path: '/finance-calculator',
+        category: 'Finance'
+    },
+    {
+        name: 'Income Tax Calculator',
+        description: 'Estimate federal income tax using 2024 US tax brackets.',
+        icon: Receipt,
+        path: '/income-tax-calculator',
+        category: 'Finance'
+    },
+    {
+        name: 'Interest Rate Calculator',
+        description: 'Calculate the interest rate needed to reach your financial goal.',
+        icon: Percent,
+        path: '/interest-rate-calculator',
+        category: 'Finance'
+    },
+    {
+        name: 'Sales Tax Calculator',
+        description: 'Calculate sales tax or reverse calculate from total price.',
+        icon: ShoppingCart,
+        path: '/sales-tax-calculator',
+        category: 'Finance'
+    },
 
     // Health Calculators
     {
@@ -118,6 +192,34 @@ export const allCalculators = [
         path: '/ideal-weight-calculator',
         category: 'Health'
     },
+    {
+        name: 'Pace Calculator',
+        description: 'Calculate running/cycling pace and speed from distance and time.',
+        icon: Timer,
+        path: '/pace-calculator',
+        category: 'Health'
+    },
+    {
+        name: 'Pregnancy Calculator',
+        description: 'Calculate due date and track pregnancy progress week by week.',
+        icon: Baby,
+        path: '/pregnancy-calculator',
+        category: 'Health'
+    },
+    {
+        name: 'Conception Calculator',
+        description: 'Estimate conception date from your due date.',
+        icon: Heart,
+        path: '/conception-calculator',
+        category: 'Health'
+    },
+    {
+        name: 'Due Date Calculator',
+        description: 'Calculate pregnancy due date using multiple methods.',
+        icon: Calendar,
+        path: '/due-date-calculator',
+        category: 'Health'
+    },
 
     // Math Calculators
     {
@@ -139,6 +241,27 @@ export const allCalculators = [
         description: 'Add, subtract, multiply, and divide fractions easily.',
         icon: Divide,
         path: '/fraction-calculator',
+        category: 'Math'
+    },
+    {
+        name: 'Random Number Generator',
+        description: 'Generate random numbers with custom range and quantity options.',
+        icon: Shuffle,
+        path: '/random-number-generator',
+        category: 'Math'
+    },
+    {
+        name: 'Triangle Calculator',
+        description: 'Calculate triangle area, perimeter, angles, and type from side lengths.',
+        icon: Triangle,
+        path: '/triangle-calculator',
+        category: 'Math'
+    },
+    {
+        name: 'Standard Deviation Calculator',
+        description: 'Calculate mean, variance, standard deviation, and other statistics.',
+        icon: BarChart3,
+        path: '/standard-deviation-calculator',
         category: 'Math'
     },
 
@@ -185,6 +308,48 @@ export const allCalculators = [
         path: '/discount-calculator',
         category: 'Other'
     },
+    {
+        name: 'Time Calculator',
+        description: 'Add or subtract time durations with multiple format outputs.',
+        icon: Clock,
+        path: '/time-calculator',
+        category: 'Other'
+    },
+    {
+        name: 'Hours Calculator',
+        description: 'Calculate work hours and earnings from time entries.',
+        icon: Clock3,
+        path: '/hours-calculator',
+        category: 'Other'
+    },
+    {
+        name: 'Grade Calculator',
+        description: 'Calculate grades, percentages, GPA, and weighted averages.',
+        icon: GraduationCap,
+        path: '/grade-calculator',
+        category: 'Other'
+    },
+    {
+        name: 'Concrete Calculator',
+        description: 'Calculate concrete volume needed for slabs, columns, and footings.',
+        icon: Cuboid,
+        path: '/concrete-calculator',
+        category: 'Other'
+    },
+    {
+        name: 'Subnet Calculator',
+        description: 'Calculate subnet mask, network address, and available hosts.',
+        icon: Network,
+        path: '/subnet-calculator',
+        category: 'Other'
+    },
+    {
+        name: 'Conversion Calculator',
+        description: 'Convert between different units of measurement.',
+        icon: ArrowLeftRight,
+        path: '/conversion-calculator',
+        category: 'Converter'
+    },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')
@@ -192,3 +357,4 @@ export const healthCalculators = allCalculators.filter(c => c.category === 'Heal
 export const mathCalculators = allCalculators.filter(c => c.category === 'Math')
 export const converterCalculators = allCalculators.filter(c => c.category === 'Converter')
 export const otherCalculators = allCalculators.filter(c => c.category === 'Other')
+
