@@ -14,7 +14,7 @@ import Terms from './pages/Terms'
 import Contact from './pages/Contact'
 import Sitemap from './pages/Sitemap'
 
-// Financial Calculators
+// Financial Calculators (38)
 import MortgageCalculator from './pages/calculators/finance/MortgageCalculator'
 import LoanCalculator from './pages/calculators/finance/LoanCalculator'
 import CompoundInterestCalculator from './pages/calculators/finance/CompoundInterestCalculator'
@@ -42,8 +42,19 @@ import Calculator401k from './pages/calculators/finance/Calculator401k'
 import NetWorthCalculator from './pages/calculators/finance/NetWorthCalculator'
 import CurrencyConverter from './pages/calculators/finance/CurrencyConverter'
 import CryptoConverter from './pages/calculators/finance/CryptoConverter'
+import BudgetCalculator from './pages/calculators/finance/BudgetCalculator'
+import CAGRCalculator from './pages/calculators/finance/CAGRCalculator'
+import StockProfitCalculator from './pages/calculators/finance/StockProfitCalculator'
+import DividendCalculator from './pages/calculators/finance/DividendCalculator'
+import BondYieldCalculator from './pages/calculators/finance/BondYieldCalculator'
+import DebtPayoffCalculator from './pages/calculators/finance/DebtPayoffCalculator'
+import EmergencyFundCalculator from './pages/calculators/finance/EmergencyFundCalculator'
+import SavingsGoalCalculator from './pages/calculators/finance/SavingsGoalCalculator'
+import HomeAffordabilityCalculator from './pages/calculators/finance/HomeAffordabilityCalculator'
+import RuleOf72Calculator from './pages/calculators/finance/RuleOf72Calculator'
+import CompoundGrowthCalculator from './pages/calculators/finance/CompoundGrowthCalculator'
 
-// Health Calculators
+// Health Calculators (27)
 import BMICalculator from './pages/calculators/health/BMICalculator'
 import CalorieCalculator from './pages/calculators/health/CalorieCalculator'
 import BMRCalculator from './pages/calculators/health/BMRCalculator'
@@ -63,8 +74,15 @@ import OvulationCalculator from './pages/calculators/health/OvulationCalculator'
 import PeriodCalculator from './pages/calculators/health/PeriodCalculator'
 import BACCalculator from './pages/calculators/health/BACCalculator'
 import WeightLossCalculator from './pages/calculators/health/WeightLossCalculator'
+import CaffeineCalculator from './pages/calculators/health/CaffeineCalculator'
+import CalorieBurnCalculator from './pages/calculators/health/CalorieBurnCalculator'
+import LeanBodyMassCalculator from './pages/calculators/health/LeanBodyMassCalculator'
+import SleepCycleCalculator from './pages/calculators/health/SleepCycleCalculator'
+import VO2MaxCalculator from './pages/calculators/health/VO2MaxCalculator'
+import RunningCalorieCalculator from './pages/calculators/health/RunningCalorieCalculator'
+import PregnancyWeightCalculator from './pages/calculators/health/PregnancyWeightCalculator'
 
-// Math Calculators
+// Math Calculators (28)
 import ScientificCalculator from './pages/calculators/math/ScientificCalculator'
 import PercentageCalculator from './pages/calculators/math/PercentageCalculator'
 import FractionCalculator from './pages/calculators/math/FractionCalculator'
@@ -82,8 +100,18 @@ import MatrixCalculator from './pages/calculators/math/MatrixCalculator'
 import WaveCalculator from './pages/calculators/math/WaveCalculator'
 import VectorCalculator from './pages/calculators/math/VectorCalculator'
 import PermutationCalculator from './pages/calculators/math/PermutationCalculator'
+import CircleCalculator from './pages/calculators/math/CircleCalculator'
+import FactorialCalculator from './pages/calculators/math/FactorialCalculator'
+import MeanMedianModeCalculator from './pages/calculators/math/MeanMedianModeCalculator'
+import ProbabilityCalculator from './pages/calculators/math/ProbabilityCalculator'
+import PythagoreanCalculator from './pages/calculators/math/PythagoreanCalculator'
+import QuadraticSolver from './pages/calculators/math/QuadraticSolver'
+import RomanNumeralConverter from './pages/calculators/math/RomanNumeralConverter'
+import SphereCalculator from './pages/calculators/math/SphereCalculator'
+import TrigonometryCalculator from './pages/calculators/math/TrigonometryCalculator'
+import GCDLCMCalculator from './pages/calculators/math/GCDLCMCalculator'
 
-// Text Tools
+// Text Tools (11)
 import WordCounter from './pages/calculators/text/WordCounter'
 import LoremIpsumGenerator from './pages/calculators/text/LoremIpsumGenerator'
 import UUIDGenerator from './pages/calculators/text/UUIDGenerator'
@@ -92,28 +120,46 @@ import JSONFormatter from './pages/calculators/text/JSONFormatter'
 import ReadabilityCalculator from './pages/calculators/text/ReadabilityCalculator'
 import SlugGenerator from './pages/calculators/text/SlugGenerator'
 import TextScrambler from './pages/calculators/text/TextScrambler'
+import DuplicateRemover from './pages/calculators/text/DuplicateRemover'
+import TextReverser from './pages/calculators/text/TextReverser'
+import TextSorter from './pages/calculators/text/TextSorter'
 
-// Tech Tools
+// Tech Tools (13)
 import QRCodeGenerator from './pages/calculators/tech/QRCodeGenerator'
 import HashGenerator from './pages/calculators/tech/HashGenerator'
 import IPSubnetCalculator from './pages/calculators/tech/IPSubnetCalculator'
 import JSONFormatterCalculator from './pages/calculators/tech/JSONFormatterCalculator'
 import HashGeneratorCalculator from './pages/calculators/tech/HashGeneratorCalculator'
 import PowerCalculator from './pages/calculators/tech/PowerCalculator'
+import Base64Encoder from './pages/calculators/tech/Base64Encoder'
+import ColorConverter from './pages/calculators/tech/ColorConverter'
+import MarkdownPreviewer from './pages/calculators/tech/MarkdownPreviewer'
+import NumberBaseConverter from './pages/calculators/tech/NumberBaseConverter'
+import TechPasswordGenerator from './pages/calculators/tech/PasswordGenerator'
+import RegexTester from './pages/calculators/tech/RegexTester'
+import URLEncoder from './pages/calculators/tech/URLEncoder'
 
-// Sustainability Tools
+// Sustainability Tools (9)
 import SolarPanelCalculator from './pages/calculators/sustainability/SolarPanelCalculator'
 import EVSavingsCalculator from './pages/calculators/sustainability/EVSavingsCalculator'
 import CompostCalculator from './pages/calculators/sustainability/CompostCalculator'
 import SolarROICalculator from './pages/calculators/sustainability/SolarROICalculator'
 import RainwaterCalculator from './pages/calculators/sustainability/RainwaterCalculator'
 import PlasticFootprintCalculator from './pages/calculators/sustainability/PlasticFootprintCalculator'
+import ElectricityUsageCalculator from './pages/calculators/sustainability/ElectricityUsageCalculator'
+import TreeCarbonCalculator from './pages/calculators/sustainability/TreeCarbonCalculator'
+import RainwaterHarvestCalculator from './pages/calculators/sustainability/RainwaterHarvestCalculator'
 
-// Real Estate Tools
+// Real Estate Tools (7)
 import FlooringCalculator from './pages/calculators/realestate/FlooringCalculator'
 import RentalYieldCalculator from './pages/calculators/realestate/RentalYieldCalculator'
+import FenceCalculator from './pages/calculators/realestate/FenceCalculator'
+import TileCalculator from './pages/calculators/realestate/TileCalculator'
+import WallpaperCalculator from './pages/calculators/realestate/WallpaperCalculator'
+import MulchCalculator from './pages/calculators/realestate/MulchCalculator'
+import PoolVolumeCalculator from './pages/calculators/realestate/PoolVolumeCalculator'
 
-// Fun Tools
+// Fun Tools (17)
 import DiceRoller from './pages/calculators/fun/DiceRoller'
 import RandomPicker from './pages/calculators/fun/RandomPicker'
 import CoinFlip from './pages/calculators/fun/CoinFlip'
@@ -126,8 +172,13 @@ import SecretSantaGenerator from './pages/calculators/fun/SecretSantaGenerator'
 import DogAgeCalculator from './pages/calculators/fun/DogAgeCalculator'
 import CompatibilityCalculator from './pages/calculators/fun/CompatibilityCalculator'
 import ReactionTimeGame from './pages/calculators/fun/ReactionTimeGame'
+import TeamRandomizer from './pages/calculators/fun/TeamRandomizer'
+import WouldYouRather from './pages/calculators/fun/WouldYouRather'
+import ScoreKeeper from './pages/calculators/fun/ScoreKeeper'
+import BracketGenerator from './pages/calculators/fun/BracketGenerator'
+import MagicEightBall from './pages/calculators/fun/MagicEightBall'
 
-// Converter Tools
+// Converter Tools (15)
 import CookingConverter from './pages/calculators/converter/CookingConverter'
 import TemperatureConverter from './pages/calculators/converter/TemperatureConverter'
 import LengthConverter from './pages/calculators/converter/LengthConverter'
@@ -136,8 +187,16 @@ import PressureConverter from './pages/calculators/converter/PressureConverter'
 import AngleConverter from './pages/calculators/converter/AngleConverter'
 import RecipeScaler from './pages/calculators/converter/RecipeScaler'
 import FrequencyConverter from './pages/calculators/converter/FrequencyConverter'
+import AreaConverter from './pages/calculators/converter/AreaConverter'
+import DataStorageConverter from './pages/calculators/converter/DataStorageConverter'
+import EnergyConverter from './pages/calculators/converter/EnergyConverter'
+import SpeedConverter from './pages/calculators/converter/SpeedConverter'
+import WeightConverter from './pages/calculators/converter/WeightConverter'
+import VolumeConverter from './pages/calculators/converter/VolumeConverter'
+import ConverterCurrencyConverter from './pages/calculators/converter/CurrencyConverter'
+import ShoeSizeConverter from './pages/calculators/converter/ShoeSizeConverter'
 
-// Other Calculators
+// Other Calculators (39)
 import UnitConverter from './pages/calculators/other/UnitConverter'
 import AgeCalculator from './pages/calculators/other/AgeCalculator'
 import DateCalculator from './pages/calculators/other/DateCalculator'
@@ -167,6 +226,15 @@ import CountdownCalculator from './pages/calculators/other/CountdownCalculator'
 import LifeStatsCalculator from './pages/calculators/other/LifeStatsCalculator'
 import PackageDimensionCalculator from './pages/calculators/other/PackageDimensionCalculator'
 import StopwatchCalculator from './pages/calculators/other/StopwatchCalculator'
+import CarDepreciationCalculator from './pages/calculators/other/CarDepreciationCalculator'
+import MPGCalculator from './pages/calculators/other/MPGCalculator'
+import ReadingSpeedCalculator from './pages/calculators/other/ReadingSpeedCalculator'
+import TypingSpeedCalculator from './pages/calculators/other/TypingSpeedCalculator'
+import TimezoneConverter from './pages/calculators/other/TimezoneConverter'
+import UnixTimestampConverter from './pages/calculators/other/UnixTimestampConverter'
+import WeightedGPACalculator from './pages/calculators/other/WeightedGPACalculator'
+import WorkdaysCalculator from './pages/calculators/other/WorkdaysCalculator'
+import ScreenTimeCalculator from './pages/calculators/other/ScreenTimeCalculator'
 
 function App() {
     return (
@@ -217,6 +285,17 @@ function App() {
                 <Route path="/net-worth-calculator" element={<NetWorthCalculator />} />
                 <Route path="/currency-converter" element={<CurrencyConverter />} />
                 <Route path="/crypto-converter" element={<CryptoConverter />} />
+                <Route path="/budget-calculator" element={<BudgetCalculator />} />
+                <Route path="/cagr-calculator" element={<CAGRCalculator />} />
+                <Route path="/stock-profit-calculator" element={<StockProfitCalculator />} />
+                <Route path="/dividend-calculator" element={<DividendCalculator />} />
+                <Route path="/bond-yield-calculator" element={<BondYieldCalculator />} />
+                <Route path="/debt-payoff-calculator" element={<DebtPayoffCalculator />} />
+                <Route path="/emergency-fund-calculator" element={<EmergencyFundCalculator />} />
+                <Route path="/savings-goal-calculator" element={<SavingsGoalCalculator />} />
+                <Route path="/home-affordability-calculator" element={<HomeAffordabilityCalculator />} />
+                <Route path="/rule-of-72-calculator" element={<RuleOf72Calculator />} />
+                <Route path="/compound-growth-calculator" element={<CompoundGrowthCalculator />} />
 
                 {/* Health Calculators */}
                 <Route path="/bmi-calculator" element={<BMICalculator />} />
@@ -238,6 +317,13 @@ function App() {
                 <Route path="/period-calculator" element={<PeriodCalculator />} />
                 <Route path="/bac-calculator" element={<BACCalculator />} />
                 <Route path="/weight-loss-calculator" element={<WeightLossCalculator />} />
+                <Route path="/caffeine-calculator" element={<CaffeineCalculator />} />
+                <Route path="/calorie-burn-calculator" element={<CalorieBurnCalculator />} />
+                <Route path="/lean-body-mass-calculator" element={<LeanBodyMassCalculator />} />
+                <Route path="/sleep-cycle-calculator" element={<SleepCycleCalculator />} />
+                <Route path="/vo2-max-calculator" element={<VO2MaxCalculator />} />
+                <Route path="/running-calorie-calculator" element={<RunningCalorieCalculator />} />
+                <Route path="/pregnancy-weight-calculator" element={<PregnancyWeightCalculator />} />
 
                 {/* Math Calculators */}
                 <Route path="/scientific-calculator" element={<ScientificCalculator />} />
@@ -257,6 +343,16 @@ function App() {
                 <Route path="/wave-calculator" element={<WaveCalculator />} />
                 <Route path="/vector-calculator" element={<VectorCalculator />} />
                 <Route path="/permutation-calculator" element={<PermutationCalculator />} />
+                <Route path="/circle-calculator" element={<CircleCalculator />} />
+                <Route path="/factorial-calculator" element={<FactorialCalculator />} />
+                <Route path="/mean-median-mode-calculator" element={<MeanMedianModeCalculator />} />
+                <Route path="/probability-calculator" element={<ProbabilityCalculator />} />
+                <Route path="/pythagorean-calculator" element={<PythagoreanCalculator />} />
+                <Route path="/quadratic-solver" element={<QuadraticSolver />} />
+                <Route path="/roman-numeral-converter" element={<RomanNumeralConverter />} />
+                <Route path="/sphere-calculator" element={<SphereCalculator />} />
+                <Route path="/trigonometry-calculator" element={<TrigonometryCalculator />} />
+                <Route path="/gcd-lcm-calculator" element={<GCDLCMCalculator />} />
 
                 {/* Text Tools */}
                 <Route path="/word-counter" element={<WordCounter />} />
@@ -267,6 +363,9 @@ function App() {
                 <Route path="/readability-calculator" element={<ReadabilityCalculator />} />
                 <Route path="/slug-generator" element={<SlugGenerator />} />
                 <Route path="/text-scrambler" element={<TextScrambler />} />
+                <Route path="/duplicate-remover" element={<DuplicateRemover />} />
+                <Route path="/text-reverser" element={<TextReverser />} />
+                <Route path="/text-sorter" element={<TextSorter />} />
 
                 {/* Tech Tools */}
                 <Route path="/qr-code-generator" element={<QRCodeGenerator />} />
@@ -275,6 +374,13 @@ function App() {
                 <Route path="/json-formatter-calculator" element={<JSONFormatterCalculator />} />
                 <Route path="/hash-generator-calculator" element={<HashGeneratorCalculator />} />
                 <Route path="/power-calculator" element={<PowerCalculator />} />
+                <Route path="/base64-encoder" element={<Base64Encoder />} />
+                <Route path="/color-converter" element={<ColorConverter />} />
+                <Route path="/markdown-previewer" element={<MarkdownPreviewer />} />
+                <Route path="/number-base-converter" element={<NumberBaseConverter />} />
+                <Route path="/password-generator" element={<PasswordGenerator />} />
+                <Route path="/regex-tester" element={<RegexTester />} />
+                <Route path="/url-encoder" element={<URLEncoder />} />
 
                 {/* Sustainability Tools */}
                 <Route path="/solar-panel-calculator" element={<SolarPanelCalculator />} />
@@ -283,10 +389,20 @@ function App() {
                 <Route path="/solar-roi-calculator" element={<SolarROICalculator />} />
                 <Route path="/rainwater-calculator" element={<RainwaterCalculator />} />
                 <Route path="/plastic-footprint-calculator" element={<PlasticFootprintCalculator />} />
+                <Route path="/electricity-usage-calculator" element={<ElectricityUsageCalculator />} />
+                <Route path="/tree-carbon-calculator" element={<TreeCarbonCalculator />} />
+                <Route path="/rainwater-harvest-calculator" element={<RainwaterHarvestCalculator />} />
 
                 {/* Real Estate Tools */}
                 <Route path="/flooring-calculator" element={<FlooringCalculator />} />
                 <Route path="/rental-yield-calculator" element={<RentalYieldCalculator />} />
+                <Route path="/fence-calculator" element={<FenceCalculator />} />
+                <Route path="/tile-calculator" element={<TileCalculator />} />
+                <Route path="/wallpaper-calculator" element={<WallpaperCalculator />} />
+                <Route path="/paint-calculator" element={<PaintCalculator />} />
+                <Route path="/concrete-calculator" element={<ConcreteCalculator />} />
+                <Route path="/mulch-calculator" element={<MulchCalculator />} />
+                <Route path="/pool-volume-calculator" element={<PoolVolumeCalculator />} />
 
                 {/* Fun Tools */}
                 <Route path="/dice-roller" element={<DiceRoller />} />
@@ -301,6 +417,14 @@ function App() {
                 <Route path="/dog-age-calculator" element={<DogAgeCalculator />} />
                 <Route path="/compatibility-calculator" element={<CompatibilityCalculator />} />
                 <Route path="/reaction-time-game" element={<ReactionTimeGame />} />
+                <Route path="/team-randomizer" element={<TeamRandomizer />} />
+                <Route path="/would-you-rather" element={<WouldYouRather />} />
+                <Route path="/score-keeper" element={<ScoreKeeper />} />
+                <Route path="/bracket-generator" element={<BracketGenerator />} />
+                <Route path="/magic-eight-ball" element={<MagicEightBall />} />
+                <Route path="/love-calculator" element={<LoveCalculator />} />
+                <Route path="/zodiac-finder" element={<ZodiacFinder />} />
+                <Route path="/pet-age-calculator" element={<PetAgeCalculator />} />
 
                 {/* Converter Tools */}
                 <Route path="/cooking-converter" element={<CookingConverter />} />
@@ -311,29 +435,29 @@ function App() {
                 <Route path="/angle-converter" element={<AngleConverter />} />
                 <Route path="/recipe-scaler" element={<RecipeScaler />} />
                 <Route path="/frequency-converter" element={<FrequencyConverter />} />
+                <Route path="/area-converter" element={<AreaConverter />} />
+                <Route path="/data-storage-converter" element={<DataStorageConverter />} />
+                <Route path="/energy-converter" element={<EnergyConverter />} />
+                <Route path="/speed-converter" element={<SpeedConverter />} />
+                <Route path="/weight-converter" element={<WeightConverter />} />
+                <Route path="/volume-converter" element={<VolumeConverter />} />
+                <Route path="/unit-converter" element={<UnitConverter />} />
+                <Route path="/conversion-calculator" element={<ConversionCalculator />} />
 
                 {/* Other Calculators */}
-                <Route path="/unit-converter" element={<UnitConverter />} />
                 <Route path="/age-calculator" element={<AgeCalculator />} />
                 <Route path="/date-calculator" element={<DateCalculator />} />
-                <Route path="/password-generator" element={<PasswordGenerator />} />
                 <Route path="/gpa-calculator" element={<GPACalculator />} />
                 <Route path="/discount-calculator" element={<DiscountCalculator />} />
                 <Route path="/time-calculator" element={<TimeCalculator />} />
                 <Route path="/hours-calculator" element={<HoursCalculator />} />
                 <Route path="/grade-calculator" element={<GradeCalculator />} />
-                <Route path="/concrete-calculator" element={<ConcreteCalculator />} />
                 <Route path="/subnet-calculator" element={<SubnetCalculator />} />
-                <Route path="/conversion-calculator" element={<ConversionCalculator />} />
                 <Route path="/fuel-cost-calculator" element={<FuelCostCalculator />} />
                 <Route path="/electricity-bill-calculator" element={<ElectricityBillCalculator />} />
                 <Route path="/carbon-footprint-calculator" element={<CarbonFootprintCalculator />} />
-                <Route path="/paint-calculator" element={<PaintCalculator />} />
-                <Route path="/pet-age-calculator" element={<PetAgeCalculator />} />
                 <Route path="/tip-split-calculator" element={<TipSplitCalculator />} />
                 <Route path="/cgpa-calculator" element={<CGPACalculator />} />
-                <Route path="/love-calculator" element={<LoveCalculator />} />
-                <Route path="/zodiac-finder" element={<ZodiacFinder />} />
                 <Route path="/world-clock" element={<WorldClock />} />
                 <Route path="/countdown-timer" element={<CountdownTimer />} />
                 <Route path="/stopwatch" element={<Stopwatch />} />
@@ -342,6 +466,16 @@ function App() {
                 <Route path="/life-stats-calculator" element={<LifeStatsCalculator />} />
                 <Route path="/package-dimension-calculator" element={<PackageDimensionCalculator />} />
                 <Route path="/stopwatch-calculator" element={<StopwatchCalculator />} />
+                <Route path="/car-depreciation-calculator" element={<CarDepreciationCalculator />} />
+                <Route path="/mpg-calculator" element={<MPGCalculator />} />
+                <Route path="/reading-speed-calculator" element={<ReadingSpeedCalculator />} />
+                <Route path="/typing-speed-calculator" element={<TypingSpeedCalculator />} />
+                <Route path="/timezone-converter" element={<TimezoneConverter />} />
+                <Route path="/unix-timestamp-converter" element={<UnixTimestampConverter />} />
+                <Route path="/weighted-gpa-calculator" element={<WeightedGPACalculator />} />
+                <Route path="/workdays-calculator" element={<WorkdaysCalculator />} />
+                <Route path="/screen-time-calculator" element={<ScreenTimeCalculator />} />
+                <Route path="/shoe-size-converter" element={<ShoeSizeConverter />} />
             </Route>
         </Routes>
     )
