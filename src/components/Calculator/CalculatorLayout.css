@@ -110,6 +110,18 @@
     background: var(--bg-tertiary);
 }
 
+.action-btn.active {
+    color: #FFDD00;
+    border-color: rgba(255, 221, 0, 0.4);
+    background: rgba(255, 221, 0, 0.1);
+}
+
+.action-btn.active:hover {
+    color: #FFDD00;
+    border-color: rgba(255, 221, 0, 0.6);
+    background: rgba(255, 221, 0, 0.15);
+}
+
 /* ===== MAIN GRID ===== */
 .calc-grid {
     display: grid;

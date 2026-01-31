@@ -1,5 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { ChevronLeft, Share2, Bookmark, RotateCcw } from 'lucide-react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { ChevronLeft, Share2, Star, RotateCcw } from 'lucide-react'
+import { useStorage } from '../../context/StorageContext'
 import './CalculatorLayout.css'
 
 function CalculatorLayout({
@@ -16,6 +17,38 @@ function CalculatorLayout({
     onReset
 }) {
     const navigate = useNavigate()
+    const location = useLocation()
+    const { isFavorite, toggleFavorite, addToHistory } = useStorage()
+
+    const currentPath = location.pathname
+    const isCurrentFavorite = isFavorite(currentPath)
+
+    const handleFavoriteClick = () => {
+        toggleFavorite(currentPath)
+    }
+
+    const handleShare = async () => {
+        const shareUrl = window.location.href
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: title,
+                    text: description,
+                    url: shareUrl,
+                })
+            } catch (err) {
+                // User cancelled or share failed
+            }
+        } else {
+            // Fallback: copy to clipboard
+            try {
+                await navigator.clipboard.writeText(shareUrl)
+                // Could show a toast notification here
+            } catch (err) {
+                console.error('Failed to copy:', err)
+            }
+        }
+    }
 
     return (
         <div className="calculator-page">
@@ -42,11 +75,15 @@ function CalculatorLayout({
                     </div>
                     <p className="calc-description">{description}</p>
                     <div className="calc-actions">
-                        <button className="action-btn" aria-label="Share">
+                        <button className="action-btn" onClick={handleShare} aria-label="Share">
                             <Share2 size={18} />
                         </button>
-                        <button className="action-btn" aria-label="Bookmark">
-                            <Bookmark size={18} />
+                        <button
+                            className={`action-btn ${isCurrentFavorite ? 'active' : ''}`}
+                            onClick={handleFavoriteClick}
+                            aria-label={isCurrentFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                        >
+                            <Star size={18} fill={isCurrentFavorite ? 'currentColor' : 'none'} />
                         </button>
                         {onReset && (
                             <button className="action-btn" onClick={onReset} aria-label="Reset">
@@ -91,3 +128,4 @@ function CalculatorLayout({
 }
 
 export default CalculatorLayout
+

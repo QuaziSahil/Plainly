@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Search, Calculator, Heart, Brain, ArrowRightLeft, ChevronRight, ArrowRight } from 'lucide-react'
+import { Search, Calculator, Heart, Brain, ArrowRightLeft, ChevronRight, ArrowRight, Star, Clock } from 'lucide-react'
 import { financeCalculators, healthCalculators, mathCalculators, converterCalculators, allCalculators } from '../data/calculators'
+import { useStorage } from '../context/StorageContext'
 import './Home.css'
 
 function Home() {
@@ -9,6 +10,24 @@ function Home() {
     const [showDropdown, setShowDropdown] = useState(false)
     const searchRef = useRef(null)
     const navigate = useNavigate()
+
+    // Get favorites and history from storage
+    const { favorites, history } = useStorage()
+
+    // Map favorite paths to calculator objects
+    const favoriteCalculators = favorites
+        .map(path => allCalculators.find(calc => calc.path === path))
+        .filter(Boolean)
+        .slice(0, 6) // Show max 6 favorites
+
+    // Map history paths to calculator objects with timestamp
+    const recentCalculators = history
+        .map(item => {
+            const calc = allCalculators.find(c => c.path === item.path)
+            return calc ? { ...calc, timestamp: item.timestamp } : null
+        })
+        .filter(Boolean)
+        .slice(0, 4) // Show max 4 recent
 
     // Get 12 trending/most useful calculators
     const trendingCalculators = [
@@ -129,6 +148,64 @@ function Home() {
                     </div>
                 </div>
             </section>
+
+            {/* For You Section - Only show if user has favorites or history */}
+            {(favoriteCalculators.length > 0 || recentCalculators.length > 0) && (
+                <section className="for-you-section">
+                    <div className="container">
+                        <div className="section-header">
+                            <div>
+                                <h2 className="section-title">For You</h2>
+                                <p className="section-subtitle">PERSONALIZED QUICK ACCESS</p>
+                            </div>
+                        </div>
+
+                        {/* Favorites Row */}
+                        {favoriteCalculators.length > 0 && (
+                            <div className="for-you-block">
+                                <div className="for-you-label">
+                                    <Star size={14} />
+                                    <span>Your Favorites</span>
+                                </div>
+                                <div className="favorites-grid">
+                                    {favoriteCalculators.map((calc) => (
+                                        <Link to={calc.path} key={calc.path} className="favorite-card">
+                                            <div className="favorite-icon">
+                                                <calc.icon size={18} />
+                                            </div>
+                                            <span className="favorite-name">{calc.name.replace(' Calculator', '')}</span>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Recent Activity Row */}
+                        {recentCalculators.length > 0 && (
+                            <div className="for-you-block">
+                                <div className="for-you-label">
+                                    <Clock size={14} />
+                                    <span>Recent Activity</span>
+                                </div>
+                                <div className="recent-list">
+                                    {recentCalculators.map((calc) => (
+                                        <Link to={calc.path} key={calc.path} className="recent-item">
+                                            <div className="recent-icon">
+                                                <calc.icon size={16} />
+                                            </div>
+                                            <div className="recent-info">
+                                                <span className="recent-name">{calc.name}</span>
+                                                <span className="recent-category">{calc.category}</span>
+                                            </div>
+                                            <ArrowRight size={14} className="recent-arrow" />
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </section>
+            )}
 
             {/* Categories Section */}
             <section className="categories-section">
