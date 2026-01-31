@@ -179,6 +179,10 @@ import ScoreKeeper from './pages/calculators/fun/ScoreKeeper'
 import BracketGenerator from './pages/calculators/fun/BracketGenerator'
 import MagicEightBall from './pages/calculators/fun/MagicEightBall'
 
+// AI Tools (2)
+import ParagraphGenerator from './pages/calculators/ai/ParagraphGenerator'
+import TextSummarizer from './pages/calculators/ai/TextSummarizer'
+
 // Converter Tools (15)
 import CookingConverter from './pages/calculators/converter/CookingConverter'
 import TemperatureConverter from './pages/calculators/converter/TemperatureConverter'
@@ -427,6 +431,10 @@ function App() {
                 <Route path="/love-calculator" element={<LoveCalculator />} />
                 <Route path="/zodiac-finder" element={<ZodiacFinder />} />
                 <Route path="/pet-age-calculator" element={<PetAgeCalculator />} />
+
+                {/* AI Tools */}
+                <Route path="/ai-paragraph-generator" element={<ParagraphGenerator />} />
+                <Route path="/ai-text-summarizer" element={<TextSummarizer />} />
 
                 {/* Converter Tools */}
                 <Route path="/cooking-converter" element={<CookingConverter />} />

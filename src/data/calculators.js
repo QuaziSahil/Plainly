@@ -318,6 +318,11 @@ export const allCalculators = [
     { name: 'Volume Converter', description: 'Convert between volume units.', icon: Box, path: '/volume-converter', category: 'Other' },
     { name: 'Screen Time Calculator', description: 'Track and analyze screen time.', icon: Timer, path: '/screen-time-calculator', category: 'Other' },
     { name: 'Shoe Size Converter', description: 'Convert between shoe size standards.', icon: Ruler, path: '/shoe-size-converter', category: 'Converter' },
+
+    // AI Tools
+    { name: 'AI Paragraph Generator', description: 'Generate paragraphs instantly with AI.', icon: FileText, path: '/ai-paragraph-generator', category: 'AI' },
+    { name: 'AI Text Summarizer', description: 'Summarize long text into key points.', icon: FileText, path: '/ai-text-summarizer', category: 'AI' },
+    { name: 'AI Baby Name Generator', description: 'AI-powered baby name suggestions.', icon: Baby, path: '/baby-name-generator', category: 'AI' },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')
@@ -330,3 +335,5 @@ export const realEstateCalculators = allCalculators.filter(c => c.category === '
 export const funCalculators = allCalculators.filter(c => c.category === 'Fun')
 export const converterCalculators = allCalculators.filter(c => c.category === 'Converter')
 export const otherCalculators = allCalculators.filter(c => c.category === 'Other')
+export const aiCalculators = allCalculators.filter(c => c.category === 'AI')
+
