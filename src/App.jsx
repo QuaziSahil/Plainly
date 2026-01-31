@@ -165,7 +165,7 @@ import DiceRoller from './pages/calculators/fun/DiceRoller'
 import RandomPicker from './pages/calculators/fun/RandomPicker'
 import CoinFlip from './pages/calculators/fun/CoinFlip'
 import NumerologyCalculator from './pages/calculators/fun/NumerologyCalculator'
-import Magic8Ball from './pages/calculators/fun/Magic8Ball'
+
 import BabyNameGenerator from './pages/calculators/fun/BabyNameGenerator'
 import LotteryOddsCalculator from './pages/calculators/fun/LotteryOddsCalculator'
 import SpinTheWheel from './pages/calculators/fun/SpinTheWheel'
@@ -418,7 +418,7 @@ function App() {
                 <Route path="/random-picker" element={<RandomPicker />} />
                 <Route path="/coin-flip" element={<CoinFlip />} />
                 <Route path="/numerology-calculator" element={<NumerologyCalculator />} />
-                <Route path="/magic-8-ball" element={<Magic8Ball />} />
+                <Route path="/magic-8-ball" element={<MagicEightBall />} />
                 <Route path="/baby-name-generator" element={<BabyNameGenerator />} />
                 <Route path="/lottery-odds-calculator" element={<LotteryOddsCalculator />} />
                 <Route path="/spin-the-wheel" element={<SpinTheWheel />} />
