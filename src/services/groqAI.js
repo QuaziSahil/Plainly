@@ -269,17 +269,5 @@ export async function generateRandomName(type, options = {}) {
     }
 }
 
-// Export all models for reference
+// Export MODELS (functions are already exported inline)
 export { MODELS }
-
-export default {
-    askGroq,
-    generateAIBabyNames,
-    generateAIBusinessNames,
-    summarizeText,
-    generateParagraph,
-    translateText,
-    improveText,
-    generateRandomName,
-    MODELS
-}
