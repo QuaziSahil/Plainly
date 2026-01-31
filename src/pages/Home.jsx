@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Search, Calculator, Heart, Brain, ArrowRightLeft, ChevronRight, ArrowRight, Star, Clock } from 'lucide-react'
-import { financeCalculators, healthCalculators, mathCalculators, converterCalculators, allCalculators } from '../data/calculators'
+import { Search, Calculator, Heart, Brain, ArrowRightLeft, ChevronRight, ArrowRight, Star, Clock, Sparkles } from 'lucide-react'
+import { financeCalculators, healthCalculators, mathCalculators, converterCalculators, allCalculators, aiCalculators } from '../data/calculators'
 import { useStorage } from '../context/StorageContext'
 import './Home.css'
 
@@ -44,6 +44,13 @@ function Home() {
         healthCalculators[6],   // Pregnancy Calculator
         financeCalculators[3],  // Investment Calculator
     ]
+
+    // Get latest 8 tools (AI tools are newest)
+    const latestTools = [
+        ...aiCalculators.slice(0, 6),
+        allCalculators.find(c => c.path === '/would-you-rather'),
+        allCalculators.find(c => c.path === '/random-picker'),
+    ].filter(Boolean).slice(0, 8)
 
     const categories = [
         { name: 'Finance', icon: Calculator, path: '/finance', description: 'Financial Metrics' },
@@ -227,6 +234,39 @@ function Home() {
                                     <category.icon size={24} />
                                 </div>
                                 <span className="category-name">{category.name.toUpperCase()}</span>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Latest Tools Section */}
+            <section className="latest-section">
+                <div className="container">
+                    <div className="section-header">
+                        <div>
+                            <h2 className="section-title">
+                                Latest Tools
+                                <span className="new-badge">NEW</span>
+                            </h2>
+                            <p className="section-subtitle">RECENTLY ADDED INSTRUMENTS</p>
+                        </div>
+                        <Link to="/calculators?category=AI" className="expand-link">
+                            VIEW ALL <ChevronRight size={14} />
+                        </Link>
+                    </div>
+
+                    <div className="latest-grid">
+                        {latestTools.map((calc) => (
+                            <Link to={calc.path} key={calc.path} className="latest-card">
+                                <div className="latest-icon">
+                                    <calc.icon size={20} />
+                                </div>
+                                <div className="latest-content">
+                                    <h3 className="latest-name">{calc.name}</h3>
+                                    <p className="latest-description">{calc.description}</p>
+                                </div>
+                                <ArrowRight size={16} className="latest-arrow" />
                             </Link>
                         ))}
                     </div>
