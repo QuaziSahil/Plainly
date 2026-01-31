@@ -323,6 +323,9 @@ export const allCalculators = [
     { name: 'AI Paragraph Generator', description: 'Generate paragraphs instantly with AI.', icon: FileText, path: '/ai-paragraph-generator', category: 'AI' },
     { name: 'AI Text Summarizer', description: 'Summarize long text into key points.', icon: FileText, path: '/ai-text-summarizer', category: 'AI' },
     { name: 'AI Baby Name Generator', description: 'AI-powered baby name suggestions.', icon: Baby, path: '/baby-name-generator', category: 'AI' },
+    { name: 'AI Translator', description: 'Translate text to 25+ languages instantly.', icon: Globe, path: '/ai-translator', category: 'AI' },
+    { name: 'AI Business Name Generator', description: 'Generate creative brand names for business.', icon: Building2, path: '/ai-business-name-generator', category: 'AI' },
+    { name: 'AI Hashtag Generator', description: 'Generate trending hashtags for social media.', icon: Hash, path: '/ai-hashtag-generator', category: 'AI' },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')

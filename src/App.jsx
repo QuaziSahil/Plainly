@@ -179,9 +179,12 @@ import ScoreKeeper from './pages/calculators/fun/ScoreKeeper'
 import BracketGenerator from './pages/calculators/fun/BracketGenerator'
 import MagicEightBall from './pages/calculators/fun/MagicEightBall'
 
-// AI Tools (2)
+// AI Tools (5)
 import ParagraphGenerator from './pages/calculators/ai/ParagraphGenerator'
 import TextSummarizer from './pages/calculators/ai/TextSummarizer'
+import AITranslator from './pages/calculators/ai/AITranslator'
+import BusinessNameGenerator from './pages/calculators/ai/BusinessNameGenerator'
+import HashtagGenerator from './pages/calculators/ai/HashtagGenerator'
 
 // Converter Tools (15)
 import CookingConverter from './pages/calculators/converter/CookingConverter'
@@ -435,6 +438,9 @@ function App() {
                 {/* AI Tools */}
                 <Route path="/ai-paragraph-generator" element={<ParagraphGenerator />} />
                 <Route path="/ai-text-summarizer" element={<TextSummarizer />} />
+                <Route path="/ai-translator" element={<AITranslator />} />
+                <Route path="/ai-business-name-generator" element={<BusinessNameGenerator />} />
+                <Route path="/ai-hashtag-generator" element={<HashtagGenerator />} />
 
                 {/* Converter Tools */}
                 <Route path="/cooking-converter" element={<CookingConverter />} />
