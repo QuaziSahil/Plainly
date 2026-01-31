@@ -28,8 +28,17 @@ const MODELS = {
     default: 'llama-3.1-8b-instant'
 }
 
+// Fallback chain: if one model hits limit, try the next
+const FALLBACK_CHAIN = [
+    MODELS.primary,    // 14.4K/day
+    MODELS.secondary,  // 7K/day  
+    MODELS.versatile,  // 1K/day
+    MODELS.analytical, // 1K/day
+    MODELS.creative,   // 1K/day
+]
+
 /**
- * Send a prompt to Groq AI and get a response
+ * Send a prompt to Groq AI with automatic fallback on rate limits
  * @param {string} prompt - The user prompt
  * @param {string} systemPrompt - Optional system instructions
  * @param {object} options - Additional options
@@ -42,40 +51,57 @@ export async function askGroq(prompt, systemPrompt = '', options = {}) {
         temperature = 0.7
     } = options
 
-    try {
-        const messages = []
-
-        if (systemPrompt) {
-            messages.push({ role: 'system', content: systemPrompt })
-        }
-
-        messages.push({ role: 'user', content: prompt })
-
-        const response = await fetch(GROQ_API_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${GROQ_API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model,
-                messages,
-                max_tokens: maxTokens,
-                temperature
-            })
-        })
-
-        if (!response.ok) {
-            const error = await response.json()
-            throw new Error(error.error?.message || 'Groq API error')
-        }
-
-        const data = await response.json()
-        return data.choices[0]?.message?.content || ''
-    } catch (error) {
-        console.error('Groq AI Error:', error)
-        throw error
+    const messages = []
+    if (systemPrompt) {
+        messages.push({ role: 'system', content: systemPrompt })
     }
+    messages.push({ role: 'user', content: prompt })
+
+    // Build fallback chain starting with requested model
+    const modelsToTry = [model, ...FALLBACK_CHAIN.filter(m => m !== model)]
+
+    for (const tryModel of modelsToTry) {
+        try {
+            const response = await fetch(GROQ_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${GROQ_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: tryModel,
+                    messages,
+                    max_tokens: maxTokens,
+                    temperature
+                })
+            })
+
+            if (!response.ok) {
+                const error = await response.json()
+                const errorMsg = error.error?.message || ''
+
+                // If rate limited, try next model in chain
+                if (response.status === 429 || errorMsg.includes('rate') || errorMsg.includes('limit')) {
+                    console.warn(`Rate limited on ${tryModel}, trying fallback...`)
+                    continue
+                }
+                throw new Error(errorMsg || 'Groq API error')
+            }
+
+            const data = await response.json()
+            return data.choices[0]?.message?.content || ''
+        } catch (error) {
+            // If it's our last model, throw the error
+            if (tryModel === modelsToTry[modelsToTry.length - 1]) {
+                console.error('All models exhausted:', error)
+                throw error
+            }
+            // Otherwise continue to next model
+            console.warn(`Error with ${tryModel}:`, error.message)
+        }
+    }
+
+    throw new Error('All AI models are currently unavailable. Please try again later.')
 }
 
 /**
