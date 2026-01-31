@@ -316,6 +316,8 @@ export const allCalculators = [
     { name: 'Bracket Generator', description: 'Generate tournament brackets.', icon: Grid3x3, path: '/bracket-generator', category: 'Other' },
     { name: 'Magic Eight Ball', description: 'Ask the magic 8-ball questions.', icon: CircleDot, path: '/magic-eight-ball', category: 'Other' },
     { name: 'Volume Converter', description: 'Convert between volume units.', icon: Box, path: '/volume-converter', category: 'Other' },
+    { name: 'Screen Time Calculator', description: 'Track and analyze screen time.', icon: Timer, path: '/screen-time-calculator', category: 'Other' },
+    { name: 'Shoe Size Converter', description: 'Convert between shoe size standards.', icon: Ruler, path: '/shoe-size-converter', category: 'Converter' },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')
