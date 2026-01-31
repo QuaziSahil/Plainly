@@ -14,6 +14,7 @@ function Footer() {
             { name: 'Privacy', path: '/privacy' },
             { name: 'Terms', path: '/terms' },
             { name: 'Contact', path: '/contact' },
+            { name: 'Sitemap', path: '/sitemap' },
         ],
         popular: [
             { name: 'Mortgage Calculator', path: '/mortgage-calculator' },

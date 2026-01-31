@@ -12,6 +12,7 @@ import About from './pages/About'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import Contact from './pages/Contact'
+import Sitemap from './pages/Sitemap'
 
 // Financial Calculators
 import MortgageCalculator from './pages/calculators/finance/MortgageCalculator'
@@ -180,6 +181,7 @@ function App() {
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/sitemap" element={<Sitemap />} />
 
                 {/* Category Pages */}
                 <Route path="/finance" element={<FinanceCategory />} />
