@@ -1,11 +1,34 @@
 // Groq AI Service for Plainly
-// Free tier: 14,400 requests/day, 30 requests/minute
+// Using DIFFERENT MODELS per function to distribute rate limits
 
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
-// Default model - Llama 3.3 70B is fast and capable
-const DEFAULT_MODEL = 'llama-3.3-70b-versatile'
+// Model assignments - spread load across different models
+// Each model has 14,400 req/day limit so using multiple = more capacity
+const MODELS = {
+    // Creative tasks - Maverick is good for creative writing
+    babyNames: 'meta-llama/llama-4-maverick-17b-128e-instruct',
+    businessNames: 'meta-llama/llama-4-maverick-17b-128e-instruct',
+
+    // Summarization - Scout is good for analysis
+    summarize: 'meta-llama/llama-4-scout-17b-16e-instruct',
+
+    // Paragraph generation - Fast instant model
+    paragraph: 'llama-3.1-8b-instant',
+
+    // Translation - Main versatile model
+    translate: 'llama-3.3-70b-versatile',
+
+    // Text improvement - Compound for complex tasks
+    improve: 'groq/compound-mini',
+
+    // Random names - Fast model
+    randomNames: 'llama-3.1-8b-instant',
+
+    // Default fallback
+    default: 'llama-3.3-70b-versatile'
+}
 
 /**
  * Send a prompt to Groq AI and get a response
@@ -16,7 +39,7 @@ const DEFAULT_MODEL = 'llama-3.3-70b-versatile'
  */
 export async function askGroq(prompt, systemPrompt = '', options = {}) {
     const {
-        model = DEFAULT_MODEL,
+        model = MODELS.default,
         maxTokens = 1024,
         temperature = 0.7
     } = options
@@ -59,6 +82,7 @@ export async function askGroq(prompt, systemPrompt = '', options = {}) {
 
 /**
  * Generate creative baby names using AI
+ * Uses: Maverick model (creative writing)
  */
 export async function generateAIBabyNames(gender, style, startsWith = '', count = 6) {
     const genderText = gender === 'any' ? 'both boy and girl' : gender === 'male' ? 'boy' : 'girl'
@@ -73,7 +97,11 @@ Return ONLY a JSON array of objects with this exact format, no other text:
     const systemPrompt = 'You are a helpful baby name expert. Always respond with valid JSON only, no markdown or explanations.'
 
     try {
-        const response = await askGroq(prompt, systemPrompt, { temperature: 0.9, maxTokens: 500 })
+        const response = await askGroq(prompt, systemPrompt, {
+            model: MODELS.babyNames,
+            temperature: 0.9,
+            maxTokens: 500
+        })
 
         // Parse JSON from response
         const jsonMatch = response.match(/\[[\s\S]*\]/)
@@ -89,6 +117,7 @@ Return ONLY a JSON array of objects with this exact format, no other text:
 
 /**
  * Generate business/brand names using AI
+ * Uses: Maverick model (creative writing)
  */
 export async function generateAIBusinessNames(industry, keywords = '', style = 'modern', count = 6) {
     const prompt = `Generate ${count} creative and memorable business/brand names for a ${industry} company.
@@ -101,7 +130,11 @@ Return ONLY a JSON array with this format, no other text:
     const systemPrompt = 'You are a branding expert. Generate catchy, memorable, and unique business names. Always respond with valid JSON only.'
 
     try {
-        const response = await askGroq(prompt, systemPrompt, { temperature: 0.9, maxTokens: 500 })
+        const response = await askGroq(prompt, systemPrompt, {
+            model: MODELS.businessNames,
+            temperature: 0.9,
+            maxTokens: 500
+        })
         const jsonMatch = response.match(/\[[\s\S]*\]/)
         if (jsonMatch) {
             return JSON.parse(jsonMatch[0])
@@ -115,6 +148,7 @@ Return ONLY a JSON array with this format, no other text:
 
 /**
  * Summarize text using AI
+ * Uses: Scout model (analysis/reasoning)
  */
 export async function summarizeText(text, style = 'concise') {
     const styleInstructions = {
@@ -131,11 +165,16 @@ ${styleInstructions[style] || styleInstructions.concise}`
 
     const systemPrompt = 'You are an expert summarizer. Be accurate and capture the essence of the text.'
 
-    return await askGroq(prompt, systemPrompt, { temperature: 0.3, maxTokens: 500 })
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.summarize,
+        temperature: 0.3,
+        maxTokens: 500
+    })
 }
 
 /**
  * Generate paragraphs using AI
+ * Uses: Instant model (fast simple tasks)
  */
 export async function generateParagraph(topic, tone = 'professional', length = 'medium') {
     const lengthGuide = {
@@ -151,11 +190,16 @@ Make it engaging, informative, and well-written.`
 
     const systemPrompt = `You are an expert content writer. Write in a ${tone} tone.`
 
-    return await askGroq(prompt, systemPrompt, { temperature: 0.7, maxTokens: 500 })
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.paragraph,
+        temperature: 0.7,
+        maxTokens: 500
+    })
 }
 
 /**
  * Translate text using AI
+ * Uses: 70B Versatile (most capable)
  */
 export async function translateText(text, targetLanguage) {
     const prompt = `Translate the following text to ${targetLanguage}:
@@ -166,11 +210,16 @@ Provide only the translation, no explanations.`
 
     const systemPrompt = 'You are an expert translator. Provide accurate, natural-sounding translations.'
 
-    return await askGroq(prompt, systemPrompt, { temperature: 0.3, maxTokens: 1000 })
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.translate,
+        temperature: 0.3,
+        maxTokens: 1000
+    })
 }
 
 /**
  * Improve/rewrite text using AI
+ * Uses: Compound-mini (good for complex tasks)
  */
 export async function improveText(text, style = 'professional') {
     const prompt = `Improve and rewrite the following text to make it more ${style}:
@@ -181,11 +230,16 @@ Keep the same meaning but improve clarity, grammar, and flow.`
 
     const systemPrompt = 'You are an expert editor. Improve text while maintaining its original meaning.'
 
-    return await askGroq(prompt, systemPrompt, { temperature: 0.5, maxTokens: 1000 })
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.improve,
+        temperature: 0.5,
+        maxTokens: 1000
+    })
 }
 
 /**
  * Generate random name (for various generators)
+ * Uses: Instant model (fast)
  */
 export async function generateRandomName(type, options = {}) {
     const prompts = {
@@ -199,7 +253,11 @@ export async function generateRandomName(type, options = {}) {
     const systemPrompt = 'You are a creative naming expert. Always respond with valid JSON only.'
 
     try {
-        const response = await askGroq(prompt, systemPrompt, { temperature: 0.9, maxTokens: 400 })
+        const response = await askGroq(prompt, systemPrompt, {
+            model: MODELS.randomNames,
+            temperature: 0.9,
+            maxTokens: 400
+        })
         const jsonMatch = response.match(/\[[\s\S]*\]/)
         if (jsonMatch) {
             return JSON.parse(jsonMatch[0])
@@ -211,6 +269,9 @@ export async function generateRandomName(type, options = {}) {
     }
 }
 
+// Export all models for reference
+export { MODELS }
+
 export default {
     askGroq,
     generateAIBabyNames,
@@ -219,5 +280,6 @@ export default {
     generateParagraph,
     translateText,
     improveText,
-    generateRandomName
+    generateRandomName,
+    MODELS
 }
