@@ -23,6 +23,9 @@ import TipCalculator from './pages/calculators/finance/TipCalculator'
 import AutoLoanCalculator from './pages/calculators/finance/AutoLoanCalculator'
 import InterestCalculator from './pages/calculators/finance/InterestCalculator'
 import PaymentCalculator from './pages/calculators/finance/PaymentCalculator'
+import RetirementCalculator from './pages/calculators/finance/RetirementCalculator'
+import AmortizationCalculator from './pages/calculators/finance/AmortizationCalculator'
+import InflationCalculator from './pages/calculators/finance/InflationCalculator'
 
 // Health Calculators
 import BMICalculator from './pages/calculators/health/BMICalculator'
@@ -31,6 +34,9 @@ import BMRCalculator from './pages/calculators/health/BMRCalculator'
 import BodyFatCalculator from './pages/calculators/health/BodyFatCalculator'
 import IdealWeightCalculator from './pages/calculators/health/IdealWeightCalculator'
 import PaceCalculator from './pages/calculators/health/PaceCalculator'
+import PregnancyCalculator from './pages/calculators/health/PregnancyCalculator'
+import PregnancyConceptionCalculator from './pages/calculators/health/PregnancyConceptionCalculator'
+import DueDateCalculator from './pages/calculators/health/DueDateCalculator'
 
 // Math Calculators
 import ScientificCalculator from './pages/calculators/math/ScientificCalculator'
@@ -50,6 +56,9 @@ import DiscountCalculator from './pages/calculators/other/DiscountCalculator'
 import TimeCalculator from './pages/calculators/other/TimeCalculator'
 import HoursCalculator from './pages/calculators/other/HoursCalculator'
 import GradeCalculator from './pages/calculators/other/GradeCalculator'
+import ConcreteCalculator from './pages/calculators/other/ConcreteCalculator'
+import SubnetCalculator from './pages/calculators/other/SubnetCalculator'
+import ConversionCalculator from './pages/calculators/other/ConversionCalculator'
 
 function App() {
     return (
@@ -81,6 +90,9 @@ function App() {
                 <Route path="/auto-loan-calculator" element={<AutoLoanCalculator />} />
                 <Route path="/interest-calculator" element={<InterestCalculator />} />
                 <Route path="/payment-calculator" element={<PaymentCalculator />} />
+                <Route path="/retirement-calculator" element={<RetirementCalculator />} />
+                <Route path="/amortization-calculator" element={<AmortizationCalculator />} />
+                <Route path="/inflation-calculator" element={<InflationCalculator />} />
 
                 {/* Health Calculators */}
                 <Route path="/bmi-calculator" element={<BMICalculator />} />
@@ -89,6 +101,9 @@ function App() {
                 <Route path="/body-fat-calculator" element={<BodyFatCalculator />} />
                 <Route path="/ideal-weight-calculator" element={<IdealWeightCalculator />} />
                 <Route path="/pace-calculator" element={<PaceCalculator />} />
+                <Route path="/pregnancy-calculator" element={<PregnancyCalculator />} />
+                <Route path="/conception-calculator" element={<PregnancyConceptionCalculator />} />
+                <Route path="/due-date-calculator" element={<DueDateCalculator />} />
 
                 {/* Math Calculators */}
                 <Route path="/scientific-calculator" element={<ScientificCalculator />} />
@@ -108,6 +123,9 @@ function App() {
                 <Route path="/time-calculator" element={<TimeCalculator />} />
                 <Route path="/hours-calculator" element={<HoursCalculator />} />
                 <Route path="/grade-calculator" element={<GradeCalculator />} />
+                <Route path="/concrete-calculator" element={<ConcreteCalculator />} />
+                <Route path="/subnet-calculator" element={<SubnetCalculator />} />
+                <Route path="/conversion-calculator" element={<ConversionCalculator />} />
             </Route>
         </Routes>
     )
