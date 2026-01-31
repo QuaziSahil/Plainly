@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { Search, Menu, X, Settings, User, ArrowRight } from 'lucide-react'
+import { Search, Menu, X, Settings, User, ArrowRight, ChevronDown } from 'lucide-react'
 import { allCalculators } from '../../data/calculators'
 import './Header.css'
 
@@ -9,11 +9,26 @@ function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [showDropdown, setShowDropdown] = useState(false)
+    const [showCategoryDropdown, setShowCategoryDropdown] = useState(false)
     const [mobileSearchQuery, setMobileSearchQuery] = useState('')
     const searchRef = useRef(null)
+    const categoryRef = useRef(null)
     const mobileSearchRef = useRef(null)
     const location = useLocation()
     const navigate = useNavigate()
+
+    const categories = [
+        { name: 'Finance', path: '/finance' },
+        { name: 'Health', path: '/health' },
+        { name: 'Math', path: '/math' },
+        { name: 'Text', path: '/calculators?category=Text' },
+        { name: 'Tech', path: '/calculators?category=Tech' },
+        { name: 'Sustainability', path: '/calculators?category=Sustainability' },
+        { name: 'Real Estate', path: '/calculators?category=Real%20Estate' },
+        { name: 'Fun', path: '/calculators?category=Fun' },
+        { name: 'Converter', path: '/converter' },
+        { name: 'Other', path: '/calculators?category=Other' },
+    ]
 
     useEffect(() => {
         const handleScroll = () => {
@@ -26,15 +41,19 @@ function Header() {
     useEffect(() => {
         setIsMobileMenuOpen(false)
         setShowDropdown(false)
+        setShowCategoryDropdown(false)
         setSearchQuery('')
         setMobileSearchQuery('')
     }, [location])
 
-    // Close dropdown when clicking outside
+    // Close dropdowns when clicking outside
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (searchRef.current && !searchRef.current.contains(e.target)) {
                 setShowDropdown(false)
+            }
+            if (categoryRef.current && !categoryRef.current.contains(e.target)) {
+                setShowCategoryDropdown(false)
             }
         }
         document.addEventListener('mousedown', handleClickOutside)
@@ -110,7 +129,6 @@ function Header() {
         { name: 'FINANCE', path: '/finance' },
         { name: 'HEALTH', path: '/health' },
         { name: 'MATH', path: '/math' },
-        { name: 'SCIENCE', path: '/converter' },
     ]
 
     return (
@@ -124,6 +142,9 @@ function Header() {
 
                 {/* Desktop Navigation */}
                 <nav className="nav-desktop">
+                    <NavLink to="/calculators" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                        ALL TOOLS
+                    </NavLink>
                     {navLinks.map((link) => (
                         <NavLink
                             key={link.path}
@@ -133,6 +154,30 @@ function Header() {
                             {link.name}
                         </NavLink>
                     ))}
+                    {/* Categories Dropdown */}
+                    <div className="nav-dropdown-container" ref={categoryRef}>
+                        <button
+                            className={`nav-link nav-dropdown-toggle ${showCategoryDropdown ? 'active' : ''}`}
+                            onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                        >
+                            CATEGORIES
+                            <ChevronDown size={14} className={`nav-dropdown-icon ${showCategoryDropdown ? 'rotate' : ''}`} />
+                        </button>
+                        {showCategoryDropdown && (
+                            <div className="nav-dropdown-menu">
+                                {categories.map((cat) => (
+                                    <Link
+                                        key={cat.name}
+                                        to={cat.path}
+                                        className="nav-dropdown-item"
+                                        onClick={() => setShowCategoryDropdown(false)}
+                                    >
+                                        {cat.name}
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </nav>
 
                 {/* Right Actions */}
