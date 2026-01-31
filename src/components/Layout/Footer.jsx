@@ -20,60 +20,76 @@ function Footer() {
     return (
         <footer className="footer">
             <div className="container">
-                <div className="footer-grid">
-                    {/* Brand */}
-                    <div className="footer-brand">
-                        <div className="footer-logo">
-                            <span className="logo-icon">◇</span>
-                            <span className="logo-text">PLAINLY</span>
+                {/* Desktop Footer */}
+                <div className="footer-desktop">
+                    <div className="footer-grid">
+                        {/* Brand */}
+                        <div className="footer-brand">
+                            <div className="footer-logo">
+                                <span className="logo-icon">◇</span>
+                                <span className="logo-text">PLAINLY</span>
+                            </div>
+                            <p className="footer-tagline">
+                                Premium calculator suite with
+                                mathematical instruments. Minimalist by
+                                design, powerful by nature.
+                            </p>
                         </div>
-                        <p className="footer-tagline">
-                            Premium calculator suite with
-                            mathematical instruments. Minimalist by
-                            design, powerful by nature.
+
+                        {/* Instruments Links */}
+                        <div className="footer-column">
+                            <h4 className="footer-heading">INSTRUMENTS</h4>
+                            <nav className="footer-nav">
+                                {footerLinks.instruments.map((link) => (
+                                    <Link key={link.path} to={link.path} className="footer-link">
+                                        {link.name}
+                                    </Link>
+                                ))}
+                            </nav>
+                        </div>
+
+                        {/* Company Links */}
+                        <div className="footer-column">
+                            <h4 className="footer-heading">COMPANY</h4>
+                            <nav className="footer-nav">
+                                {footerLinks.company.map((link) => (
+                                    <Link key={link.path} to={link.path} className="footer-link">
+                                        {link.name}
+                                    </Link>
+                                ))}
+                            </nav>
+                        </div>
+
+                        {/* Popular */}
+                        <div className="footer-column">
+                            <h4 className="footer-heading">POPULAR</h4>
+                            <nav className="footer-nav">
+                                <Link to="/mortgage-calculator" className="footer-link">Mortgage Calculator</Link>
+                                <Link to="/bmi-calculator" className="footer-link">BMI Calculator</Link>
+                                <Link to="/percentage-calculator" className="footer-link">Percentage Calculator</Link>
+                                <Link to="/unit-converter" className="footer-link">Unit Converter</Link>
+                            </nav>
+                        </div>
+                    </div>
+
+                    {/* Bottom */}
+                    <div className="footer-bottom">
+                        <p className="footer-copyright">
+                            © 2024 Plainly. All rights reserved.
                         </p>
-                    </div>
-
-                    {/* Instruments Links */}
-                    <div className="footer-column">
-                        <h4 className="footer-heading">INSTRUMENTS</h4>
-                        <nav className="footer-nav">
-                            {footerLinks.instruments.map((link) => (
-                                <Link key={link.path} to={link.path} className="footer-link">
-                                    {link.name}
-                                </Link>
-                            ))}
-                        </nav>
-                    </div>
-
-                    {/* Company Links */}
-                    <div className="footer-column">
-                        <h4 className="footer-heading">COMPANY</h4>
-                        <nav className="footer-nav">
-                            {footerLinks.company.map((link) => (
-                                <Link key={link.path} to={link.path} className="footer-link">
-                                    {link.name}
-                                </Link>
-                            ))}
-                        </nav>
-                    </div>
-
-                    {/* Popular */}
-                    <div className="footer-column">
-                        <h4 className="footer-heading">POPULAR</h4>
-                        <nav className="footer-nav">
-                            <Link to="/mortgage-calculator" className="footer-link">Mortgage Calculator</Link>
-                            <Link to="/bmi-calculator" className="footer-link">BMI Calculator</Link>
-                            <Link to="/percentage-calculator" className="footer-link">Percentage Calculator</Link>
-                            <Link to="/unit-converter" className="footer-link">Unit Converter</Link>
-                        </nav>
                     </div>
                 </div>
 
-                {/* Bottom */}
-                <div className="footer-bottom">
-                    <p className="footer-copyright">
-                        © 2024 Plainly. All rights reserved.
+                {/* Mobile Footer - Compact horizontal links */}
+                <div className="footer-mobile">
+                    <div className="footer-mobile-divider"></div>
+                    <nav className="footer-mobile-links">
+                        <Link to="/privacy" className="footer-mobile-link">Privacy Policy</Link>
+                        <Link to="/terms" className="footer-mobile-link">Terms of Service</Link>
+                        <Link to="/contact" className="footer-mobile-link">Contact</Link>
+                    </nav>
+                    <p className="footer-mobile-copyright">
+                        © 2024 Plainly
                     </p>
                 </div>
             </div>
