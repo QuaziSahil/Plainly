@@ -95,7 +95,33 @@ import {
     Regex,
     Trees,
     Footprints,
-    Keyboard
+    Keyboard,
+    // AI Tool Icons
+    Mail,
+    FileUser,
+    Briefcase,
+    Tag,
+    Send,
+    Instagram,
+    Youtube,
+    BookOpen,
+    FileSearch,
+    RotateCcw,
+    Linkedin,
+    CheckCircle,
+    ArrowRightLeft,
+    Minimize2,
+    Maximize2,
+    ListTree,
+    ClipboardList,
+    PenTool,
+    Feather,
+    Music,
+    Laugh,
+    Quote,
+    Disc,
+    Mic,
+    AtSign
 } from 'lucide-react'
 
 export const allCalculators = [
