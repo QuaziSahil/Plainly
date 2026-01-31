@@ -11,6 +11,9 @@ const MODELS = {
     babyNames: 'meta-llama/llama-4-maverick-17b-128e-instruct',
     businessNames: 'meta-llama/llama-4-maverick-17b-128e-instruct',
 
+    // Email generation - Good balance of professionalism and creativity
+    email: 'meta-llama/llama-4-scout-17b-16e-instruct',
+
     // Summarization - Scout is good for analysis
     summarize: 'meta-llama/llama-4-scout-17b-16e-instruct',
 
@@ -267,6 +270,341 @@ export async function generateRandomName(type, options = {}) {
         console.error('AI Name Error:', error)
         return null
     }
+}
+
+/**
+ * Generate emails using AI
+ * Uses: Scout model (analysis/reasoning)
+ */
+export async function generateEmail(purpose, context, tone = 'professional', length = 'medium') {
+    const lengthGuide = {
+        short: 'Clear and concise, get straight to the point.',
+        medium: 'Standard email length with proper greeting and closing.',
+        long: 'Detailed email with comprehensive explanations and structure.'
+    }
+
+    const prompt = `Draft a ${tone} email for the following purpose: "${purpose}"
+    
+Context/Details: ${context}
+
+Length requirement: ${lengthGuide[length] || lengthGuide.medium}
+
+The email should include:
+1. A catchy or appropriate Subject line
+2. A proper greeting
+3. The main body
+4. A professional closing/signature block placeholder
+
+Return the subject and the body clearly separated.`
+
+    const systemPrompt = `You are a professional communication expert. Write emails that are ${tone}, effective, and impactful. Ensure there is a clear Subject line at the beginning.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.email,
+        temperature: 0.7,
+        maxTokens: 1000
+    })
+}
+
+/**
+ * Generate cover letters using AI
+ */
+export async function generateCoverLetter(jobTitle, company, skills, experience, tone = 'professional') {
+    const prompt = `Write a ${tone} cover letter for the position of "${jobTitle}" at "${company}".
+    
+My Key Skills: ${skills}
+My Experience: ${experience}
+
+The letter should be professional, persuasive, and tailored to the job. Include placeholders for [Date], [Hiring Manager Name], and [My Contact Info].`
+
+    const systemPrompt = `You are a career coaching expert. Write compelling, professional cover letters that help candidates stand out.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.email, // Using same model as email
+        temperature: 0.7,
+        maxTokens: 1500
+    })
+}
+
+/**
+ * Generate resume summaries using AI
+ */
+export async function generateResumeSummary(jobTitle, experience, achievements) {
+    const prompt = `Write 3 different professional resume summaries for a "${jobTitle}".
+    
+Years of Experience: ${experience}
+Key Achievements: ${achievements}
+
+Provide 3 options: 1. Concise, 2. Achievement-focused, 3. Skills-focused.`
+
+    const systemPrompt = `You are an expert resume writer. Create impactful, keyword-rich summaries that grab attention.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.improve,
+        temperature: 0.7,
+        maxTokens: 800
+    })
+}
+
+/**
+ * Generate product descriptions using AI
+ */
+export async function generateProductDescription(productName, features, audience, tone = 'persuasive') {
+    const prompt = `Write a ${tone} product description for "${productName}".
+    
+Key Features: ${features}
+Target Audience: ${audience}
+
+Make it engaging and focus on benefits, not just features.`
+
+    const systemPrompt = `You are a professional copywriter. Create compelling product descriptions that drive conversions.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.paragraph,
+        temperature: 0.8,
+        maxTokens: 800
+    })
+}
+
+/**
+ * Generate slogans/taglines using AI
+ */
+export async function generateSlogans(businessName, description, tone = 'catchy') {
+    const prompt = `Generate 10 catchy and memorable slogans for "${businessName}".
+    
+Business Description: ${description}
+Desired Tone: ${tone}
+
+Return as a list.`
+
+    const systemPrompt = `You are a creative branding expert. Create short, punchy, and memorable slogans.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.businessNames,
+        temperature: 0.9,
+        maxTokens: 500
+    })
+}
+
+/**
+ * Generate social media content (Tweets, Instagram, etc)
+ */
+export async function generateSocialContent(platform, topic, keywords, tone = 'engaging') {
+    const prompt = `Create 5 ${tone} posts for ${platform} about: "${topic}"
+    
+Include these keywords: ${keywords}
+Include relevant hashtags.`
+
+    const systemPrompt = `You are a social media marketing expert. Create high-engagement content for ${platform}.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.paragraph,
+        temperature: 0.8,
+        maxTokens: 800
+    })
+}
+
+/**
+ * Generate blog post drafts using AI
+ */
+export async function generateBlogPost(topic, outline = '', tone = 'informative', length = 'medium') {
+    const prompt = `Write a ${tone} blog post about: "${topic}"
+    
+${outline ? `Follow this outline: ${outline}` : 'Create a structured post with introduction, key points, and conclusion.'}
+
+Length: ${length === 'short' ? '400-600 words' : length === 'long' ? '1000-1500 words' : '700-900 words'}.`
+
+    const systemPrompt = `You are an expert blog writer. Write engaging, SEO-optimized, and high-quality content.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.paragraph,
+        temperature: 0.7,
+        maxTokens: 2048
+    })
+}
+
+/**
+ * Generate SEO meta descriptions using AI
+ */
+export async function generateMetaDescription(pageTitle, contentSummary, targetKeywords = '') {
+    const prompt = `Write 3 different compelling SEO meta descriptions for:
+    
+Page Title: ${pageTitle}
+Content: ${contentSummary}
+Keywords: ${targetKeywords}
+
+Each description must be under 160 characters and include a call to action.`
+
+    const systemPrompt = `You are an SEO expert. Write descriptions that improve click-through rates while staying within character limits.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.summarize,
+        temperature: 0.5,
+        maxTokens: 500
+    })
+}
+
+/**
+ * Generate creative titles for content (YouTube, Articles)
+ */
+export async function generateContentTitles(topic, type = 'YouTube', tone = 'viral') {
+    const prompt = `Generate 10 ${tone} ${type} titles for a video/article about: "${topic}"
+    
+Make them catchy with high click-through potential.`
+
+    const systemPrompt = `You are a viral content strategist. Create titles that are irresistible to click but not clickbaity.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.businessNames,
+        temperature: 0.9,
+        maxTokens: 500
+    })
+}
+
+/**
+ * Advanced text transformation services
+ */
+
+export async function checkGrammar(text) {
+    const prompt = `Review the following text for grammar, spelling, and punctuation errors:
+    
+"${text}"
+
+Provide the corrected version and a brief list of the main improvements made.`
+
+    const systemPrompt = `You are an expert English teacher and editor. Fix all errors while keeping the original meaning.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.improve,
+        temperature: 0.3,
+        maxTokens: 1000
+    })
+}
+
+export async function transformVoice(text, targetVoice = 'active') {
+    const prompt = `Rewrite the following text from passive voice to ${targetVoice} voice:
+    
+"${text}"`
+
+    const systemPrompt = `You are an expert editor who specializes in clear, direct writing. Convert passive sentences to active ones for better impact.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.improve,
+        temperature: 0.3,
+        maxTokens: 1000
+    })
+}
+
+export async function adjustSentenceLength(text, target = 'expand') {
+    const action = target === 'expand' ? 'Expand and elaborate on' : 'Shorten and make more concise';
+    const prompt = `${action} the following text while keeping the core meaning:
+    
+"${text}"`
+
+    const systemPrompt = `You are an expert writer. ${target === 'expand' ? 'Add relevant detail and depth' : 'Remove fluff and optimize for brevity'}.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.improve,
+        temperature: 0.6,
+        maxTokens: 1000
+    })
+}
+
+/**
+ * Academic & Business tools
+ */
+
+export async function generateEssayOutline(topic, type = 'argumentative') {
+    const prompt = `Create a structured essay outline for the topic: "${topic}"
+    
+Essay Type: ${type}
+
+Include:
+1. Introduction (with thesis statement placeholder)
+2. 3-4 Main body paragraphs with key points
+3. Conclusion`
+
+    const systemPrompt = `You are an academic writing coach. Create logical, well-structured outlines for students.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.summarize,
+        temperature: 0.5,
+        maxTokens: 1000
+    })
+}
+
+export async function generateMeetingNotes(transcript, format = 'standard') {
+    const prompt = `Summarize the following meeting discussion into structured notes:
+    
+"${transcript}"
+
+Format: ${format === 'bullets' ? 'Concise bullet points' : 'Detailed sections with Actions, Decisions, and Summary'}.`
+
+    const systemPrompt = `You are a professional secretary. Extract key information, action items, and decisions from meeting transcripts.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.summarize,
+        temperature: 0.4,
+        maxTokens: 1500
+    })
+}
+
+/**
+ * Creative Writing tools
+ */
+
+export async function generateCreativeContent(type, topic, details = '', tone = 'creative') {
+    const prompts = {
+        storyStarter: `Write 3 unique story starters (first paragraphs) for a ${topic} story. ${details ? `Context: ${details}` : ''}`,
+        plot: `Generate a compelling plot outline for a ${topic} story. ${details ? `Elements to include: ${details}` : ''}`,
+        poem: `Write a ${tone} poem about "${topic}". ${details ? `Style: ${details}` : ''}`,
+        lyrics: `Write song lyrics about "${topic}" in the style of ${details || 'modern pop'}.`,
+        joke: `Tell me 5 funny jokes about "${topic}".`,
+        quote: `Generate 5 inspirational or thought-provoking quotes about "${topic}".`
+    }
+
+    const prompt = prompts[type] || `Write something creative about ${topic}.`
+    const systemPrompt = `You are a highly creative writer. Write engaging, imaginative, and original content.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.babyNames, // Using Maverick model for creativity
+        temperature: 0.9,
+        maxTokens: 1500
+    })
+}
+
+export async function generateMeetingAgenda(objective, participants = '', duration = '30') {
+    const prompt = `Create a professional meeting agenda for: "${objective}"
+    
+Participants/Context: ${participants || 'Standard team meeting'}
+Duration: ${duration} minutes
+
+Include:
+1. Goal of the meeting
+2. Time-boxed agenda items
+3. Required preparation`
+
+    const systemPrompt = `You are a productivity expert. Create efficient, goal-oriented meeting agendas.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.summarize,
+        temperature: 0.5,
+        maxTokens: 1000
+    })
+}
+
+export async function generateColorPalette(theme, count = 5) {
+    const prompt = `Generate a ${count}-color palette for the theme: "${theme}"
+    
+Return the colors as a list of hex codes with brief descriptions of why they fit the theme.`
+
+    const systemPrompt = `You are a professional UI/UX designer and color theorist. Create harmonious and modern color palettes.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.businessNames,
+        temperature: 0.8,
+        maxTokens: 800
+    })
 }
 
 // Export MODELS (functions are already exported inline)

@@ -185,6 +185,36 @@ import TextSummarizer from './pages/calculators/ai/TextSummarizer'
 import AITranslator from './pages/calculators/ai/AITranslator'
 import BusinessNameGenerator from './pages/calculators/ai/BusinessNameGenerator'
 import HashtagGenerator from './pages/calculators/ai/HashtagGenerator'
+import AIEmailGenerator from './pages/calculators/ai/AIEmailGenerator'
+import AICoverLetterGenerator from './pages/calculators/ai/AICoverLetterGenerator'
+import AIResumeSummaryGenerator from './pages/calculators/ai/AIResumeSummaryGenerator'
+import AIProductDescriptionGenerator from './pages/calculators/ai/AIProductDescriptionGenerator'
+import AISloganGenerator from './pages/calculators/ai/AISloganGenerator'
+import AITweetGenerator from './pages/calculators/ai/AITweetGenerator'
+import AIInstagramCaptionGenerator from './pages/calculators/ai/AIInstagramCaptionGenerator'
+import AIYouTubeTitleGenerator from './pages/calculators/ai/AIYouTubeTitleGenerator'
+import AIBlogPostGenerator from './pages/calculators/ai/AIBlogPostGenerator'
+import AIMetaDescriptionGenerator from './pages/calculators/ai/AIMetaDescriptionGenerator'
+import AIParaphraser from './pages/calculators/ai/AIParaphraser'
+import AILinkedInPostGenerator from './pages/calculators/ai/AILinkedInPostGenerator'
+import AIGrammarChecker from './pages/calculators/ai/AIGrammarChecker'
+import AIVoiceTransformer from './pages/calculators/ai/AIVoiceTransformer'
+import AISentenceExpander from './pages/calculators/ai/AISentenceExpander'
+import AISentenceShortener from './pages/calculators/ai/AISentenceShortener'
+import AIEssayOutlineGenerator from './pages/calculators/ai/AIEssayOutlineGenerator'
+import AIMeetingNotesGenerator from './pages/calculators/ai/AIMeetingNotesGenerator'
+import AIStoryStarterGenerator from './pages/calculators/ai/AIStoryStarterGenerator'
+import AIPlotGenerator from './pages/calculators/ai/AIPlotGenerator'
+import AIPoemGenerator from './pages/calculators/ai/AIPoemGenerator'
+import AISongLyricsGenerator from './pages/calculators/ai/AISongLyricsGenerator'
+import AIJokeGenerator from './pages/calculators/ai/AIJokeGenerator'
+import AIQuoteGenerator from './pages/calculators/ai/AIQuoteGenerator'
+import AIPickupLineGenerator from './pages/calculators/ai/AIPickupLineGenerator'
+import AIBandNameGenerator from './pages/calculators/ai/AIBandNameGenerator'
+import AIRapNameGenerator from './pages/calculators/ai/AIRapNameGenerator'
+import AIUsernameGenerator from './pages/calculators/ai/AIUsernameGenerator'
+import AIColorPaletteGenerator from './pages/calculators/ai/AIColorPaletteGenerator'
+import AIMeetingAgendaGenerator from './pages/calculators/ai/AIMeetingAgendaGenerator'
 
 // Converter Tools (15)
 import CookingConverter from './pages/calculators/converter/CookingConverter'
@@ -441,6 +471,36 @@ function App() {
                 <Route path="/ai-translator" element={<AITranslator />} />
                 <Route path="/ai-business-name-generator" element={<BusinessNameGenerator />} />
                 <Route path="/ai-hashtag-generator" element={<HashtagGenerator />} />
+                <Route path="/ai-email-generator" element={<AIEmailGenerator />} />
+                <Route path="/ai-cover-letter-generator" element={<AICoverLetterGenerator />} />
+                <Route path="/ai-resume-summary-generator" element={<AIResumeSummaryGenerator />} />
+                <Route path="/ai-product-description-generator" element={<AIProductDescriptionGenerator />} />
+                <Route path="/ai-slogan-generator" element={<AISloganGenerator />} />
+                <Route path="/ai-tweet-generator" element={<AITweetGenerator />} />
+                <Route path="/ai-instagram-caption-generator" element={<AIInstagramCaptionGenerator />} />
+                <Route path="/ai-youtube-title-generator" element={<AIYouTubeTitleGenerator />} />
+                <Route path="/ai-blog-post-generator" element={<AIBlogPostGenerator />} />
+                <Route path="/ai-meta-description-generator" element={<AIMetaDescriptionGenerator />} />
+                <Route path="/ai-paraphraser" element={<AIParaphraser />} />
+                <Route path="/ai-linkedin-post-generator" element={<AILinkedInPostGenerator />} />
+                <Route path="/ai-grammar-checker" element={<AIGrammarChecker />} />
+                <Route path="/ai-voice-transformer" element={<AIVoiceTransformer />} />
+                <Route path="/ai-sentence-expander" element={<AISentenceExpander />} />
+                <Route path="/ai-sentence-shortener" element={<AISentenceShortener />} />
+                <Route path="/ai-essay-outline-generator" element={<AIEssayOutlineGenerator />} />
+                <Route path="/ai-meeting-notes-generator" element={<AIMeetingNotesGenerator />} />
+                <Route path="/ai-story-starter-generator" element={<AIStoryStarterGenerator />} />
+                <Route path="/ai-plot-generator" element={<AIPlotGenerator />} />
+                <Route path="/ai-poem-generator" element={<AIPoemGenerator />} />
+                <Route path="/ai-song-lyrics-generator" element={<AISongLyricsGenerator />} />
+                <Route path="/ai-joke-generator" element={<AIJokeGenerator />} />
+                <Route path="/ai-quote-generator" element={<AIQuoteGenerator />} />
+                <Route path="/ai-pickup-line-generator" element={<AIPickupLineGenerator />} />
+                <Route path="/ai-band-name-generator" element={<AIBandNameGenerator />} />
+                <Route path="/ai-rap-name-generator" element={<AIRapNameGenerator />} />
+                <Route path="/ai-username-generator" element={<AIUsernameGenerator />} />
+                <Route path="/ai-color-palette-generator" element={<AIColorPaletteGenerator />} />
+                <Route path="/ai-meeting-agenda-generator" element={<AIMeetingAgendaGenerator />} />
 
                 {/* Converter Tools */}
                 <Route path="/cooking-converter" element={<CookingConverter />} />
