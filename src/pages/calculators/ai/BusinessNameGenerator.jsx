@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Building2, Loader2, Copy, Check, Sparkles, RefreshCw } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 import AIOutputFormatter from '../../../components/AIOutputFormatter'

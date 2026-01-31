@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Sparkles, Loader2, Wand2, Copy, Check, RefreshCw, Zap } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 import AIOutputFormatter from '../../../components/AIOutputFormatter'
@@ -9,6 +9,7 @@ function AISloganGenerator() {
     const [description, setDescription] = useState('')
     const [tone, setTone] = useState('catchy')
     const [result, setResult] = useState('')
+    const resultRef = useRef(null)
     const [loading, setLoading] = useState(false)
     const [copied, setCopied] = useState(false)
     const [error, setError] = useState('')
@@ -26,6 +27,7 @@ function AISloganGenerator() {
         try {
             const slogans = await generateSlogans(businessName, description, tone)
             setResult(slogans)
+            setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
         } catch (err) {
             setError('Failed to generate. Please try again.')
             console.error(err)
@@ -154,8 +156,7 @@ function AISloganGenerator() {
                 )}
             </button>
 
-            {result && (
-                <div style={{
+            {result && (<div ref={resultRef} style={{
                     background: '#1a1a2e',
                     borderRadius: '12px',
                     border: '1px solid #333',

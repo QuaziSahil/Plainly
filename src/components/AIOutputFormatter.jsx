@@ -4,6 +4,15 @@
  */
 import { memo } from 'react'
 
+// Clean text by removing markdown formatting
+const cleanText = (text) => {
+    if (!text) return ''
+    return text
+        .replace(/\*\*/g, '')           // Remove ** bold markers
+        .replace(/^["']|["']$/g, '')    // Remove surrounding quotes
+        .trim()
+}
+
 // Parse AI output into structured elements
 const parseAIOutput = (text) => {
     if (!text) return []
@@ -11,36 +20,36 @@ const parseAIOutput = (text) => {
     const lines = text.split('\n').filter(line => line.trim())
     const elements = []
 
-    lines.forEach((line, index) => {
+    lines.forEach((line) => {
         const trimmed = line.trim()
 
-        // Numbered list: "1. item" or "1) item"
-        const numberedMatch = trimmed.match(/^(\d+)[.):]\s*(.+)$/)
+        // Numbered list: "1. item" or "1) item" or "1: item"
+        const numberedMatch = trimmed.match(/^(\d+)[.):\s]+(.+)$/)
         if (numberedMatch) {
             elements.push({
                 type: 'numbered',
                 number: numberedMatch[1],
-                content: numberedMatch[2].replace(/^["']|["']$/g, '').trim()
+                content: cleanText(numberedMatch[2])
             })
             return
         }
 
-        // Bullet point: "- item" or "• item" or "* item"
-        const bulletMatch = trimmed.match(/^[-•*]\s*(.+)$/)
+        // Bullet point: "- item" or "• item"
+        const bulletMatch = trimmed.match(/^[-•]\s+(.+)$/)
         if (bulletMatch) {
             elements.push({
                 type: 'bullet',
-                content: bulletMatch[1].replace(/^["']|["']$/g, '').trim()
+                content: cleanText(bulletMatch[1])
             })
             return
         }
 
-        // Heading: "## Heading" or "**Heading**"
-        const headingMatch = trimmed.match(/^#{1,3}\s*(.+)$/) || trimmed.match(/^\*\*(.+)\*\*$/)
+        // Heading: "## Heading"
+        const headingMatch = trimmed.match(/^#{1,3}\s+(.+)$/)
         if (headingMatch) {
             elements.push({
                 type: 'heading',
-                content: headingMatch[1].trim()
+                content: cleanText(headingMatch[1])
             })
             return
         }
@@ -49,7 +58,7 @@ const parseAIOutput = (text) => {
         if (trimmed.length > 0) {
             elements.push({
                 type: 'paragraph',
-                content: trimmed
+                content: cleanText(trimmed)
             })
         }
     })
@@ -144,13 +153,13 @@ function AIOutputFormatter({ content }) {
                                 <div key={index} style={styles.numberedItem}>
                                     <span style={styles.numberBadge}>{match[1]}</span>
                                     <span style={styles.itemContent}>
-                                        {match[2].replace(/^["']|["']$/g, '').trim()}
+                                        {cleanText(match[2])}
                                     </span>
                                 </div>
                             )
                         }
                         return item.trim() ? (
-                            <div key={index} style={styles.paragraph}>{item.trim()}</div>
+                            <div key={index} style={styles.paragraph}>{cleanText(item)}</div>
                         ) : null
                     }).filter(Boolean)}
                 </div>

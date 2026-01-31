@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Languages, Loader2, Copy, Check, ArrowRight } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 import AIOutputFormatter from '../../../components/AIOutputFormatter'
@@ -8,6 +8,7 @@ function AITranslator() {
     const [inputText, setInputText] = useState('')
     const [targetLang, setTargetLang] = useState('Spanish')
     const [result, setResult] = useState('')
+    const resultRef = useRef(null)
     const [loading, setLoading] = useState(false)
     const [copied, setCopied] = useState(false)
     const [error, setError] = useState('')
@@ -33,6 +34,7 @@ function AITranslator() {
         try {
             const translation = await translateText(inputText, targetLang)
             setResult(translation)
+            setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
         } catch (err) {
             setError('Failed to translate. Please try again.')
             console.error(err)
@@ -147,8 +149,7 @@ function AITranslator() {
             </button>
 
             {/* Result */}
-            {result && (
-                <div style={{
+            {result && (<div ref={resultRef} style={{
                     background: '#1a1a2e',
                     borderRadius: '12px',
                     border: '1px solid #8b5cf640',

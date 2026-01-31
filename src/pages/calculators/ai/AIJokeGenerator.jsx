@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Laugh, Loader2, Wand2, Copy, Check, RefreshCw, Smartphone } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 import AIOutputFormatter from '../../../components/AIOutputFormatter'
@@ -8,6 +8,7 @@ function AIJokeGenerator() {
     const [topic, setTopic] = useState('')
     const [tone, setTone] = useState('funny')
     const [result, setResult] = useState('')
+    const resultRef = useRef(null)
     const [loading, setLoading] = useState(false)
     const [copied, setCopied] = useState(false)
     const [error, setError] = useState('')
@@ -20,6 +21,7 @@ function AIJokeGenerator() {
         try {
             const jokes = await generateCreativeContent('joke', topic || 'anything')
             setResult(jokes)
+            setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
         } catch (err) {
             setError('Failed to generate. Please try again.')
             console.error(err)
@@ -125,8 +127,7 @@ function AIJokeGenerator() {
                 )}
             </button>
 
-            {result && (
-                <div style={{
+            {result && (<div ref={resultRef} style={{
                     background: '#1a1a2e',
                     borderRadius: '12px',
                     border: '1px solid #333',
