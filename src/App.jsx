@@ -26,6 +26,10 @@ import PaymentCalculator from './pages/calculators/finance/PaymentCalculator'
 import RetirementCalculator from './pages/calculators/finance/RetirementCalculator'
 import AmortizationCalculator from './pages/calculators/finance/AmortizationCalculator'
 import InflationCalculator from './pages/calculators/finance/InflationCalculator'
+import FinanceCalculator from './pages/calculators/finance/FinanceCalculator'
+import IncomeTaxCalculator from './pages/calculators/finance/IncomeTaxCalculator'
+import InterestRateCalculator from './pages/calculators/finance/InterestRateCalculator'
+import SalesTaxCalculator from './pages/calculators/finance/SalesTaxCalculator'
 
 // Health Calculators
 import BMICalculator from './pages/calculators/health/BMICalculator'
@@ -93,6 +97,10 @@ function App() {
                 <Route path="/retirement-calculator" element={<RetirementCalculator />} />
                 <Route path="/amortization-calculator" element={<AmortizationCalculator />} />
                 <Route path="/inflation-calculator" element={<InflationCalculator />} />
+                <Route path="/finance-calculator" element={<FinanceCalculator />} />
+                <Route path="/income-tax-calculator" element={<IncomeTaxCalculator />} />
+                <Route path="/interest-rate-calculator" element={<InterestRateCalculator />} />
+                <Route path="/sales-tax-calculator" element={<SalesTaxCalculator />} />
 
                 {/* Health Calculators */}
                 <Route path="/bmi-calculator" element={<BMICalculator />} />
