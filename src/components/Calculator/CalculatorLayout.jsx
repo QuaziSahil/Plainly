@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { ChevronLeft, Share2, Star, RotateCcw } from 'lucide-react'
+import { ChevronLeft, Share2, Star, RotateCcw, Bug } from 'lucide-react'
 import { useStorage } from '../../context/StorageContext'
+import BugReportModal from '../BugReportModal'
 import './CalculatorLayout.css'
 
 function CalculatorLayout({
@@ -19,6 +21,7 @@ function CalculatorLayout({
     const navigate = useNavigate()
     const location = useLocation()
     const { isFavorite, toggleFavorite, addToHistory } = useStorage()
+    const [showBugReport, setShowBugReport] = useState(false)
 
     const currentPath = location.pathname
     const isCurrentFavorite = isFavorite(currentPath)
@@ -93,8 +96,24 @@ function CalculatorLayout({
                         >
                             <RotateCcw size={18} />
                         </button>
+                        <button
+                            className="action-btn bug-report-btn"
+                            onClick={() => setShowBugReport(true)}
+                            aria-label="Report Bug"
+                            title="Report an issue"
+                        >
+                            <Bug size={18} />
+                        </button>
                     </div>
                 </header>
+
+                {/* Bug Report Modal */}
+                <BugReportModal
+                    isOpen={showBugReport}
+                    onClose={() => setShowBugReport(false)}
+                    calculatorName={title}
+                    calculatorPath={currentPath}
+                />
 
 
                 {/* Main Content Grid */}
