@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { Search, Menu, X, Settings, User, ArrowRight, ChevronDown, Coffee } from 'lucide-react'
+import { Search, Menu, X, Settings, ArrowRight, ChevronDown, Coffee } from 'lucide-react'
 import { allCalculators } from '../../data/calculators'
+import { useSettings } from '../../context/SettingsContext'
 import './Header.css'
 
 function Header() {
@@ -16,6 +17,7 @@ function Header() {
     const mobileSearchRef = useRef(null)
     const location = useLocation()
     const navigate = useNavigate()
+    const { openSettings } = useSettings()
 
     const categories = [
         { name: 'Finance', path: '/finance' },
@@ -226,7 +228,7 @@ function Header() {
                         )}
                     </div>
 
-                    <button className="header-icon-btn" aria-label="Settings">
+                    <button className="header-icon-btn" aria-label="Settings" onClick={openSettings}>
                         <Settings size={18} />
                     </button>
 
