@@ -18,13 +18,11 @@ import {
     Timer,
     Baby,
     Calendar,
-    Pi,
     Divide,
     Hash,
     Shuffle,
     Triangle,
     BarChart3,
-    Plus,
     ArrowLeftRight,
     Clock,
     CalendarDays,
@@ -77,11 +75,31 @@ import {
     Stars,
     Gamepad2,
     TrendingDown,
-    UtensilsCrossed
+    UtensilsCrossed,
+    Coffee,
+    Circle,
+    Fence,
+    Layers,
+    Link2,
+    Database,
+    Battery,
+    Weight,
+    Move,
+    HardDrive,
+    Gauge,
+    Users,
+    MessageCircle,
+    Type,
+    ArrowDown,
+    FileDigit,
+    Regex,
+    Trees,
+    Footprints,
+    Keyboard
 } from 'lucide-react'
 
 export const allCalculators = [
-    // Finance Calculators (27)
+    // Finance Calculators (38)
     { name: 'Mortgage Calculator', description: 'Calculate monthly payments, total interest, and amortization for home loans.', icon: Home, path: '/mortgage-calculator', category: 'Finance' },
     { name: 'Loan Calculator', description: 'Compute loan payments, interest rates, and payoff schedules.', icon: CreditCard, path: '/loan-calculator', category: 'Finance' },
     { name: 'Compound Interest', description: 'Visualize exponential growth through compounding interest calculations.', icon: TrendingUp, path: '/compound-interest-calculator', category: 'Finance' },
@@ -109,8 +127,19 @@ export const allCalculators = [
     { name: 'Net Worth Calculator', description: 'Track assets and liabilities to calculate net worth.', icon: Wallet, path: '/net-worth-calculator', category: 'Finance' },
     { name: 'Currency Converter', description: 'Convert between world currencies with live rates.', icon: DollarSign, path: '/currency-converter', category: 'Finance' },
     { name: 'Crypto Converter', description: 'Convert cryptocurrency to fiat currency.', icon: Bitcoin, path: '/crypto-converter', category: 'Finance' },
+    { name: 'Budget Calculator', description: 'Plan and track your monthly budget.', icon: Wallet, path: '/budget-calculator', category: 'Finance' },
+    { name: 'CAGR Calculator', description: 'Calculate Compound Annual Growth Rate.', icon: TrendingUp, path: '/cagr-calculator', category: 'Finance' },
+    { name: 'Stock Profit Calculator', description: 'Calculate stock trading profits and returns.', icon: BarChart3, path: '/stock-profit-calculator', category: 'Finance' },
+    { name: 'Dividend Calculator', description: 'Calculate dividend income and yield.', icon: PiggyBank, path: '/dividend-calculator', category: 'Finance' },
+    { name: 'Bond Yield Calculator', description: 'Calculate bond yields and returns.', icon: FileSpreadsheet, path: '/bond-yield-calculator', category: 'Finance' },
+    { name: 'Debt Payoff Calculator', description: 'Plan your debt payoff strategy.', icon: CreditCard, path: '/debt-payoff-calculator', category: 'Finance' },
+    { name: 'Emergency Fund Calculator', description: 'Calculate your emergency fund needs.', icon: PiggyBank, path: '/emergency-fund-calculator', category: 'Finance' },
+    { name: 'Savings Goal Calculator', description: 'Plan savings for your goals.', icon: PiggyBank, path: '/savings-goal-calculator', category: 'Finance' },
+    { name: 'Home Affordability Calculator', description: 'Calculate how much home you can afford.', icon: Home, path: '/home-affordability-calculator', category: 'Finance' },
+    { name: 'Rule of 72 Calculator', description: 'Calculate investment doubling time.', icon: Calculator, path: '/rule-of-72-calculator', category: 'Finance' },
+    { name: 'Compound Growth Calculator', description: 'Calculate compound growth over time.', icon: TrendingUp, path: '/compound-growth-calculator', category: 'Finance' },
 
-    // Health Calculators (19)
+    // Health Calculators (26)
     { name: 'BMI Calculator', description: 'Calculate Body Mass Index and understand your weight category.', icon: Scale, path: '/bmi-calculator', category: 'Health' },
     { name: 'Calorie Calculator', description: 'Estimate daily caloric needs based on your activity level.', icon: Flame, path: '/calorie-calculator', category: 'Health' },
     { name: 'BMR Calculator', description: 'Calculate your Basal Metabolic Rate for fitness planning.', icon: Activity, path: '/bmr-calculator', category: 'Health' },
@@ -130,8 +159,15 @@ export const allCalculators = [
     { name: 'Period Calculator', description: 'Track and predict menstrual cycle dates.', icon: CalendarDays, path: '/period-calculator', category: 'Health' },
     { name: 'BAC Calculator', description: 'Estimate blood alcohol content based on drinks.', icon: AlertTriangle, path: '/bac-calculator', category: 'Health' },
     { name: 'Weight Loss Calculator', description: 'Plan weight loss timeline and milestones.', icon: TrendingDown, path: '/weight-loss-calculator', category: 'Health' },
+    { name: 'Caffeine Calculator', description: 'Track your daily caffeine intake.', icon: Coffee, path: '/caffeine-calculator', category: 'Health' },
+    { name: 'Calorie Burn Calculator', description: 'Calculate calories burned during activities.', icon: Flame, path: '/calorie-burn-calculator', category: 'Health' },
+    { name: 'Lean Body Mass Calculator', description: 'Calculate your lean body mass.', icon: Dumbbell, path: '/lean-body-mass-calculator', category: 'Health' },
+    { name: 'Sleep Cycle Calculator', description: 'Optimize your sleep cycles.', icon: Moon, path: '/sleep-cycle-calculator', category: 'Health' },
+    { name: 'VO2 Max Calculator', description: 'Estimate your cardiovascular fitness.', icon: Activity, path: '/vo2-max-calculator', category: 'Health' },
+    { name: 'Running Calorie Calculator', description: 'Calculate calories burned while running.', icon: Flame, path: '/running-calorie-calculator', category: 'Health' },
+    { name: 'Pregnancy Weight Calculator', description: 'Track healthy pregnancy weight gain.', icon: Baby, path: '/pregnancy-weight-calculator', category: 'Health' },
 
-    // Math Calculators (17)
+    // Math Calculators (27)
     { name: 'Scientific Calculator', description: 'Advanced calculations with trigonometry, logarithms, and more.', icon: Calculator, path: '/scientific-calculator', category: 'Math' },
     { name: 'Percentage Calculator', description: 'Calculate percentages, increases, decreases, and differences.', icon: Percent, path: '/percentage-calculator', category: 'Math' },
     { name: 'Fraction Calculator', description: 'Add, subtract, multiply, and divide fractions easily.', icon: Divide, path: '/fraction-calculator', category: 'Math' },
@@ -148,42 +184,67 @@ export const allCalculators = [
     { name: 'Matrix Calculator', description: 'Add, subtract, multiply matrices and find determinants.', icon: Grid3x3, path: '/matrix-calculator', category: 'Math' },
     { name: 'Wave Calculator', description: 'Calculate wave frequency, wavelength, and velocity.', icon: Waves, path: '/wave-calculator', category: 'Math' },
     { name: 'Vector Calculator', description: 'Calculate 2D/3D vector operations.', icon: Atom, path: '/vector-calculator', category: 'Math' },
-    { name: 'Permutation Calculator', description: 'Calculate permutations and combinations with BigInt support.', icon: Shuffle, path: '/permutation-calculator', category: 'Math' },
+    { name: 'Permutation Calculator', description: 'Calculate permutations and combinations.', icon: Shuffle, path: '/permutation-calculator', category: 'Math' },
+    { name: 'Circle Calculator', description: 'Calculate circle area, circumference, and diameter.', icon: Circle, path: '/circle-calculator', category: 'Math' },
+    { name: 'Factorial Calculator', description: 'Calculate factorials of numbers.', icon: Hash, path: '/factorial-calculator', category: 'Math' },
+    { name: 'Mean Median Mode Calculator', description: 'Calculate statistical measures.', icon: BarChart3, path: '/mean-median-mode-calculator', category: 'Math' },
+    { name: 'Probability Calculator', description: 'Calculate probability and odds.', icon: Dice5, path: '/probability-calculator', category: 'Math' },
+    { name: 'Pythagorean Calculator', description: 'Calculate using the Pythagorean theorem.', icon: Triangle, path: '/pythagorean-calculator', category: 'Math' },
+    { name: 'Quadratic Solver', description: 'Solve quadratic equations step by step.', icon: Calculator, path: '/quadratic-solver', category: 'Math' },
+    { name: 'Roman Numeral Converter', description: 'Convert between Roman and Arabic numerals.', icon: Hash, path: '/roman-numeral-converter', category: 'Math' },
+    { name: 'Sphere Calculator', description: 'Calculate sphere volume and surface area.', icon: Circle, path: '/sphere-calculator', category: 'Math' },
+    { name: 'Trigonometry Calculator', description: 'Calculate trigonometric functions.', icon: Triangle, path: '/trigonometry-calculator', category: 'Math' },
+    { name: 'GCD LCM Calculator', description: 'Find GCD and LCM of numbers.', icon: Hash, path: '/gcd-lcm-calculator', category: 'Math' },
 
-    // Text Tools (8)
+    // Text Tools (11)
     { name: 'Word Counter', description: 'Count words, characters, sentences, and reading time.', icon: FileText, path: '/word-counter', category: 'Text' },
     { name: 'Lorem Ipsum Generator', description: 'Generate placeholder text for designs.', icon: FileText, path: '/lorem-ipsum-generator', category: 'Text' },
     { name: 'UUID Generator', description: 'Generate unique identifiers (UUID/GUID).', icon: Key, path: '/uuid-generator', category: 'Text' },
     { name: 'Color Picker', description: 'Pick colors and convert between HEX, RGB, HSL, CMYK.', icon: Palette, path: '/color-picker', category: 'Text' },
     { name: 'JSON Formatter', description: 'Format, validate, and minify JSON data.', icon: Code, path: '/json-formatter', category: 'Text' },
     { name: 'Readability Calculator', description: 'Analyze text readability with multiple indices.', icon: FileText, path: '/readability-calculator', category: 'Text' },
-    { name: 'Slug Generator', description: 'Generate SEO-friendly URL slugs.', icon: FileText, path: '/slug-generator', category: 'Text' },
+    { name: 'Slug Generator', description: 'Generate SEO-friendly URL slugs.', icon: Link2, path: '/slug-generator', category: 'Text' },
     { name: 'Text Scrambler', description: 'Scramble text in various modes.', icon: Shuffle, path: '/text-scrambler', category: 'Text' },
+    { name: 'Duplicate Remover', description: 'Remove duplicate lines from text.', icon: FileText, path: '/duplicate-remover', category: 'Text' },
+    { name: 'Text Reverser', description: 'Reverse text characters or words.', icon: ArrowLeftRight, path: '/text-reverser', category: 'Text' },
+    { name: 'Text Sorter', description: 'Sort text lines alphabetically.', icon: ArrowDown, path: '/text-sorter', category: 'Text' },
 
-    // Tech Tools (7)
+    // Tech Tools (13)
     { name: 'QR Code Generator', description: 'Generate QR codes for URLs, text, and more.', icon: QrCode, path: '/qr-code-generator', category: 'Tech' },
     { name: 'Hash Generator', description: 'Generate SHA-1, SHA-256, SHA-512 hashes.', icon: Hash, path: '/hash-generator', category: 'Tech' },
     { name: 'IP Subnet Calculator', description: 'Calculate subnet information from IP addresses.', icon: Server, path: '/ip-subnet-calculator', category: 'Tech' },
     { name: 'JSON Formatter Calculator', description: 'Format, validate, and analyze JSON.', icon: FileCode, path: '/json-formatter-calculator', category: 'Tech' },
     { name: 'Hash Generator Calculator', description: 'Generate multiple hash types for text.', icon: Hash, path: '/hash-generator-calculator', category: 'Tech' },
     { name: 'Power Calculator', description: 'Calculate electrical power using Ohms law.', icon: Zap, path: '/power-calculator', category: 'Tech' },
+    { name: 'Base64 Encoder', description: 'Encode and decode Base64 strings.', icon: Code, path: '/base64-encoder', category: 'Tech' },
+    { name: 'Color Converter', description: 'Convert between color formats.', icon: Palette, path: '/color-converter', category: 'Tech' },
+    { name: 'Markdown Previewer', description: 'Preview and convert Markdown.', icon: FileText, path: '/markdown-previewer', category: 'Tech' },
+    { name: 'Number Base Converter', description: 'Convert between number bases.', icon: Binary, path: '/number-base-converter', category: 'Tech' },
+    { name: 'Password Generator', description: 'Generate secure random passwords.', icon: Key, path: '/password-generator', category: 'Tech' },
+    { name: 'Regex Tester', description: 'Test regular expressions.', icon: Regex, path: '/regex-tester', category: 'Tech' },
+    { name: 'URL Encoder', description: 'Encode and decode URLs.', icon: Link2, path: '/url-encoder', category: 'Tech' },
 
-    // Sustainability Tools (7)
+    // Sustainability Tools (9)
     { name: 'Solar Panel Calculator', description: 'Calculate solar system size and savings.', icon: Sun, path: '/solar-panel-calculator', category: 'Sustainability' },
     { name: 'EV Savings Calculator', description: 'Compare electric vs gas vehicle costs.', icon: Car, path: '/ev-savings-calculator', category: 'Sustainability' },
     { name: 'Carbon Footprint Calculator', description: 'Calculate your annual CO2 emissions.', icon: Leaf, path: '/carbon-footprint-calculator', category: 'Sustainability' },
     { name: 'Compost Calculator', description: 'Calculate optimal composting ratios.', icon: Leaf, path: '/compost-calculator', category: 'Sustainability' },
     { name: 'Solar ROI Calculator', description: 'Calculate solar panel return on investment.', icon: Sun, path: '/solar-roi-calculator', category: 'Sustainability' },
     { name: 'Rainwater Calculator', description: 'Calculate rainwater harvesting potential.', icon: Droplet, path: '/rainwater-calculator', category: 'Sustainability' },
-    { name: 'Plastic Footprint Calculator', description: 'Track your weekly plastic usage.', icon: Leaf, path: '/plastic-footprint-calculator', category: 'Sustainability' },
+    { name: 'Plastic Footprint Calculator', description: 'Track your weekly plastic usage.', icon: Footprints, path: '/plastic-footprint-calculator', category: 'Sustainability' },
+    { name: 'Electricity Usage Calculator', description: 'Calculate electricity usage and costs.', icon: Zap, path: '/electricity-usage-calculator', category: 'Sustainability' },
+    { name: 'Tree Carbon Calculator', description: 'Calculate carbon absorbed by trees.', icon: Trees, path: '/tree-carbon-calculator', category: 'Sustainability' },
 
-    // Real Estate Tools (4)
+    // Real Estate Tools (7)
     { name: 'Flooring Calculator', description: 'Calculate flooring materials and costs.', icon: Square, path: '/flooring-calculator', category: 'Real Estate' },
     { name: 'Rental Yield Calculator', description: 'Calculate rental property returns.', icon: Building2, path: '/rental-yield-calculator', category: 'Real Estate' },
     { name: 'Paint Calculator', description: 'Calculate how much paint you need for a room.', icon: PaintBucket, path: '/paint-calculator', category: 'Real Estate' },
     { name: 'Concrete Calculator', description: 'Calculate concrete volume for slabs and footings.', icon: Cuboid, path: '/concrete-calculator', category: 'Real Estate' },
+    { name: 'Fence Calculator', description: 'Calculate fencing materials needed.', icon: Fence, path: '/fence-calculator', category: 'Real Estate' },
+    { name: 'Tile Calculator', description: 'Calculate tiles needed for a project.', icon: Grid3x3, path: '/tile-calculator', category: 'Real Estate' },
+    { name: 'Wallpaper Calculator', description: 'Calculate wallpaper rolls needed.', icon: Layers, path: '/wallpaper-calculator', category: 'Real Estate' },
 
-    // Fun Tools (15)
+    // Fun Tools (17)
     { name: 'Dice Roller', description: 'Roll virtual dice for games.', icon: Dice5, path: '/dice-roller', category: 'Fun' },
     { name: 'Random Picker', description: 'Pick random items from a list.', icon: Shuffle, path: '/random-picker', category: 'Fun' },
     { name: 'Coin Flip', description: 'Flip a virtual coin.', icon: Coins, path: '/coin-flip', category: 'Fun' },
@@ -199,23 +260,29 @@ export const allCalculators = [
     { name: 'Dog Age Calculator', description: 'Convert dog years to human years.', icon: Dog, path: '/dog-age-calculator', category: 'Fun' },
     { name: 'Compatibility Calculator', description: 'Calculate love compatibility between names.', icon: Stars, path: '/compatibility-calculator', category: 'Fun' },
     { name: 'Reaction Time Game', description: 'Test your reaction speed.', icon: Gamepad2, path: '/reaction-time-game', category: 'Fun' },
+    { name: 'Team Randomizer', description: 'Randomly assign teams.', icon: Users, path: '/team-randomizer', category: 'Fun' },
+    { name: 'Would You Rather', description: 'Fun would you rather questions.', icon: MessageCircle, path: '/would-you-rather', category: 'Fun' },
 
-    // Converter Tools (8)
+    // Converter Tools (15)
     { name: 'Unit Converter', description: 'Convert between length, weight, temperature, speed, and more.', icon: ArrowLeftRight, path: '/unit-converter', category: 'Converter' },
     { name: 'Conversion Calculator', description: 'Convert between different units of measurement.', icon: ArrowLeftRight, path: '/conversion-calculator', category: 'Converter' },
     { name: 'Cooking Converter', description: 'Convert cooking measurements (cups, tbsp, ml).', icon: ChefHat, path: '/cooking-converter', category: 'Converter' },
     { name: 'Temperature Converter', description: 'Convert between Celsius, Fahrenheit, and Kelvin.', icon: Thermometer, path: '/temperature-converter', category: 'Converter' },
     { name: 'Length Converter', description: 'Convert between length units.', icon: Ruler, path: '/length-converter', category: 'Converter' },
     { name: 'Time Converter', description: 'Convert between time units.', icon: Clock, path: '/time-converter', category: 'Converter' },
-    { name: 'Pressure Converter', description: 'Convert between pressure units.', icon: ArrowUp, path: '/pressure-converter', category: 'Converter' },
+    { name: 'Pressure Converter', description: 'Convert between pressure units.', icon: Gauge, path: '/pressure-converter', category: 'Converter' },
     { name: 'Angle Converter', description: 'Convert between angle units.', icon: Triangle, path: '/angle-converter', category: 'Converter' },
     { name: 'Recipe Scaler', description: 'Scale recipe ingredients up or down.', icon: UtensilsCrossed, path: '/recipe-scaler', category: 'Converter' },
     { name: 'Frequency Converter', description: 'Convert between frequency units.', icon: ArrowUpDown, path: '/frequency-converter', category: 'Converter' },
+    { name: 'Area Converter', description: 'Convert between area units.', icon: Square, path: '/area-converter', category: 'Converter' },
+    { name: 'Data Storage Converter', description: 'Convert between data storage units.', icon: HardDrive, path: '/data-storage-converter', category: 'Converter' },
+    { name: 'Energy Converter', description: 'Convert between energy units.', icon: Battery, path: '/energy-converter', category: 'Converter' },
+    { name: 'Speed Converter', description: 'Convert between speed units.', icon: Gauge, path: '/speed-converter', category: 'Converter' },
+    { name: 'Weight Converter', description: 'Convert between weight units.', icon: Weight, path: '/weight-converter', category: 'Converter' },
 
-    // Other Tools (20)
+    // Other Tools (37)
     { name: 'Age Calculator', description: 'Calculate exact age in years, months, and days.', icon: CalendarDays, path: '/age-calculator', category: 'Other' },
     { name: 'Date Calculator', description: 'Find the difference between dates or add/subtract days.', icon: Calendar, path: '/date-calculator', category: 'Other' },
-    { name: 'Password Generator', description: 'Generate secure, random passwords with custom options.', icon: Key, path: '/password-generator', category: 'Other' },
     { name: 'GPA Calculator', description: 'Calculate Grade Point Average for academic planning.', icon: GraduationCap, path: '/gpa-calculator', category: 'Other' },
     { name: 'CGPA Calculator', description: 'Convert CGPA to percentage and grades.', icon: GraduationCap, path: '/cgpa-calculator', category: 'Other' },
     { name: 'Discount Calculator', description: 'Calculate sale prices and savings from discounts.', icon: BadgePercent, path: '/discount-calculator', category: 'Other' },
@@ -234,6 +301,21 @@ export const allCalculators = [
     { name: 'Life Stats Calculator', description: 'Fascinating statistics about your life.', icon: Hourglass, path: '/life-stats-calculator', category: 'Other' },
     { name: 'Package Dimension Calculator', description: 'Calculate shipping dimensions and volume.', icon: Box, path: '/package-dimension-calculator', category: 'Other' },
     { name: 'Split Time Calculator', description: 'Analyze lap and split times.', icon: Timer, path: '/stopwatch-calculator', category: 'Other' },
+    { name: 'Car Depreciation Calculator', description: 'Calculate vehicle depreciation over time.', icon: Car, path: '/car-depreciation-calculator', category: 'Other' },
+    { name: 'MPG Calculator', description: 'Calculate miles per gallon fuel efficiency.', icon: Fuel, path: '/mpg-calculator', category: 'Other' },
+    { name: 'Reading Speed Calculator', description: 'Calculate your reading speed.', icon: FileText, path: '/reading-speed-calculator', category: 'Other' },
+    { name: 'Typing Speed Calculator', description: 'Test your typing speed.', icon: Keyboard, path: '/typing-speed-calculator', category: 'Other' },
+    { name: 'Timezone Converter', description: 'Convert times between timezones.', icon: Globe, path: '/timezone-converter', category: 'Other' },
+    { name: 'Unix Timestamp Converter', description: 'Convert Unix timestamps to dates.', icon: Clock, path: '/unix-timestamp-converter', category: 'Other' },
+    { name: 'Weighted GPA Calculator', description: 'Calculate weighted GPA with honors/AP.', icon: GraduationCap, path: '/weighted-gpa-calculator', category: 'Other' },
+    { name: 'Workdays Calculator', description: 'Calculate business days between dates.', icon: Calendar, path: '/workdays-calculator', category: 'Other' },
+    { name: 'Pool Volume Calculator', description: 'Calculate pool water volume.', icon: Droplet, path: '/pool-volume-calculator', category: 'Other' },
+    { name: 'Mulch Calculator', description: 'Calculate mulch needed for landscaping.', icon: Leaf, path: '/mulch-calculator', category: 'Other' },
+    { name: 'Rainwater Harvest Calculator', description: 'Calculate rainwater collection potential.', icon: Droplet, path: '/rainwater-harvest-calculator', category: 'Other' },
+    { name: 'Score Keeper', description: 'Keep track of game scores.', icon: BarChart3, path: '/score-keeper', category: 'Other' },
+    { name: 'Bracket Generator', description: 'Generate tournament brackets.', icon: Grid3x3, path: '/bracket-generator', category: 'Other' },
+    { name: 'Magic Eight Ball', description: 'Ask the magic 8-ball questions.', icon: CircleDot, path: '/magic-eight-ball', category: 'Other' },
+    { name: 'Volume Converter', description: 'Convert between volume units.', icon: Box, path: '/volume-converter', category: 'Other' },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')
