@@ -95,11 +95,11 @@ function Home() {
             <section className="hero">
                 <div className="container">
                     <h1 className="hero-title">
-                        Calculated <span className="hero-italic">Precision.</span>
+                        Make the complex, <span className="hero-italic">plainly simple.</span>
                     </h1>
                     <p className="hero-subtitle">
-                        CURATED COLLECTION OF MATHEMATICAL INSTRUMENTS FOR THE<br />
-                        DISCERNING PROFESSIONAL
+                        TOOLS THAT TURN DIFFICULT PROBLEMS INTO<br />
+                        CLEAR ANSWERS
                     </p>
 
                     {/* Search Bar with Dropdown */}
