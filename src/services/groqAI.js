@@ -30,12 +30,14 @@ const MODELS = {
 
 // Fallback chain: if one model hits limit, try the next
 const FALLBACK_CHAIN = [
-    MODELS.primary,    // 14.4K/day
-    MODELS.secondary,  // 7K/day  
-    MODELS.versatile,  // 1K/day
-    MODELS.analytical, // 1K/day
-    MODELS.creative,   // 1K/day
+    MODELS.primary,    // 14.4K/day - llama-3.1-8b-instant
+    MODELS.secondary,  // 7K/day - allam-2-7b
+    'moonshotai/kimi-k2-instruct',  // 1K/day - Kimi K2
+    MODELS.versatile,  // 1K/day - llama-3.3-70b-versatile
+    MODELS.analytical, // 1K/day - Scout
+    MODELS.creative,   // 1K/day - Maverick
 ]
+// Total capacity: ~26,400 requests/day
 
 /**
  * Send a prompt to Groq AI with automatic fallback on rate limits
