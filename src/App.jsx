@@ -7,6 +7,7 @@ import FinanceCategory from './pages/categories/FinanceCategory'
 import HealthCategory from './pages/categories/HealthCategory'
 import MathCategory from './pages/categories/MathCategory'
 import ConverterCategory from './pages/categories/ConverterCategory'
+import AICategory from './pages/categories/AICategory'
 
 // Company Pages
 import About from './pages/About'
@@ -309,6 +310,7 @@ function App() {
                     <Route path="/health" element={<HealthCategory />} />
                     <Route path="/math" element={<MathCategory />} />
                     <Route path="/converter" element={<ConverterCategory />} />
+                    <Route path="/ai" element={<AICategory />} />
 
                     {/* Financial Calculators */}
                     <Route path="/mortgage-calculator" element={<MortgageCalculator />} />

@@ -20,6 +20,7 @@ function Header() {
     const { openSettings } = useSettings()
 
     const categories = [
+        { name: 'AI Tools', path: '/ai' },
         { name: 'Finance', path: '/finance' },
         { name: 'Health', path: '/health' },
         { name: 'Math', path: '/math' },

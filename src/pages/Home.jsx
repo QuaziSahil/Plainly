@@ -57,6 +57,7 @@ function Home() {
         { name: 'Wellness', icon: Heart, path: '/health', description: 'Health Analytics' },
         { name: 'Mathematics', icon: Brain, path: '/math', description: 'Metric Systems' },
         { name: 'Converter', icon: ArrowRightLeft, path: '/converter', description: 'Unit Systems' },
+        { name: 'AI Tools', icon: Sparkles, path: '/ai', description: 'AI Generators' },
     ]
 
     // Filter calculators based on search query
