@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react'
-import { Baby } from 'lucide-react'
+import { useState } from 'react'
+import { Baby, RefreshCw, Sparkles } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 
 function BabyNameGenerator() {
@@ -10,16 +10,16 @@ function BabyNameGenerator() {
 
     const nameData = {
         modern: {
-            male: ['Liam', 'Noah', 'Oliver', 'Elijah', 'Lucas', 'Mason', 'Ethan', 'Aiden', 'Logan', 'Jackson', 'Sebastian', 'Mateo', 'Jack', 'Owen', 'Theodore'],
-            female: ['Olivia', 'Emma', 'Charlotte', 'Amelia', 'Ava', 'Sophia', 'Isabella', 'Mia', 'Luna', 'Harper', 'Evelyn', 'Aria', 'Ella', 'Chloe', 'Penelope']
+            male: ['Liam', 'Noah', 'Oliver', 'Elijah', 'Lucas', 'Mason', 'Ethan', 'Aiden', 'Logan', 'Jackson', 'Sebastian', 'Mateo', 'Jack', 'Owen', 'Theodore', 'Leo', 'Jayden', 'Asher', 'Wyatt', 'Carter'],
+            female: ['Olivia', 'Emma', 'Charlotte', 'Amelia', 'Ava', 'Sophia', 'Isabella', 'Mia', 'Luna', 'Harper', 'Evelyn', 'Aria', 'Ella', 'Chloe', 'Penelope', 'Riley', 'Layla', 'Zoey', 'Nora', 'Lily']
         },
         classic: {
-            male: ['James', 'William', 'Henry', 'Alexander', 'Benjamin', 'Charles', 'Edward', 'George', 'Thomas', 'Robert', 'John', 'Arthur', 'Frederick', 'Richard', 'David'],
-            female: ['Elizabeth', 'Catherine', 'Margaret', 'Victoria', 'Eleanor', 'Grace', 'Rose', 'Caroline', 'Beatrice', 'Josephine', 'Helena', 'Adelaide', 'Louisa', 'Florence', 'Harriet']
+            male: ['James', 'William', 'Henry', 'Alexander', 'Benjamin', 'Charles', 'Edward', 'George', 'Thomas', 'Robert', 'John', 'Arthur', 'Frederick', 'Richard', 'David', 'Michael', 'Joseph', 'Daniel', 'Matthew', 'Andrew'],
+            female: ['Elizabeth', 'Catherine', 'Margaret', 'Victoria', 'Eleanor', 'Grace', 'Rose', 'Caroline', 'Beatrice', 'Josephine', 'Helena', 'Adelaide', 'Louisa', 'Florence', 'Harriet', 'Alice', 'Clara', 'Emily', 'Sarah', 'Anna']
         },
         unique: {
-            male: ['Jasper', 'Felix', 'Atlas', 'Kai', 'Finn', 'Oscar', 'Hugo', 'Axel', 'Rowan', 'Silas', 'Ezra', 'Milo', 'Bodhi', 'Orion', 'Zane'],
-            female: ['Aurora', 'Iris', 'Ivy', 'Willow', 'Violet', 'Hazel', 'Sage', 'Nova', 'Wren', 'Freya', 'Juniper', 'Lilith', 'Opal', 'Dahlia', 'Meadow']
+            male: ['Jasper', 'Felix', 'Atlas', 'Kai', 'Finn', 'Oscar', 'Hugo', 'Axel', 'Rowan', 'Silas', 'Ezra', 'Milo', 'Bodhi', 'Orion', 'Zane', 'Phoenix', 'River', 'Sage', 'Jett', 'Knox'],
+            female: ['Aurora', 'Iris', 'Ivy', 'Willow', 'Violet', 'Hazel', 'Sage', 'Nova', 'Wren', 'Freya', 'Juniper', 'Lilith', 'Opal', 'Dahlia', 'Meadow', 'Luna', 'Ember', 'Coral', 'Jasmine', 'Stella']
         }
     }
 
@@ -38,7 +38,7 @@ function BabyNameGenerator() {
             pool = pool.filter(n => n.toLowerCase().startsWith(startsWith.toLowerCase()))
         }
 
-        // Shuffle and take 5
+        // Shuffle and take 6
         const shuffled = pool.sort(() => Math.random() - 0.5)
         setNames(shuffled.slice(0, 6))
     }
@@ -81,32 +81,86 @@ function BabyNameGenerator() {
                     maxLength={2}
                 />
             </div>
-            <button onClick={generateNames} style={{
-                width: '100%',
-                padding: '14px',
-                background: '#333',
-                border: 'none',
-                borderRadius: '8px',
-                color: 'white',
-                cursor: 'pointer',
-                fontSize: '16px',
-                marginBottom: '16px'
-            }}>
-                ✨ Generate Names
-            </button>
+
+            {/* Generate / Regenerate Buttons */}
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                <button onClick={generateNames} style={{
+                    flex: 1,
+                    padding: '14px',
+                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                    border: 'none',
+                    borderRadius: '8px',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    transition: 'transform 0.2s, box-shadow 0.2s'
+                }}>
+                    <Sparkles size={18} />
+                    {names.length > 0 ? 'Generate New' : 'Generate Names'}
+                </button>
+
+                {names.length > 0 && (
+                    <button onClick={generateNames} style={{
+                        padding: '14px 18px',
+                        background: '#333',
+                        border: '1px solid #444',
+                        borderRadius: '8px',
+                        color: 'white',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'background 0.2s'
+                    }} title="Regenerate">
+                        <RefreshCw size={18} />
+                    </button>
+                )}
+            </div>
+
+            {/* Name Results */}
             {names.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {names.map((name, i) => (
-                        <div key={i} style={{
-                            background: i === 0 ? '#333' : '#222',
-                            padding: '12px 20px',
-                            borderRadius: '20px',
-                            fontSize: i === 0 ? '18px' : '14px',
-                            fontWeight: i === 0 ? 'bold' : 'normal'
-                        }}>
-                            {name}
-                        </div>
-                    ))}
+                <div style={{ marginTop: '8px' }}>
+                    <div style={{
+                        fontSize: '12px',
+                        opacity: 0.6,
+                        marginBottom: '12px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '1px'
+                    }}>
+                        Suggestions
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        {names.map((name, i) => (
+                            <div key={i} style={{
+                                background: i === 0 ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' : '#222',
+                                padding: i === 0 ? '14px 24px' : '10px 18px',
+                                borderRadius: '24px',
+                                fontSize: i === 0 ? '18px' : '14px',
+                                fontWeight: i === 0 ? '600' : '400',
+                                border: i === 0 ? 'none' : '1px solid #333',
+                                cursor: 'pointer',
+                                transition: 'transform 0.2s, background 0.2s'
+                            }}>
+                                {name}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {names.length === 0 && (
+                <div style={{
+                    textAlign: 'center',
+                    padding: '32px',
+                    opacity: 0.5,
+                    fontSize: '14px'
+                }}>
+                    Click "Generate Names" to get started!
                 </div>
             )}
         </CalculatorLayout>
@@ -114,3 +168,4 @@ function BabyNameGenerator() {
 }
 
 export default BabyNameGenerator
+
