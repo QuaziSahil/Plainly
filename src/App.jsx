@@ -20,6 +20,9 @@ import CompoundInterestCalculator from './pages/calculators/finance/CompoundInte
 import InvestmentCalculator from './pages/calculators/finance/InvestmentCalculator'
 import SalaryCalculator from './pages/calculators/finance/SalaryCalculator'
 import TipCalculator from './pages/calculators/finance/TipCalculator'
+import AutoLoanCalculator from './pages/calculators/finance/AutoLoanCalculator'
+import InterestCalculator from './pages/calculators/finance/InterestCalculator'
+import PaymentCalculator from './pages/calculators/finance/PaymentCalculator'
 
 // Health Calculators
 import BMICalculator from './pages/calculators/health/BMICalculator'
@@ -27,11 +30,15 @@ import CalorieCalculator from './pages/calculators/health/CalorieCalculator'
 import BMRCalculator from './pages/calculators/health/BMRCalculator'
 import BodyFatCalculator from './pages/calculators/health/BodyFatCalculator'
 import IdealWeightCalculator from './pages/calculators/health/IdealWeightCalculator'
+import PaceCalculator from './pages/calculators/health/PaceCalculator'
 
 // Math Calculators
 import ScientificCalculator from './pages/calculators/math/ScientificCalculator'
 import PercentageCalculator from './pages/calculators/math/PercentageCalculator'
 import FractionCalculator from './pages/calculators/math/FractionCalculator'
+import RandomNumberGenerator from './pages/calculators/math/RandomNumberGenerator'
+import TriangleCalculator from './pages/calculators/math/TriangleCalculator'
+import StandardDeviationCalculator from './pages/calculators/math/StandardDeviationCalculator'
 
 // Other Calculators
 import UnitConverter from './pages/calculators/other/UnitConverter'
@@ -40,6 +47,9 @@ import DateCalculator from './pages/calculators/other/DateCalculator'
 import PasswordGenerator from './pages/calculators/other/PasswordGenerator'
 import GPACalculator from './pages/calculators/other/GPACalculator'
 import DiscountCalculator from './pages/calculators/other/DiscountCalculator'
+import TimeCalculator from './pages/calculators/other/TimeCalculator'
+import HoursCalculator from './pages/calculators/other/HoursCalculator'
+import GradeCalculator from './pages/calculators/other/GradeCalculator'
 
 function App() {
     return (
@@ -68,6 +78,9 @@ function App() {
                 <Route path="/investment-calculator" element={<InvestmentCalculator />} />
                 <Route path="/salary-calculator" element={<SalaryCalculator />} />
                 <Route path="/tip-calculator" element={<TipCalculator />} />
+                <Route path="/auto-loan-calculator" element={<AutoLoanCalculator />} />
+                <Route path="/interest-calculator" element={<InterestCalculator />} />
+                <Route path="/payment-calculator" element={<PaymentCalculator />} />
 
                 {/* Health Calculators */}
                 <Route path="/bmi-calculator" element={<BMICalculator />} />
@@ -75,11 +88,15 @@ function App() {
                 <Route path="/bmr-calculator" element={<BMRCalculator />} />
                 <Route path="/body-fat-calculator" element={<BodyFatCalculator />} />
                 <Route path="/ideal-weight-calculator" element={<IdealWeightCalculator />} />
+                <Route path="/pace-calculator" element={<PaceCalculator />} />
 
                 {/* Math Calculators */}
                 <Route path="/scientific-calculator" element={<ScientificCalculator />} />
                 <Route path="/percentage-calculator" element={<PercentageCalculator />} />
                 <Route path="/fraction-calculator" element={<FractionCalculator />} />
+                <Route path="/random-number-generator" element={<RandomNumberGenerator />} />
+                <Route path="/triangle-calculator" element={<TriangleCalculator />} />
+                <Route path="/standard-deviation-calculator" element={<StandardDeviationCalculator />} />
 
                 {/* Other Calculators */}
                 <Route path="/unit-converter" element={<UnitConverter />} />
@@ -88,6 +105,9 @@ function App() {
                 <Route path="/password-generator" element={<PasswordGenerator />} />
                 <Route path="/gpa-calculator" element={<GPACalculator />} />
                 <Route path="/discount-calculator" element={<DiscountCalculator />} />
+                <Route path="/time-calculator" element={<TimeCalculator />} />
+                <Route path="/hours-calculator" element={<HoursCalculator />} />
+                <Route path="/grade-calculator" element={<GradeCalculator />} />
             </Route>
         </Routes>
     )
