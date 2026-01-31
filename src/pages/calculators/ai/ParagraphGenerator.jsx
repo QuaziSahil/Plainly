@@ -60,23 +60,6 @@ function ParagraphGenerator() {
             resultLabel="Generated"
             onReset={handleReset}
         >
-            {/* AI Badge */}
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '10px 14px',
-                background: 'linear-gradient(135deg, #10b98120 0%, #059669 20%)',
-                borderRadius: '10px',
-                marginBottom: '16px',
-                border: '1px solid #10b98140'
-            }}>
-                <Wand2 size={18} color="#10b981" />
-                <span style={{ fontSize: '13px', color: '#10b981', fontWeight: 600 }}>
-                    Powered by Groq AI • Llama 3.3 70B
-                </span>
-            </div>
-
             {/* Topic Input */}
             <div className="input-group">
                 <label className="input-label">Topic / Subject *</label>

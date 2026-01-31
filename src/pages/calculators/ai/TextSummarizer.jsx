@@ -67,23 +67,6 @@ function TextSummarizer() {
             resultLabel="Reduction"
             onReset={handleReset}
         >
-            {/* AI Badge */}
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '10px 14px',
-                background: 'linear-gradient(135deg, #3b82f620 0%, #1d4ed8 20%)',
-                borderRadius: '10px',
-                marginBottom: '16px',
-                border: '1px solid #3b82f640'
-            }}>
-                <Wand2 size={18} color="#3b82f6" />
-                <span style={{ fontSize: '13px', color: '#3b82f6', fontWeight: 600 }}>
-                    Powered by Groq AI • Llama 3.3 70B
-                </span>
-            </div>
-
             {/* Text Input */}
             <div className="input-group">
                 <label className="input-label">
