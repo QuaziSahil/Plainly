@@ -121,7 +121,16 @@ import {
     Quote,
     Disc,
     Mic,
-    AtSign
+    AtSign,
+    // More AI Tool Icons that were missing
+    UserCircle,
+    ShoppingBag,
+    Twitter,
+    FileEdit,
+    Search,
+    RefreshCw,
+    CheckSquare,
+    Volume2
 } from 'lucide-react'
 
 export const allCalculators = [
