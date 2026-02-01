@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react'
-import { Image, Loader2, Download, RefreshCw, Sparkles, Copy, Check, Wand2 } from 'lucide-react'
+import { Image, Loader2, Download, RefreshCw, Sparkles, Copy, Check, Wand2, AlertCircle } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 import { askGroq } from '../../../services/groqAI'
+import { generateImage as generateHFImage, isConfigured } from '../../../services/huggingFaceAI'
 
 function AIImageGenerator() {
     const [prompt, setPrompt] = useState('')
@@ -13,22 +14,21 @@ function AIImageGenerator() {
     const [enhancing, setEnhancing] = useState(false)
     const [error, setError] = useState('')
     const [copied, setCopied] = useState(false)
-    const [imageLoaded, setImageLoaded] = useState(false)
     const resultRef = useRef(null)
 
     const styles = [
-        { value: 'realistic', label: 'Realistic', prompt: 'ultra realistic, photorealistic, 8k, high detail' },
-        { value: 'anime', label: 'Anime', prompt: 'anime style, vibrant colors, manga art' },
-        { value: 'digital-art', label: 'Digital Art', prompt: 'digital art, trending on artstation, vibrant' },
-        { value: '3d-render', label: '3D Render', prompt: '3d render, octane render, cinema 4d, blender' },
-        { value: 'oil-painting', label: 'Oil Painting', prompt: 'oil painting, classical, renaissance style' },
-        { value: 'watercolor', label: 'Watercolor', prompt: 'watercolor painting, soft colors, artistic' },
-        { value: 'pixel-art', label: 'Pixel Art', prompt: 'pixel art, 16-bit, retro game style' },
-        { value: 'cyberpunk', label: 'Cyberpunk', prompt: 'cyberpunk style, neon lights, futuristic city' },
-        { value: 'fantasy', label: 'Fantasy', prompt: 'fantasy art, magical, ethereal, mystical' },
-        { value: 'minimalist', label: 'Minimalist', prompt: 'minimalist, clean, simple, modern design' },
-        { value: 'comic', label: 'Comic Book', prompt: 'comic book style, bold lines, halftone dots' },
-        { value: 'vintage', label: 'Vintage', prompt: 'vintage style, retro, 1950s aesthetic' }
+        { value: 'realistic', label: 'Realistic', prompt: 'ultra realistic, photorealistic, 8k, high detail, sharp focus' },
+        { value: 'anime', label: 'Anime', prompt: 'anime style, vibrant colors, manga art, studio ghibli' },
+        { value: 'digital-art', label: 'Digital Art', prompt: 'digital art, trending on artstation, vibrant, detailed' },
+        { value: '3d-render', label: '3D Render', prompt: '3d render, octane render, cinema 4d, blender, realistic lighting' },
+        { value: 'oil-painting', label: 'Oil Painting', prompt: 'oil painting, classical, renaissance style, detailed brushwork' },
+        { value: 'watercolor', label: 'Watercolor', prompt: 'watercolor painting, soft colors, artistic, flowing' },
+        { value: 'pixel-art', label: 'Pixel Art', prompt: 'pixel art, 16-bit, retro game style, detailed' },
+        { value: 'cyberpunk', label: 'Cyberpunk', prompt: 'cyberpunk style, neon lights, futuristic city, dark atmosphere' },
+        { value: 'fantasy', label: 'Fantasy', prompt: 'fantasy art, magical, ethereal, mystical, epic' },
+        { value: 'minimalist', label: 'Minimalist', prompt: 'minimalist, clean, simple, modern design, elegant' },
+        { value: 'comic', label: 'Comic Book', prompt: 'comic book style, bold lines, halftone dots, dynamic' },
+        { value: 'vintage', label: 'Vintage', prompt: 'vintage style, retro, 1950s aesthetic, nostalgic' }
     ]
 
     const aspectRatios = [
@@ -55,13 +55,13 @@ Rules:
 - Include quality boosters (8k, high detail, sharp focus)
 - Keep the original intent
 - Return ONLY the enhanced prompt, no explanations
-- Keep under 200 words`
+- Keep under 150 words`
 
         try {
             const enhanced = await askGroq(
                 `Enhance this image prompt for better AI generation: "${prompt}"`,
                 systemPrompt,
-                { temperature: 0.7, maxTokens: 300 }
+                { temperature: 0.7, maxTokens: 250 }
             )
             setEnhancedPrompt(enhanced.trim())
         } catch (err) {
@@ -79,51 +79,48 @@ Rules:
             return
         }
 
+        if (!isConfigured()) {
+            setError('Hugging Face API key not configured')
+            return
+        }
+
         setLoading(true)
         setError('')
         setImageUrl('')
-        setImageLoaded(false)
 
         const selectedStyle = styles.find(s => s.value === style)
         const selectedRatio = aspectRatios.find(r => r.value === aspectRatio)
 
         // Build the full prompt with style
-        const fullPrompt = `${finalPrompt}, ${selectedStyle?.prompt || ''}`
-
-        // Pollinations.AI API - completely free, no key needed
-        const encodedPrompt = encodeURIComponent(fullPrompt)
-        const width = selectedRatio?.width || 1024
-        const height = selectedRatio?.height || 1024
-        const seed = Math.floor(Math.random() * 1000000)
-
-        // Pollinations.AI URL format
-        const url = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&seed=${seed}&nologo=true`
-
-        setImageUrl(url)
-        setLoading(false)
-
-        setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
-    }
-
-    const handleDownload = async () => {
-        if (!imageUrl) return
+        const fullPrompt = `${finalPrompt}, ${selectedStyle?.prompt || ''}, masterpiece, best quality`
 
         try {
-            const response = await fetch(imageUrl)
-            const blob = await response.blob()
-            const url = window.URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = `ai-image-${Date.now()}.png`
-            document.body.appendChild(a)
-            a.click()
-            document.body.removeChild(a)
-            window.URL.revokeObjectURL(url)
+            const imageDataUrl = await generateHFImage(fullPrompt, {
+                width: selectedRatio?.width || 1024,
+                height: selectedRatio?.height || 1024,
+                num_inference_steps: 30,
+                guidance_scale: 7.5
+            })
+
+            setImageUrl(imageDataUrl)
+            setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
         } catch (err) {
-            console.error('Download failed:', err)
-            // Fallback: open in new tab
-            window.open(imageUrl, '_blank')
+            console.error(err)
+            setError(err.message || 'Failed to generate image')
+        } finally {
+            setLoading(false)
         }
+    }
+
+    const handleDownload = () => {
+        if (!imageUrl) return
+
+        const link = document.createElement('a')
+        link.href = imageUrl
+        link.download = `ai-image-${Date.now()}.png`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
     }
 
     const handleCopyPrompt = async () => {
@@ -140,13 +137,12 @@ Rules:
         setAspectRatio('1:1')
         setImageUrl('')
         setError('')
-        setImageLoaded(false)
     }
 
     return (
         <CalculatorLayout
             title="AI Image Generator"
-            description="Create stunning images from text with AI (Powered by Pollinations.AI - Free & Unlimited)"
+            description="Create stunning images from text with AI (Powered by Stable Diffusion XL)"
             category="AI Tools"
             categoryPath="/ai"
             icon={Image}
@@ -317,8 +313,12 @@ Rules:
                     border: '1px solid #ef444440',
                     borderRadius: '8px',
                     color: '#ef4444',
-                    fontSize: '14px'
+                    fontSize: '14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
                 }}>
+                    <AlertCircle size={18} />
                     {error}
                 </div>
             )}
@@ -350,7 +350,7 @@ Rules:
                 {loading ? (
                     <>
                         <Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} />
-                        Generating Image...
+                        Generating Image... (10-30s)
                     </>
                 ) : imageUrl ? (
                     <>
@@ -364,6 +364,19 @@ Rules:
                     </>
                 )}
             </button>
+
+            {/* Info */}
+            <div style={{
+                marginTop: '16px',
+                padding: '12px',
+                background: '#3b82f610',
+                border: '1px solid #3b82f630',
+                borderRadius: '8px',
+                fontSize: '12px',
+                color: '#60a5fa'
+            }}>
+                💡 <strong>Tip:</strong> First generation may take 20-30 seconds while the model loads. Subsequent generations are faster.
+            </div>
 
             {/* Result */}
             {imageUrl && (
@@ -418,45 +431,26 @@ Rules:
 
                         {/* Image */}
                         <div style={{
-                            position: 'relative',
-                            minHeight: '200px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            background: '#0a0a0a'
+                            background: '#0a0a0a',
+                            padding: '16px'
                         }}>
-                            {!imageLoaded && (
-                                <div style={{
-                                    position: 'absolute',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '12px',
-                                    color: '#8b949e'
-                                }}>
-                                    <Loader2 size={32} style={{ animation: 'spin 1s linear infinite' }} />
-                                    <span style={{ fontSize: '14px' }}>Loading image...</span>
-                                </div>
-                            )}
                             <img
                                 src={imageUrl}
                                 alt="AI Generated"
-                                onLoad={() => setImageLoaded(true)}
-                                onError={() => {
-                                    setError('Failed to load image. Please try again.')
-                                    setImageLoaded(true)
-                                }}
                                 style={{
                                     maxWidth: '100%',
                                     height: 'auto',
-                                    display: imageLoaded ? 'block' : 'none',
-                                    borderRadius: '0 0 12px 12px'
+                                    borderRadius: '8px',
+                                    boxShadow: '0 4px 20px rgba(0,0,0,0.5)'
                                 }}
                             />
                         </div>
                     </div>
 
-                    {/* Info */}
+                    {/* Success Info */}
                     <div style={{
                         marginTop: '16px',
                         padding: '14px',
@@ -466,7 +460,7 @@ Rules:
                         fontSize: '13px',
                         color: '#10b981'
                     }}>
-                        🎨 <strong>Free & Unlimited:</strong> Powered by Pollinations.AI - no API key, no limits!
+                        🎨 <strong>Powered by Stable Diffusion XL</strong> via Hugging Face
                     </div>
                 </div>
             )}
