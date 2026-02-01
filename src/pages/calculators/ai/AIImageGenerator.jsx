@@ -63,9 +63,12 @@ Rules:
                 systemPrompt,
                 { temperature: 0.7, maxTokens: 250 }
             )
-            setEnhancedPrompt(enhanced.trim())
-            // Auto-copy enhanced prompt to clipboard
-            await navigator.clipboard.writeText(enhanced.trim())
+            const enhancedText = enhanced.trim()
+            setEnhancedPrompt(enhancedText)
+            // Auto-paste enhanced prompt into the textarea
+            setPrompt(enhancedText)
+            // Also copy to clipboard
+            await navigator.clipboard.writeText(enhancedText)
         } catch (err) {
             console.error(err)
             setError('Failed to enhance prompt')
@@ -169,7 +172,7 @@ Rules:
             category="AI Tools"
             categoryPath="/ai"
             icon={Image}
-            result={imageUrl ? 'Generated' : 'Ready'}
+            result={loading ? 'Generating...' : imageUrl ? 'Generated ✓' : 'Ready'}
             resultLabel="Status"
             onReset={handleReset}
         >
@@ -401,8 +404,72 @@ Rules:
                 💡 <strong>Tip:</strong> First generation may take 20-30 seconds while the model loads. Subsequent generations are faster.
             </div>
 
+            {/* Loading Animation */}
+            {loading && (
+                <div style={{ marginTop: '24px' }}>
+                    <div style={{
+                        background: '#1a1a2e',
+                        borderRadius: '12px',
+                        border: '1px solid #333',
+                        overflow: 'hidden',
+                        padding: '40px 20px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '20px'
+                    }}>
+                        {/* Animated loader */}
+                        <div style={{
+                            width: '80px',
+                            height: '80px',
+                            borderRadius: '50%',
+                            border: '4px solid #333',
+                            borderTopColor: '#a78bfa',
+                            animation: 'spin 1s linear infinite'
+                        }} />
+
+                        <div style={{ textAlign: 'center' }}>
+                            <p style={{
+                                margin: '0 0 8px 0',
+                                fontSize: '18px',
+                                fontWeight: '600',
+                                color: '#e6edf3',
+                                animation: 'pulse 2s ease-in-out infinite'
+                            }}>
+                                ✨ Generating with Plainly AI
+                            </p>
+                            <p style={{
+                                margin: 0,
+                                fontSize: '14px',
+                                color: '#8b949e'
+                            }}>
+                                Creating your masterpiece... This may take 10-30 seconds
+                            </p>
+                        </div>
+
+                        {/* Progress bar animation */}
+                        <div style={{
+                            width: '200px',
+                            height: '4px',
+                            background: '#21262d',
+                            borderRadius: '2px',
+                            overflow: 'hidden'
+                        }}>
+                            <div style={{
+                                width: '40%',
+                                height: '100%',
+                                background: 'linear-gradient(90deg, #8b5cf6, #ec4899, #8b5cf6)',
+                                backgroundSize: '200% 100%',
+                                animation: 'shimmer 1.5s ease-in-out infinite'
+                            }} />
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Result */}
-            {imageUrl && (
+            {imageUrl && !loading && (
                 <div ref={resultRef} style={{ marginTop: '24px' }}>
                     <div style={{
                         background: '#1a1a2e',
@@ -492,6 +559,14 @@ Rules:
                 @keyframes spin {
                     from { transform: rotate(0deg); }
                     to { transform: rotate(360deg); }
+                }
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.6; }
+                }
+                @keyframes shimmer {
+                    0% { transform: translateX(-100%); }
+                    100% { transform: translateX(350%); }
                 }
             `}</style>
         </CalculatorLayout>
