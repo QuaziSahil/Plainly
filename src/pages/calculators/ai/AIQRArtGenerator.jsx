@@ -5,6 +5,7 @@ import { generateImage, isConfigured } from '../../../services/pollinationsAI'
 
 function AIQRArtGenerator() {
     const [content, setContent] = useState('')
+    const [qrLink, setQrLink] = useState('')
     const [artStyle, setArtStyle] = useState('artistic')
     const [theme, setTheme] = useState('cyberpunk')
     const [imageUrl, setImageUrl] = useState('')
@@ -50,8 +51,9 @@ function AIQRArtGenerator() {
         const selectedTheme = themes.find(t => t.value === theme)
 
         const contentText = content.trim() ? `incorporating "${content}" theme` : ''
+        const qrContentText = qrLink.trim() ? `designed to visually represent the data "${qrLink}"` : 'scannable QR code pattern'
 
-        const prompt = `artistic QR code design ${contentText}, ${selectedStyle?.prompt}, ${selectedTheme?.prompt}, scannable QR code pattern integrated with art, creative design, high quality, detailed, visually stunning, the QR pattern should be visible but artistic`
+        const prompt = `artistic QR code design ${contentText}, ${qrContentText}, ${selectedStyle?.prompt}, ${selectedTheme?.prompt}, integrated with art, creative design, high quality, detailed, visually stunning, the QR pattern should be visible but artistic`
 
         try {
             const imageDataUrl = await generateImage(prompt, {
@@ -87,6 +89,7 @@ function AIQRArtGenerator() {
 
     const handleReset = () => {
         setContent('')
+        setQrLink('')
         setArtStyle('artistic')
         setTheme('cyberpunk')
         setImageUrl('')
@@ -112,6 +115,18 @@ function AIQRArtGenerator() {
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="e.g., music, technology, nature, my brand name..."
+                    className="input-field"
+                />
+            </div>
+
+            {/* QR Link/Text */}
+            <div className="input-group">
+                <label className="input-label">QR Link/Text (Optional)</label>
+                <input
+                    type="text"
+                    value={qrLink}
+                    onChange={(e) => setQrLink(e.target.value)}
+                    placeholder="e.g., https://plainly.live or My Secret Message"
                     className="input-field"
                 />
             </div>
