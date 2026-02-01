@@ -1,4 +1,4 @@
-# Plainly Development Rules
+# Plainly Project Guidelines
 
 > ⚠️ **MANDATORY FOR ALL AI MODELS**: Read and follow these rules before making ANY changes.
 
@@ -146,6 +146,21 @@ For every new tool:
 - Latest tools should appear on home page
 - Category pages must display all tools in that category
 
+### 11. ⚠️ CRITICAL: Verify Icon Imports (MANDATORY)
+When adding new tools to `calculators.js`, you **MUST**:
+1. **Check FIRST** if the icon is already imported at the top of the file
+2. **Search for the exact icon name** in the import block (lines 1-150)
+3. **If NOT found, ADD IT** to the lucide-react imports BEFORE using it
+4. **Run `npm run build`** to verify no import errors
+
+**Common icons that cause crashes if not imported:**
+- `Image` - for image/photo tools
+- `Laugh` - for fun/humor tools
+- `Video` - for video tools
+- `Camera` - for camera/photo tools
+
+**❌ NEVER assume an icon is imported - ALWAYS VERIFY!**
+
 ---
 
 ## 📋 MANDATORY CHECKLIST FOR NEW TOOLS
@@ -160,8 +175,10 @@ Before submitting any new tool, verify:
 - [ ] All touch targets ≥ 44px
 - [ ] Has loading and error states
 - [ ] Copy functionality works (code-only for code tools)
+- [ ] **⚠️ Icon is imported in calculators.js** (VERIFY FIRST!)
 - [ ] Added to `calculators.js` with correct category
 - [ ] Route added to `App.jsx`
+- [ ] Import added to `App.jsx`
 - [ ] Build passes without errors (`npm run build`)
 
 ---
@@ -176,6 +193,7 @@ Before submitting any new tool, verify:
 ❌ Skipping error handling
 ❌ Breaking existing functionality
 ❌ Using different styling than the design system
+❌ **Using an icon without verifying it's imported** (CAUSES SITE-WIDE CRASH!)
 
 ---
 
