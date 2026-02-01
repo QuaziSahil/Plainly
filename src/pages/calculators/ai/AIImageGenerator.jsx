@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import { Image, Loader2, Download, RefreshCw, Sparkles, Copy, Check, Wand2, AlertCircle } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 import { askGroq } from '../../../services/groqAI'
-import { generateImage as generateHFImage, isConfigured } from '../../../services/huggingFaceAI'
+import { generateImage as generatePollinationsImage, isConfigured } from '../../../services/pollinationsAI'
 
 function AIImageGenerator() {
     const [prompt, setPrompt] = useState('')
@@ -95,7 +95,7 @@ Rules:
         const fullPrompt = `${finalPrompt}, ${selectedStyle?.prompt || ''}, masterpiece, best quality`
 
         try {
-            const imageDataUrl = await generateHFImage(fullPrompt, {
+            const imageDataUrl = await generatePollinationsImage(fullPrompt, {
                 width: selectedRatio?.width || 1024,
                 height: selectedRatio?.height || 1024,
                 num_inference_steps: 30,
@@ -481,7 +481,7 @@ Rules:
                         fontSize: '13px',
                         color: '#10b981'
                     }}>
-                        🎨 <strong>Powered by Stable Diffusion XL</strong> via Hugging Face
+                        🎨 <strong>Powered by Pollinations.AI</strong> - Free & Unlimited
                     </div>
                 </div>
             )}
