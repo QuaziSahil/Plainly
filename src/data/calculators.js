@@ -144,7 +144,9 @@ import {
     Cpu,
     Braces,
     Eye,
-    Terminal
+    Terminal,
+    Megaphone,
+    Target
 } from 'lucide-react'
 
 export const allCalculators = [
@@ -454,6 +456,10 @@ export const allCalculators = [
     { name: 'AI Function Name Generator', description: 'Get perfect function names for your code.', icon: FunctionSquare, path: '/ai-function-name-generator', category: 'AI' },
     { name: 'Code Preview & Download', description: 'Preview, copy and download any code with line numbers.', icon: Eye, path: '/ai-code-preview', category: 'AI' },
     { name: 'Code Runner', description: 'Run JavaScript code and see the output instantly.', icon: Terminal, path: '/ai-code-runner', category: 'AI' },
+    // AI Marketing & SEO Tools (NEW)
+    { name: 'AI SEO Keyword Research', description: 'Find high-ranking keyword opportunities with AI.', icon: Search, path: '/ai-seo-keyword-research', category: 'AI' },
+    { name: 'AI Ad Copy Generator', description: 'Create high-converting ad copy for any platform.', icon: Megaphone, path: '/ai-ad-copy-generator', category: 'AI' },
+    { name: 'AI Customer Persona Generator', description: 'Create detailed buyer personas for your business.', icon: Target, path: '/ai-customer-persona-generator', category: 'AI' },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')
