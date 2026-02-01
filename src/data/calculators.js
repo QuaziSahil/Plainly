@@ -130,7 +130,19 @@ import {
     Search,
     RefreshCw,
     CheckSquare,
-    Volume2
+    Volume2,
+    // AI Code Tools Icons
+    Code2,
+    Component,
+    GitCommit,
+    Bug,
+    FlaskConical,
+    MessageSquareCode,
+    Variable,
+    FunctionSquare,
+    Paintbrush,
+    Cpu,
+    Braces
 } from 'lucide-react'
 
 export const allCalculators = [
@@ -173,6 +185,32 @@ export const allCalculators = [
     { name: 'Home Affordability Calculator', description: 'Calculate how much home you can afford.', icon: Home, path: '/home-affordability-calculator', category: 'Finance' },
     { name: 'Rule of 72 Calculator', description: 'Calculate investment doubling time.', icon: Calculator, path: '/rule-of-72-calculator', category: 'Finance' },
     { name: 'Compound Growth Calculator', description: 'Calculate compound growth over time.', icon: TrendingUp, path: '/compound-growth-calculator', category: 'Finance' },
+    // Finance 2.0 Tools (25 NEW)
+    { name: 'FIRE Calculator', description: 'Financial Independence, Retire Early planning.', icon: Flame, path: '/fire-calculator', category: 'Finance' },
+    { name: 'Coast FIRE Calculator', description: 'Calculate when you can stop saving and coast to retirement.', icon: Flame, path: '/coast-fire-calculator', category: 'Finance' },
+    { name: 'Lean FIRE Calculator', description: 'Minimalist financial independence calculator.', icon: Flame, path: '/lean-fire-calculator', category: 'Finance' },
+    { name: 'Fat FIRE Calculator', description: 'Luxury retirement financial planning.', icon: Flame, path: '/fat-fire-calculator', category: 'Finance' },
+    { name: 'Crypto Portfolio Calculator', description: 'Track and analyze crypto holdings.', icon: Bitcoin, path: '/crypto-portfolio-calculator', category: 'Finance' },
+    { name: 'DeFi Yield Calculator', description: 'Calculate yields from DeFi staking and farming.', icon: Bitcoin, path: '/defi-yield-calculator', category: 'Finance' },
+    { name: 'NFT Profit Calculator', description: 'Calculate NFT trading profits and fees.', icon: Bitcoin, path: '/nft-profit-calculator', category: 'Finance' },
+    { name: 'Staking Rewards Calculator', description: 'Calculate crypto staking earnings.', icon: Bitcoin, path: '/staking-rewards-calculator', category: 'Finance' },
+    { name: 'Gas Fee Calculator', description: 'Estimate Ethereum transaction costs.', icon: Fuel, path: '/gas-fee-calculator', category: 'Finance' },
+    { name: 'Dollar Cost Averaging Calculator', description: 'Plan DCA investment strategy.', icon: TrendingUp, path: '/dca-calculator', category: 'Finance' },
+    { name: 'Side Hustle Calculator', description: 'Track income from multiple side hustles.', icon: Wallet, path: '/side-hustle-calculator', category: 'Finance' },
+    { name: 'Freelance Rate Calculator', description: 'Calculate your freelance hourly rate.', icon: DollarSign, path: '/freelance-rate-calculator', category: 'Finance' },
+    { name: 'Invoice Generator', description: 'Create and calculate invoices.', icon: FileText, path: '/invoice-generator', category: 'Finance' },
+    { name: 'Hourly to Salary Converter', description: 'Convert between hourly and annual pay.', icon: ArrowLeftRight, path: '/hourly-to-salary-converter', category: 'Finance' },
+    { name: 'Take Home Pay Calculator', description: 'Calculate net pay after taxes.', icon: Wallet, path: '/take-home-pay-calculator', category: 'Finance' },
+    { name: 'Paycheck Calculator', description: 'Calculate your net paycheck.', icon: Receipt, path: '/paycheck-calculator', category: 'Finance' },
+    { name: 'Overtime Calculator', description: 'Calculate overtime pay and earnings.', icon: Clock, path: '/overtime-calculator', category: 'Finance' },
+    { name: 'Commission Calculator', description: 'Calculate sales commission earnings.', icon: TrendingUp, path: '/commission-calculator', category: 'Finance' },
+    { name: 'Subscription Cost Calculator', description: 'Track and manage subscription expenses.', icon: CreditCard, path: '/subscription-cost-calculator', category: 'Finance' },
+    { name: 'Cost Per Use Calculator', description: 'Calculate the true value of purchases.', icon: Calculator, path: '/cost-per-use-calculator', category: 'Finance' },
+    { name: 'Rent Affordability Calculator', description: 'Find how much rent you can afford.', icon: Home, path: '/rent-affordability-calculator', category: 'Finance' },
+    { name: 'Utility Bill Splitter', description: 'Split utility bills among roommates.', icon: Users, path: '/utility-bill-splitter', category: 'Finance' },
+    { name: 'Wealth Tax Calculator', description: 'Calculate wealth tax liability.', icon: Landmark, path: '/wealth-tax-calculator', category: 'Finance' },
+    { name: 'Estate Tax Calculator', description: 'Estimate federal estate tax.', icon: Landmark, path: '/estate-tax-calculator', category: 'Finance' },
+    { name: 'Gift Tax Calculator', description: 'Calculate gift tax and exemptions.', icon: Heart, path: '/gift-tax-calculator', category: 'Finance' },
 
     // Health Calculators (26)
     { name: 'BMI Calculator', description: 'Calculate Body Mass Index and understand your weight category.', icon: Scale, path: '/bmi-calculator', category: 'Health' },
@@ -391,6 +429,27 @@ export const allCalculators = [
     { name: 'AI Translator', description: 'Translate text to 25+ languages instantly.', icon: Globe, path: '/ai-translator', category: 'AI' },
     { name: 'AI Business Name Generator', description: 'Generate creative brand names for business.', icon: Building2, path: '/ai-business-name-generator', category: 'AI' },
     { name: 'AI Hashtag Generator', description: 'Generate trending hashtags for social media.', icon: Hash, path: '/ai-hashtag-generator', category: 'AI' },
+    // AI Code & Development Tools (20 NEW)
+    { name: 'AI Code Generator', description: 'Generate code in any language from descriptions.', icon: Code2, path: '/ai-code-generator', category: 'AI' },
+    { name: 'AI Code Debugger', description: 'Find and fix bugs in your code with AI.', icon: Bug, path: '/ai-code-debugger', category: 'AI' },
+    { name: 'AI Code Explainer', description: 'Get clear explanations of any code snippet.', icon: FileSearch, path: '/ai-code-explainer', category: 'AI' },
+    { name: 'AI Code Converter', description: 'Convert code between programming languages.', icon: ArrowRightLeft, path: '/ai-code-converter', category: 'AI' },
+    { name: 'AI SQL Generator', description: 'Generate SQL queries from plain English.', icon: Database, path: '/ai-sql-generator', category: 'AI' },
+    { name: 'AI Regex Generator', description: 'Create regex patterns from descriptions.', icon: Regex, path: '/ai-regex-generator', category: 'AI' },
+    { name: 'AI Git Commit Generator', description: 'Generate meaningful commit messages.', icon: GitCommit, path: '/ai-git-commit-generator', category: 'AI' },
+    { name: 'AI API Documentation Generator', description: 'Auto-generate API docs from code.', icon: FileText, path: '/ai-api-doc-generator', category: 'AI' },
+    { name: 'AI Unit Test Generator', description: 'Generate comprehensive unit tests.', icon: FlaskConical, path: '/ai-unit-test-generator', category: 'AI' },
+    { name: 'AI Code Comment Generator', description: 'Add clear comments to your code.', icon: MessageSquareCode, path: '/ai-code-comment-generator', category: 'AI' },
+    { name: 'AI Code Review Assistant', description: 'Get expert code review feedback.', icon: Search, path: '/ai-code-review-assistant', category: 'AI' },
+    { name: 'AI Variable Name Generator', description: 'Get perfect variable and function names.', icon: Variable, path: '/ai-variable-name-generator', category: 'AI' },
+    { name: 'AI CSS Generator', description: 'Generate CSS styles from descriptions.', icon: Paintbrush, path: '/ai-css-generator', category: 'AI' },
+    { name: 'AI HTML Generator', description: 'Generate semantic HTML structure.', icon: Code2, path: '/ai-html-generator', category: 'AI' },
+    { name: 'AI React Component Generator', description: 'Generate React components from descriptions.', icon: Component, path: '/ai-react-component-generator', category: 'AI' },
+    { name: 'AI REST API Designer', description: 'Design RESTful APIs with best practices.', icon: Server, path: '/ai-rest-api-designer', category: 'AI' },
+    { name: 'AI Database Schema Generator', description: 'Design efficient database schemas.', icon: Database, path: '/ai-database-schema-generator', category: 'AI' },
+    { name: 'AI Algorithm Selector', description: 'Find the best algorithm for any problem.', icon: Cpu, path: '/ai-algorithm-selector', category: 'AI' },
+    { name: 'AI Tech Stack Recommender', description: 'Get personalized tech stack recommendations.', icon: Layers, path: '/ai-tech-stack-recommender', category: 'AI' },
+    { name: 'AI Function Name Generator', description: 'Get perfect function names for your code.', icon: FunctionSquare, path: '/ai-function-name-generator', category: 'AI' },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')

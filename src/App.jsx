@@ -56,6 +56,32 @@ import SavingsGoalCalculator from './pages/calculators/finance/SavingsGoalCalcul
 import HomeAffordabilityCalculator from './pages/calculators/finance/HomeAffordabilityCalculator'
 import RuleOf72Calculator from './pages/calculators/finance/RuleOf72Calculator'
 import CompoundGrowthCalculator from './pages/calculators/finance/CompoundGrowthCalculator'
+// Finance 2.0 Calculators (25 NEW)
+import FIRECalculator from './pages/calculators/finance/FIRECalculator'
+import CoastFIRECalculator from './pages/calculators/finance/CoastFIRECalculator'
+import LeanFIRECalculator from './pages/calculators/finance/LeanFIRECalculator'
+import FatFIRECalculator from './pages/calculators/finance/FatFIRECalculator'
+import CryptoPortfolioCalculator from './pages/calculators/finance/CryptoPortfolioCalculator'
+import DeFiYieldCalculator from './pages/calculators/finance/DeFiYieldCalculator'
+import NFTProfitCalculator from './pages/calculators/finance/NFTProfitCalculator'
+import StakingRewardsCalculator from './pages/calculators/finance/StakingRewardsCalculator'
+import GasFeeCalculator from './pages/calculators/finance/GasFeeCalculator'
+import DollarCostAveragingCalculator from './pages/calculators/finance/DollarCostAveragingCalculator'
+import SideHustleCalculator from './pages/calculators/finance/SideHustleCalculator'
+import FreelanceRateCalculator from './pages/calculators/finance/FreelanceRateCalculator'
+import InvoiceGeneratorCalculator from './pages/calculators/finance/InvoiceGeneratorCalculator'
+import HourlyToSalaryConverter from './pages/calculators/finance/HourlyToSalaryConverter'
+import TakeHomePayCalculator from './pages/calculators/finance/TakeHomePayCalculator'
+import PaycheckCalculator from './pages/calculators/finance/PaycheckCalculator'
+import OvertimeCalculator from './pages/calculators/finance/OvertimeCalculator'
+import CommissionCalculator from './pages/calculators/finance/CommissionCalculator'
+import SubscriptionCostCalculator from './pages/calculators/finance/SubscriptionCostCalculator'
+import CostPerUseCalculator from './pages/calculators/finance/CostPerUseCalculator'
+import RentAffordabilityCalculator from './pages/calculators/finance/RentAffordabilityCalculator'
+import UtilityBillSplitter from './pages/calculators/finance/UtilityBillSplitter'
+import WealthTaxCalculator from './pages/calculators/finance/WealthTaxCalculator'
+import EstateTaxCalculator from './pages/calculators/finance/EstateTaxCalculator'
+import GiftTaxCalculator from './pages/calculators/finance/GiftTaxCalculator'
 
 // Health Calculators (27)
 import BMICalculator from './pages/calculators/health/BMICalculator'
@@ -217,6 +243,27 @@ import AIRapNameGenerator from './pages/calculators/ai/AIRapNameGenerator'
 import AIUsernameGenerator from './pages/calculators/ai/AIUsernameGenerator'
 import AIColorPaletteGenerator from './pages/calculators/ai/AIColorPaletteGenerator'
 import AIMeetingAgendaGenerator from './pages/calculators/ai/AIMeetingAgendaGenerator'
+// AI Code & Development Tools (20 NEW)
+import AICodeGenerator from './pages/calculators/ai/AICodeGenerator'
+import AICodeDebugger from './pages/calculators/ai/AICodeDebugger'
+import AICodeExplainer from './pages/calculators/ai/AICodeExplainer'
+import AICodeConverter from './pages/calculators/ai/AICodeConverter'
+import AISQLGenerator from './pages/calculators/ai/AISQLGenerator'
+import AIRegexGenerator from './pages/calculators/ai/AIRegexGenerator'
+import AIGitCommitGenerator from './pages/calculators/ai/AIGitCommitGenerator'
+import AIAPIDocGenerator from './pages/calculators/ai/AIAPIDocGenerator'
+import AIUnitTestGenerator from './pages/calculators/ai/AIUnitTestGenerator'
+import AICodeCommentGenerator from './pages/calculators/ai/AICodeCommentGenerator'
+import AICodeReviewAssistant from './pages/calculators/ai/AICodeReviewAssistant'
+import AIVariableNameGenerator from './pages/calculators/ai/AIVariableNameGenerator'
+import AICSSGenerator from './pages/calculators/ai/AICSSGenerator'
+import AIHTMLGenerator from './pages/calculators/ai/AIHTMLGenerator'
+import AIReactComponentGenerator from './pages/calculators/ai/AIReactComponentGenerator'
+import AIRESTAPIDesigner from './pages/calculators/ai/AIRESTAPIDesigner'
+import AIDatabaseSchemaGenerator from './pages/calculators/ai/AIDatabaseSchemaGenerator'
+import AIAlgorithmSelector from './pages/calculators/ai/AIAlgorithmSelector'
+import AITechStackRecommender from './pages/calculators/ai/AITechStackRecommender'
+import AIFunctionNameGenerator from './pages/calculators/ai/AIFunctionNameGenerator'
 
 // Converter Tools (15)
 import CookingConverter from './pages/calculators/converter/CookingConverter'
@@ -351,6 +398,32 @@ function App() {
                     <Route path="/home-affordability-calculator" element={<HomeAffordabilityCalculator />} />
                     <Route path="/rule-of-72-calculator" element={<RuleOf72Calculator />} />
                     <Route path="/compound-growth-calculator" element={<CompoundGrowthCalculator />} />
+                    {/* Finance 2.0 Calculators */}
+                    <Route path="/fire-calculator" element={<FIRECalculator />} />
+                    <Route path="/coast-fire-calculator" element={<CoastFIRECalculator />} />
+                    <Route path="/lean-fire-calculator" element={<LeanFIRECalculator />} />
+                    <Route path="/fat-fire-calculator" element={<FatFIRECalculator />} />
+                    <Route path="/crypto-portfolio-calculator" element={<CryptoPortfolioCalculator />} />
+                    <Route path="/defi-yield-calculator" element={<DeFiYieldCalculator />} />
+                    <Route path="/nft-profit-calculator" element={<NFTProfitCalculator />} />
+                    <Route path="/staking-rewards-calculator" element={<StakingRewardsCalculator />} />
+                    <Route path="/gas-fee-calculator" element={<GasFeeCalculator />} />
+                    <Route path="/dca-calculator" element={<DollarCostAveragingCalculator />} />
+                    <Route path="/side-hustle-calculator" element={<SideHustleCalculator />} />
+                    <Route path="/freelance-rate-calculator" element={<FreelanceRateCalculator />} />
+                    <Route path="/invoice-generator" element={<InvoiceGeneratorCalculator />} />
+                    <Route path="/hourly-to-salary-converter" element={<HourlyToSalaryConverter />} />
+                    <Route path="/take-home-pay-calculator" element={<TakeHomePayCalculator />} />
+                    <Route path="/paycheck-calculator" element={<PaycheckCalculator />} />
+                    <Route path="/overtime-calculator" element={<OvertimeCalculator />} />
+                    <Route path="/commission-calculator" element={<CommissionCalculator />} />
+                    <Route path="/subscription-cost-calculator" element={<SubscriptionCostCalculator />} />
+                    <Route path="/cost-per-use-calculator" element={<CostPerUseCalculator />} />
+                    <Route path="/rent-affordability-calculator" element={<RentAffordabilityCalculator />} />
+                    <Route path="/utility-bill-splitter" element={<UtilityBillSplitter />} />
+                    <Route path="/wealth-tax-calculator" element={<WealthTaxCalculator />} />
+                    <Route path="/estate-tax-calculator" element={<EstateTaxCalculator />} />
+                    <Route path="/gift-tax-calculator" element={<GiftTaxCalculator />} />
 
                     {/* Health Calculators */}
                     <Route path="/bmi-calculator" element={<BMICalculator />} />
@@ -517,6 +590,27 @@ function App() {
                     <Route path="/ai-username-generator" element={<AIUsernameGenerator />} />
                     <Route path="/ai-color-palette-generator" element={<AIColorPaletteGenerator />} />
                     <Route path="/ai-meeting-agenda-generator" element={<AIMeetingAgendaGenerator />} />
+                    {/* AI Code & Development Tools (20 NEW) */}
+                    <Route path="/ai-code-generator" element={<AICodeGenerator />} />
+                    <Route path="/ai-code-debugger" element={<AICodeDebugger />} />
+                    <Route path="/ai-code-explainer" element={<AICodeExplainer />} />
+                    <Route path="/ai-code-converter" element={<AICodeConverter />} />
+                    <Route path="/ai-sql-generator" element={<AISQLGenerator />} />
+                    <Route path="/ai-regex-generator" element={<AIRegexGenerator />} />
+                    <Route path="/ai-git-commit-generator" element={<AIGitCommitGenerator />} />
+                    <Route path="/ai-api-doc-generator" element={<AIAPIDocGenerator />} />
+                    <Route path="/ai-unit-test-generator" element={<AIUnitTestGenerator />} />
+                    <Route path="/ai-code-comment-generator" element={<AICodeCommentGenerator />} />
+                    <Route path="/ai-code-review-assistant" element={<AICodeReviewAssistant />} />
+                    <Route path="/ai-variable-name-generator" element={<AIVariableNameGenerator />} />
+                    <Route path="/ai-css-generator" element={<AICSSGenerator />} />
+                    <Route path="/ai-html-generator" element={<AIHTMLGenerator />} />
+                    <Route path="/ai-react-component-generator" element={<AIReactComponentGenerator />} />
+                    <Route path="/ai-rest-api-designer" element={<AIRESTAPIDesigner />} />
+                    <Route path="/ai-database-schema-generator" element={<AIDatabaseSchemaGenerator />} />
+                    <Route path="/ai-algorithm-selector" element={<AIAlgorithmSelector />} />
+                    <Route path="/ai-tech-stack-recommender" element={<AITechStackRecommender />} />
+                    <Route path="/ai-function-name-generator" element={<AIFunctionNameGenerator />} />
 
                     {/* Converter Tools */}
                     <Route path="/cooking-converter" element={<CookingConverter />} />
