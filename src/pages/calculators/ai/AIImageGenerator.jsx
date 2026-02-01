@@ -64,6 +64,8 @@ Rules:
                 { temperature: 0.7, maxTokens: 250 }
             )
             setEnhancedPrompt(enhanced.trim())
+            // Auto-copy enhanced prompt to clipboard
+            await navigator.clipboard.writeText(enhanced.trim())
         } catch (err) {
             console.error(err)
             setError('Failed to enhance prompt')
@@ -163,7 +165,7 @@ Rules:
     return (
         <CalculatorLayout
             title="AI Image Generator"
-            description="Create stunning images from text with AI (Powered by Stable Diffusion XL)"
+            description="Create stunning images from text with AI - Free & Unlimited"
             category="AI Tools"
             categoryPath="/ai"
             icon={Image}
@@ -371,7 +373,7 @@ Rules:
                 {loading ? (
                     <>
                         <Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} />
-                        Generating Image... (10-30s)
+                        Generating with Plainly AI...
                     </>
                 ) : imageUrl ? (
                     <>
@@ -481,7 +483,7 @@ Rules:
                         fontSize: '13px',
                         color: '#10b981'
                     }}>
-                        🎨 <strong>Powered by Pollinations.AI</strong> - Free & Unlimited
+                        🎨 <strong>Generated with Plainly AI</strong> - Free & Unlimited
                     </div>
                 </div>
             )}
