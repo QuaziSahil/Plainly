@@ -2,26 +2,17 @@ import { useState, useRef } from 'react'
 import { Video, Loader2, Download, RefreshCw, Sparkles, AlertCircle, Play } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 import { askGroq } from '../../../services/groqAI'
-
-const POLLINATIONS_API_KEY = import.meta.env.VITE_POLLINATIONS_API_KEY
+import { generateVideo } from '../../../services/pollinationsAI'
 
 function AIVideoGenerator() {
     const [prompt, setPrompt] = useState('')
     const [enhancedPrompt, setEnhancedPrompt] = useState('')
-    const [model, setModel] = useState('wan')
     const [aspectRatio, setAspectRatio] = useState('16:9')
     const [videoUrl, setVideoUrl] = useState('')
     const [loading, setLoading] = useState(false)
     const [enhancing, setEnhancing] = useState(false)
     const [error, setError] = useState('')
     const resultRef = useRef(null)
-
-    const videoModels = [
-        { value: 'wan', label: 'Wan 2.6', desc: 'Best quality, recommended' },
-        { value: 'veo', label: 'Veo 3.1 Fast', desc: 'Google video AI' },
-        { value: 'seedance', label: 'Seedance Lite', desc: 'Fast generation' },
-        { value: 'seedance-pro', label: 'Seedance Pro', desc: 'High quality' }
-    ]
 
     const aspectRatios = [
         { value: '16:9', label: 'Landscape (16:9)' },
@@ -78,28 +69,9 @@ Rules:
         setVideoUrl('')
 
         try {
-            // Build video URL using gen.pollinations.ai/image/ with video model
-            // Video models use the same /image/ endpoint but return video content
-            const encodedPrompt = encodeURIComponent(finalPrompt)
-            let url = `https://gen.pollinations.ai/image/${encodedPrompt}?model=${model}`
-
-            // Add API key if available
-            if (POLLINATIONS_API_KEY) {
-                url += `&key=${POLLINATIONS_API_KEY}`
-            }
-
-            // Fetch the video
-            const response = await fetch(url)
-
-            if (!response.ok) {
-                throw new Error(`Video generation failed: ${response.status}`)
-            }
-
-            // Convert to blob and create URL
-            const blob = await response.blob()
-            const videoObjectUrl = URL.createObjectURL(blob)
+            // Auto-fallback is handled by the service
+            const videoObjectUrl = await generateVideo(finalPrompt)
             setVideoUrl(videoObjectUrl)
-
             setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
         } catch (err) {
             console.error(err)
@@ -202,32 +174,6 @@ Rules:
                     </>
                 )}
             </button>
-
-            {/* Video Model Selector */}
-            <div className="input-group">
-                <label className="input-label">AI Model</label>
-                <select
-                    value={model}
-                    onChange={(e) => setModel(e.target.value)}
-                    style={{
-                        width: '100%',
-                        padding: '12px 16px',
-                        background: '#21262d',
-                        border: '1px solid #30363d',
-                        borderRadius: '8px',
-                        color: '#e6edf3',
-                        fontSize: '14px',
-                        cursor: 'pointer',
-                        minHeight: '48px'
-                    }}
-                >
-                    {videoModels.map(m => (
-                        <option key={m.value} value={m.value}>
-                            {m.label} - {m.desc}
-                        </option>
-                    ))}
-                </select>
-            </div>
 
             {/* Aspect Ratio */}
             <div className="input-group">

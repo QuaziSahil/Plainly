@@ -9,28 +9,12 @@ function AIImageGenerator() {
     const [enhancedPrompt, setEnhancedPrompt] = useState('')
     const [style, setStyle] = useState('realistic')
     const [aspectRatio, setAspectRatio] = useState('1:1')
-    const [model, setModel] = useState('flux')
     const [imageUrl, setImageUrl] = useState('')
     const [loading, setLoading] = useState(false)
     const [enhancing, setEnhancing] = useState(false)
     const [error, setError] = useState('')
     const [copied, setCopied] = useState(false)
     const resultRef = useRef(null)
-
-    const aiModels = [
-        { value: 'flux', label: 'Flux Schnell', desc: 'Best quality ⭐' },
-        { value: 'turbo', label: 'SDXL Turbo', desc: 'Fastest ⚡' },
-        { value: 'gptimage', label: 'GPT Image 1 Mini', desc: 'Creative' },
-        { value: 'gptimage-large', label: 'GPT Image 1.5', desc: 'Better GPT' },
-        { value: 'seedream', label: 'Seedream 4.0', desc: 'Artistic' },
-        { value: 'seedream-pro', label: 'Seedream 4.5 Pro', desc: 'Best Seedream' },
-        { value: 'klein', label: 'FLUX.2 Klein 4B', desc: 'Fast Flux' },
-        { value: 'klein-large', label: 'FLUX.2 Klein 9B', desc: 'Better Klein' },
-        { value: 'kontext', label: 'FLUX.1 Kontext', desc: 'Context editing' },
-        { value: 'nanobanana', label: 'NanoBanana', desc: 'Experimental' },
-        { value: 'nanobanana-pro', label: 'NanoBanana Pro', desc: 'Better NanoBanana' },
-        { value: 'zimage', label: 'Z-Image Turbo', desc: 'Fast' }
-    ]
 
     const styles = [
         { value: 'realistic', label: 'Realistic', prompt: 'ultra realistic, photorealistic, 8k, high detail, sharp focus' },
@@ -121,10 +105,10 @@ Rules:
         const fullPrompt = `${finalPrompt}, ${selectedStyle?.prompt || ''}, masterpiece, best quality`
 
         try {
+            // Auto-fallback is handled by the service
             const imageDataUrl = await generatePollinationsImage(fullPrompt, {
                 width: selectedRatio?.width || 1024,
-                height: selectedRatio?.height || 1024,
-                model: model
+                height: selectedRatio?.height || 1024
             })
 
             setImageUrl(imageDataUrl)
@@ -350,32 +334,6 @@ Rules:
                         </button>
                     ))}
                 </div>
-            </div>
-
-            {/* AI Model Selector */}
-            <div className="input-group">
-                <label className="input-label">AI Model</label>
-                <select
-                    value={model}
-                    onChange={(e) => setModel(e.target.value)}
-                    style={{
-                        width: '100%',
-                        padding: '12px 16px',
-                        background: '#21262d',
-                        border: '1px solid #30363d',
-                        borderRadius: '8px',
-                        color: '#e6edf3',
-                        fontSize: '14px',
-                        cursor: 'pointer',
-                        minHeight: '48px'
-                    }}
-                >
-                    {aiModels.map(m => (
-                        <option key={m.value} value={m.value}>
-                            {m.label} - {m.desc}
-                        </option>
-                    ))}
-                </select>
             </div>
 
             {error && (
