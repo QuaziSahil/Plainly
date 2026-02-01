@@ -45,16 +45,16 @@ function Home() {
         aiCalculators.find(c => c.path === '/ai-code-debugger'),  // AI Code Debugger
     ].filter(Boolean)
 
-    // Get latest 8 tools (newest AI Image & Marketing tools)
+    // Get latest 8 tools (newest AI Image & Design tools)
     const latestTools = [
-        aiCalculators.find(c => c.path === '/ai-image-generator'),  // NEW: Image Generator!
-        aiCalculators.find(c => c.path === '/ai-meme-generator'),  // NEW: Meme Generator
-        aiCalculators.find(c => c.path === '/ai-thumbnail-generator'),  // NEW: Thumbnail Ideas
-        aiCalculators.find(c => c.path === '/ai-seo-keyword-research'),  // SEO Research
-        aiCalculators.find(c => c.path === '/ai-ad-copy-generator'),  // Ad Copy
-        aiCalculators.find(c => c.path === '/ai-customer-persona-generator'),  // Personas
-        aiCalculators.find(c => c.path === '/ai-code-generator'),
-        aiCalculators.find(c => c.path === '/ai-sql-generator'),
+        aiCalculators.find(c => c.path === '/ai-face-generator'),  // NEW: Face Generator
+        aiCalculators.find(c => c.path === '/ai-logo-generator'),  // NEW: Logo Generator
+        aiCalculators.find(c => c.path === '/ai-cartoon-avatar-generator'),  // NEW: Cartoon Avatars
+        aiCalculators.find(c => c.path === '/ai-pattern-generator'),  // NEW: Pattern Generator
+        aiCalculators.find(c => c.path === '/ai-album-cover-generator'),  // NEW: Album Covers
+        aiCalculators.find(c => c.path === '/ai-icon-generator'),  // NEW: Icon Generator
+        aiCalculators.find(c => c.path === '/ai-mockup-generator'),  // NEW: Mockups
+        aiCalculators.find(c => c.path === '/ai-qr-art-generator'),  // NEW: QR Art
     ].filter(Boolean).slice(0, 8)
 
     const categories = [
