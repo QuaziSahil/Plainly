@@ -143,7 +143,8 @@ import {
     Paintbrush,
     Cpu,
     Braces,
-    Eye
+    Eye,
+    Terminal
 } from 'lucide-react'
 
 export const allCalculators = [
@@ -452,6 +453,7 @@ export const allCalculators = [
     { name: 'AI Tech Stack Recommender', description: 'Get personalized tech stack recommendations.', icon: Layers, path: '/ai-tech-stack-recommender', category: 'AI' },
     { name: 'AI Function Name Generator', description: 'Get perfect function names for your code.', icon: FunctionSquare, path: '/ai-function-name-generator', category: 'AI' },
     { name: 'Code Preview & Download', description: 'Preview, copy and download any code with line numbers.', icon: Eye, path: '/ai-code-preview', category: 'AI' },
+    { name: 'Code Runner', description: 'Run JavaScript code and see the output instantly.', icon: Terminal, path: '/ai-code-runner', category: 'AI' },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')

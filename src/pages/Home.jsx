@@ -47,9 +47,9 @@ function Home() {
 
     // Get latest 8 tools (newest AI Code tools)
     const latestTools = [
-        aiCalculators.find(c => c.path === '/ai-code-preview'),  // NEW: Code Preview & Download
+        aiCalculators.find(c => c.path === '/ai-code-runner'),  // NEW: Code Runner
+        aiCalculators.find(c => c.path === '/ai-code-preview'),
         aiCalculators.find(c => c.path === '/ai-code-generator'),
-        aiCalculators.find(c => c.path === '/ai-code-debugger'),
         aiCalculators.find(c => c.path === '/ai-sql-generator'),
         aiCalculators.find(c => c.path === '/ai-regex-generator'),
         aiCalculators.find(c => c.path === '/ai-react-component-generator'),
