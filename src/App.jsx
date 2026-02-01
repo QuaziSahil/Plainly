@@ -270,6 +270,9 @@ import AICodeRunner from './pages/calculators/ai/AICodeRunner'
 import AISEOKeywordResearch from './pages/calculators/ai/AISEOKeywordResearch'
 import AIAdCopyGenerator from './pages/calculators/ai/AIAdCopyGenerator'
 import AICustomerPersonaGenerator from './pages/calculators/ai/AICustomerPersonaGenerator'
+// AI Image & Design Tools (Text-based)
+import AIMemeGenerator from './pages/calculators/ai/AIMemeGenerator'
+import AIThumbnailGenerator from './pages/calculators/ai/AIThumbnailGenerator'
 
 // Converter Tools (15)
 import CookingConverter from './pages/calculators/converter/CookingConverter'
@@ -623,6 +626,9 @@ function App() {
                     <Route path="/ai-seo-keyword-research" element={<AISEOKeywordResearch />} />
                     <Route path="/ai-ad-copy-generator" element={<AIAdCopyGenerator />} />
                     <Route path="/ai-customer-persona-generator" element={<AICustomerPersonaGenerator />} />
+                    {/* AI Image & Design Tools (Text-based) */}
+                    <Route path="/ai-meme-generator" element={<AIMemeGenerator />} />
+                    <Route path="/ai-thumbnail-generator" element={<AIThumbnailGenerator />} />
 
                     {/* Converter Tools */}
                     <Route path="/cooking-converter" element={<CookingConverter />} />

@@ -460,6 +460,9 @@ export const allCalculators = [
     { name: 'AI SEO Keyword Research', description: 'Find high-ranking keyword opportunities with AI.', icon: Search, path: '/ai-seo-keyword-research', category: 'AI' },
     { name: 'AI Ad Copy Generator', description: 'Create high-converting ad copy for any platform.', icon: Megaphone, path: '/ai-ad-copy-generator', category: 'AI' },
     { name: 'AI Customer Persona Generator', description: 'Create detailed buyer personas for your business.', icon: Target, path: '/ai-customer-persona-generator', category: 'AI' },
+    // AI Image & Design Tools (Text-based)
+    { name: 'AI Meme Generator', description: 'Create viral meme concepts with captions and templates.', icon: Laugh, path: '/ai-meme-generator', category: 'AI' },
+    { name: 'AI Thumbnail Generator', description: 'Generate high-CTR thumbnail concepts for videos.', icon: Image, path: '/ai-thumbnail-generator', category: 'AI' },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')
