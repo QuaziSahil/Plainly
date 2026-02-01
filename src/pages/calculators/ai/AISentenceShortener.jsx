@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { Minimize2, Loader2, Wand2, Copy, Check, RefreshCw, FileText } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 import AIOutputFormatter from '../../../components/AIOutputFormatter'
@@ -130,50 +130,50 @@ function AISentenceShortener() {
             </button>
 
             {result && (<div ref={resultRef} style={{
-                    background: '#1a1a2e',
-                    borderRadius: '12px',
-                    border: '1px solid #333',
-                    overflow: 'hidden'
+                background: '#1a1a2e',
+                borderRadius: '12px',
+                border: '1px solid #333',
+                overflow: 'hidden'
+            }}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '12px 16px',
+                    borderBottom: '1px solid #333',
+                    background: '#0a0a0a'
                 }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '12px 16px',
-                        borderBottom: '1px solid #333',
-                        background: '#0a0a0a'
-                    }}>
-                        <span style={{ fontSize: '12px', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <FileText size={12} /> Concise Version
-                        </span>
-                        <button
-                            onClick={handleCopy}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                padding: '6px 12px',
-                                background: copied ? '#10b981' : '#333',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: 'white',
-                                fontSize: '12px',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            {copied ? <Check size={14} /> : <Copy size={14} />}
-                            {copied ? 'Copied!' : 'Copy Result'}
-                        </button>
-                    </div>
-                    <div style={{
-                        padding: '24px',
-                        fontSize: '15px',
-                        lineHeight: '1.7',
-                        whiteSpace: 'pre-wrap'
-                    }}>
-                        <AIOutputFormatter content={result} />
-                    </div>
+                    <span style={{ fontSize: '12px', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <FileText size={12} /> Concise Version
+                    </span>
+                    <button
+                        onClick={handleCopy}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            padding: '6px 12px',
+                            background: copied ? '#10b981' : '#333',
+                            border: 'none',
+                            borderRadius: '6px',
+                            color: 'white',
+                            fontSize: '12px',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        {copied ? <Check size={14} /> : <Copy size={14} />}
+                        {copied ? 'Copied!' : 'Copy Result'}
+                    </button>
                 </div>
+                <div style={{
+                    padding: '24px',
+                    fontSize: '15px',
+                    lineHeight: '1.7',
+                    whiteSpace: 'pre-wrap'
+                }}>
+                    <AIOutputFormatter content={result} />
+                </div>
+            </div>
             )}
 
             <style>{`

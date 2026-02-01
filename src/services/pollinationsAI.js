@@ -97,7 +97,7 @@ export async function generateImage(prompt, options = {}) {
  * Generate a video with automatic model fallback
  * Video models use the same /image/ endpoint but return video content
  */
-export async function generateVideo(prompt, options = {}) {
+export async function generateVideo(prompt, _options = {}) {
     const encodedPrompt = encodeURIComponent(prompt)
 
     // Try each video model in order

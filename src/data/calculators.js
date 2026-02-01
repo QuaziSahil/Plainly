@@ -156,7 +156,14 @@ import {
     Smartphone,
     Presentation,
     Package,
-    Shapes
+    Shapes,
+    ListChecks,
+    BrainCircuit,
+    FileCheck,
+    Library,
+    Brain,
+    Languages,
+    Lightbulb
 } from 'lucide-react'
 
 export const allCalculators = [
@@ -488,7 +495,24 @@ export const allCalculators = [
     { name: 'AI Mockup Generator', description: 'Create product mockups for marketing and portfolios.', icon: Package, path: '/ai-mockup-generator', category: 'AI' },
     { name: 'AI Icon Generator', description: 'Design custom icons for apps and websites.', icon: Shapes, path: '/ai-icon-generator', category: 'AI' },
     { name: 'AI QR Art Generator', description: 'Generate artistic QR code designs with AI.', icon: QrCode, path: '/ai-qr-art-generator', category: 'AI' },
+    // AI Education & Learning Tools (15 NEW)
+    { name: 'AI Quiz Generator', description: 'Generate custom quizzes based on any topic or grade level.', icon: ListChecks, path: '/ai-quiz-generator', category: 'AI' },
+    { name: 'AI Flashcard Generator', description: 'Create front-and-back study flashcards for active recall.', icon: BookOpen, path: '/ai-flashcard-generator', category: 'AI' },
+    { name: 'AI Study Guide Generator', description: 'Produce structured, comprehensive exam study materials.', icon: GraduationCap, path: '/ai-study-guide-generator', category: 'AI' },
+    { name: 'AI Lesson Plan Generator', description: 'Generate detailed teaching materials and curricula.', icon: Presentation, path: '/ai-lesson-plan-generator', category: 'AI' },
+    { name: 'AI Explanation Simplifier', description: 'Break down complex topics into simple, clear explanations.', icon: BrainCircuit, path: '/ai-explanation-simplifier', category: 'AI' },
+    { name: 'AI Practice Problem Generator', description: 'Generate math and science problems with step-by-step solutions.', icon: Calculator, path: '/ai-practice-problem-generator', category: 'AI' },
+    { name: 'AI Essay Grader', description: 'Get automated scoring and constructive feedback on essays.', icon: FileCheck, path: '/ai-essay-grader', category: 'AI' },
+    { name: 'AI Citation Generator', description: 'Generate perfect APA, MLA, and Chicago style citations.', icon: Quote, path: '/ai-citation-generator', category: 'AI' },
+    { name: 'AI Research Question Generator', description: 'Generate insightful research ideas for any topic.', icon: FileSearch, path: '/ai-research-question-generator', category: 'AI' },
+    { name: 'AI Thesis Statement Generator', description: 'Draft strong, arguable thesis statements for essays.', icon: PenTool, path: '/ai-thesis-statement-generator', category: 'AI' },
+    { name: 'AI Annotated Bibliography', description: 'Summarize sources with evaluations and formal citations.', icon: Library, path: '/ai-annotated-bibliography', category: 'AI' },
+    { name: 'AI Mind Map Generator', description: 'Create visual, hierarchical outlines for structured learning.', icon: Network, path: '/ai-mind-map-generator', category: 'AI' },
+    { name: 'AI Mnemonic Device Generator', description: 'Create effective memory aids and acronyms for concepts.', icon: Brain, path: '/ai-mnemonic-generator', category: 'AI' },
+    { name: 'AI Language Learning Tutor', description: 'Practice vocabulary and grammar in any target language.', icon: Languages, path: '/ai-language-learning-tutor', category: 'AI' },
+    { name: 'AI Analogy Generator', description: 'Explain abstract concepts with vivid, relatable analogies.', icon: ArrowRightLeft, path: '/ai-analogy-generator', category: 'AI' },
 ]
+
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')
 export const healthCalculators = allCalculators.filter(c => c.category === 'Health')

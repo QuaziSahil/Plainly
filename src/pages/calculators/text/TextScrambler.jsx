@@ -1,12 +1,13 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Shuffle } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 
 function TextScrambler() {
     const [text, setText] = useState('The quick brown fox jumps over the lazy dog')
     const [mode, setMode] = useState('words')
+    const [displayedScramble, setDisplayedScramble] = useState('')
 
-    const scrambleWord = (word) => {
+    const scrambleWord = useCallback((word) => {
         if (word.length <= 3) return word
         const first = word[0]
         const last = word[word.length - 1]
@@ -18,38 +19,13 @@ function TextScrambler() {
         }
 
         return first + middle.join('') + last
-    }
+    }, [])
 
-    const scrambled = useMemo(() => {
-        if (!text) return ''
-
-        if (mode === 'words') {
-            // Scramble word order
-            const words = text.split(' ')
-            for (let i = words.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [words[i], words[j]] = [words[j], words[i]]
-            }
-            return words.join(' ')
-        } else if (mode === 'letters') {
-            // Cambridge-style scramble (first and last stay, middle scrambled)
-            return text.split(' ').map(word => scrambleWord(word)).join(' ')
-        } else if (mode === 'full') {
-            // Full scramble
-            const chars = text.split('')
-            for (let i = chars.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [chars[i], chars[j]] = [chars[j], chars[i]]
-            }
-            return chars.join('')
+    const performScramble = useCallback(() => {
+        if (!text) {
+            setDisplayedScramble('')
+            return
         }
-        return text
-    }, [text, mode])
-
-    const [displayedScramble, setDisplayedScramble] = useState(scrambled)
-
-    const rescramble = () => {
-        if (!text) return
 
         let result
         if (mode === 'words') {
@@ -68,9 +44,16 @@ function TextScrambler() {
                 [chars[i], chars[j]] = [chars[j], chars[i]]
             }
             result = chars.join('')
+        } else {
+            result = text
         }
         setDisplayedScramble(result)
-    }
+    }, [text, mode, scrambleWord])
+
+    // Initial scramble and when text/mode changes
+    useEffect(() => {
+        performScramble()
+    }, [performScramble])
 
     const copyResult = () => {
         navigator.clipboard.writeText(displayedScramble)
@@ -88,7 +71,7 @@ function TextScrambler() {
         >
             <div className="input-group">
                 <label className="input-label">Scramble Mode</label>
-                <select value={mode} onChange={(e) => { setMode(e.target.value); rescramble(); }}>
+                <select value={mode} onChange={(e) => { setMode(e.target.value) }}>
                     <option value="words">Shuffle Word Order</option>
                     <option value="letters">Scramble Letters (Cambridge style)</option>
                     <option value="full">Full Character Scramble</option>
@@ -104,7 +87,7 @@ function TextScrambler() {
                 />
             </div>
             <button
-                onClick={rescramble}
+                onClick={performScramble}
                 style={{
                     width: '100%',
                     padding: '14px',

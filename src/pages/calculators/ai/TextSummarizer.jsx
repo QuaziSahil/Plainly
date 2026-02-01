@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { FileSearch, Loader2, Wand2, Copy, Check } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 import AIOutputFormatter from '../../../components/AIOutputFormatter'
@@ -157,55 +157,55 @@ function TextSummarizer() {
 
             {/* Result */}
             {result && (<div ref={resultRef} style={{
-                    background: '#1a1a2e',
-                    borderRadius: '12px',
-                    border: '1px solid #3b82f640',
-                    overflow: 'hidden'
+                background: '#1a1a2e',
+                borderRadius: '12px',
+                border: '1px solid #3b82f640',
+                overflow: 'hidden'
+            }}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '12px 16px',
+                    borderBottom: '1px solid #333',
+                    background: '#0a0a0a'
                 }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '12px 16px',
-                        borderBottom: '1px solid #333',
-                        background: '#0a0a0a'
-                    }}>
-                        <div style={{ fontSize: '12px' }}>
-                            <span style={{ color: '#3b82f6', fontWeight: 600 }}>
-                                📝 Summary
-                            </span>
-                            <span style={{ opacity: 0.5, marginLeft: '12px' }}>
-                                {inputWordCount} → {resultWordCount} words ({reduction}% reduction)
-                            </span>
-                        </div>
-                        <button
-                            onClick={handleCopy}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                padding: '6px 12px',
-                                background: copied ? '#3b82f6' : '#333',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: 'white',
-                                fontSize: '12px',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            {copied ? <Check size={14} /> : <Copy size={14} />}
-                            {copied ? 'Copied!' : 'Copy'}
-                        </button>
+                    <div style={{ fontSize: '12px' }}>
+                        <span style={{ color: '#3b82f6', fontWeight: 600 }}>
+                            📝 Summary
+                        </span>
+                        <span style={{ opacity: 0.5, marginLeft: '12px' }}>
+                            {inputWordCount} → {resultWordCount} words ({reduction}% reduction)
+                        </span>
                     </div>
-                    <div style={{
-                        padding: '20px',
-                        fontSize: '15px',
-                        lineHeight: '1.7',
-                        whiteSpace: 'pre-wrap'
-                    }}>
-                        <AIOutputFormatter content={result} />
-                    </div>
+                    <button
+                        onClick={handleCopy}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            padding: '6px 12px',
+                            background: copied ? '#3b82f6' : '#333',
+                            border: 'none',
+                            borderRadius: '6px',
+                            color: 'white',
+                            fontSize: '12px',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        {copied ? <Check size={14} /> : <Copy size={14} />}
+                        {copied ? 'Copied!' : 'Copy'}
+                    </button>
                 </div>
+                <div style={{
+                    padding: '20px',
+                    fontSize: '15px',
+                    lineHeight: '1.7',
+                    whiteSpace: 'pre-wrap'
+                }}>
+                    <AIOutputFormatter content={result} />
+                </div>
+            </div>
             )}
 
             {!result && !loading && (

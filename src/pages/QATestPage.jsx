@@ -1,19 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CheckCircle, XCircle, AlertCircle, RefreshCw, Play, ExternalLink } from 'lucide-react'
+import { CheckCircle, XCircle, AlertCircle, ExternalLink } from 'lucide-react'
 import { allCalculators } from '../data/calculators'
 
 function QATestPage() {
     const [testResults, setTestResults] = useState({})
-    const [testing, setTesting] = useState(false)
+
     const [filter, setFilter] = useState('all')
 
-    // Features every calculator should have
-    const requiredFeatures = [
-        'Has inputs',
-        'Shows result',
-        'Has reset option'
-    ]
+
 
     // Group calculators by category
     const categories = [...new Set(allCalculators.map(c => c.category))]
@@ -171,8 +166,8 @@ function QATestPage() {
                                     padding: '16px 20px',
                                     borderRadius: '8px',
                                     borderLeft: `3px solid ${result?.status === 'pass' ? '#10b981' :
-                                            result?.status === 'fail' ? '#ef4444' :
-                                                result?.status === 'warning' ? '#f59e0b' : '#333'
+                                        result?.status === 'fail' ? '#ef4444' :
+                                            result?.status === 'warning' ? '#f59e0b' : '#333'
                                         }`
                                 }}
                             >

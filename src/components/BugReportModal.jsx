@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { X, Send, Bug, CheckCircle } from 'lucide-react'
 
-function BugReportModal({ isOpen, onClose, calculatorName, calculatorPath }) {
+function BugReportModal({ isOpen, onClose, calculatorName }) {
     const [formData, setFormData] = useState({
         issueType: 'bug',
         description: '',
@@ -57,7 +57,7 @@ function BugReportModal({ isOpen, onClose, calculatorName, calculatorPath }) {
             } else {
                 throw new Error('Failed to submit')
             }
-        } catch (err) {
+        } catch (_err) {
             setError('Failed to submit report. Please try again.')
         } finally {
             setSubmitting(false)

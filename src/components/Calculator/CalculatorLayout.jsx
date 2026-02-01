@@ -20,7 +20,7 @@ function CalculatorLayout({
 }) {
     const navigate = useNavigate()
     const location = useLocation()
-    const { isFavorite, toggleFavorite, addToHistory } = useStorage()
+    const { isFavorite, toggleFavorite } = useStorage()
     const [showBugReport, setShowBugReport] = useState(false)
 
     const currentPath = location.pathname
@@ -39,7 +39,7 @@ function CalculatorLayout({
                     text: description,
                     url: shareUrl,
                 })
-            } catch (err) {
+            } catch (_err) {
                 // User cancelled or share failed
             }
         } else {
@@ -47,8 +47,8 @@ function CalculatorLayout({
             try {
                 await navigator.clipboard.writeText(shareUrl)
                 // Could show a toast notification here
-            } catch (err) {
-                console.error('Failed to copy:', err)
+            } catch (_err) {
+                console.error('Failed to copy URL')
             }
         }
     }

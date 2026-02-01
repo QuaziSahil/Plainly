@@ -104,7 +104,6 @@ Rules:
     const handleReset = () => {
         setPrompt('')
         setEnhancedPrompt('')
-        setModel('wan')
         setAspectRatio('16:9')
         setVideoUrl('')
         setError('')

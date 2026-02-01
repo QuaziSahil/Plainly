@@ -11,7 +11,7 @@ const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 // Llama 4 Scout/Maverick:    1,000 req/day  ← Premium creative
 // groq/compound-mini:          250 req/day  ← Complex tasks only
 
-const MODELS = {
+export const MODELS = {
     // HIGH LIMIT - Use these for most tasks (21.4K combined/day!)
     primary: 'llama-3.1-8b-instant',      // 14.4K/day - MAIN model
     secondary: 'allam-2-7b',               // 7K/day - ALTERNATE model
@@ -25,7 +25,10 @@ const MODELS = {
     complex: 'groq/compound-mini',
 
     // Default = primary (highest limit)
-    default: 'llama-3.1-8b-instant'
+    default: 'llama-3.1-8b-instant',
+    
+    // Aliases for specific use cases (all point to primary for high limit)
+    randomNames: 'llama-3.1-8b-instant'   // For fun/random generation tools
 }
 
 // Fallback chain: if one model hits limit, try the next
@@ -696,5 +699,255 @@ Return the colors as a list of hex codes with brief descriptions of why they fit
     })
 }
 
-// Export MODELS (functions are already exported inline)
-export { MODELS }
+/**
+ * Educational & Learning Tools Services
+ */
+
+export async function generateQuiz(topic, gradeLevel = 'high school', questionCount = 5) {
+    const prompt = `Generate a ${questionCount}-question multiple-choice quiz about "${topic}" for a ${gradeLevel} level student.
+    
+Include correct answers and brief explanations for each question. Format the output clearly with Markdown.`
+
+    const systemPrompt = `You are an expert educator. Create challenging but fair assessment questions that test conceptual understanding.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.6,
+        maxTokens: 1500
+    })
+}
+
+export async function generateFlashcards(subject, difficulty = 'intermediate') {
+    const prompt = `Create 10 educational flashcards for the subject: "${subject}" at an ${difficulty} level.
+    
+Format each card as:
+**Front:** [Question/Concept]
+**Back:** [Answer/Explanation]
+
+Ensure the information is clear, concise, and accurate.`
+
+    const systemPrompt = `You are a learning specialist. Create effective flashcards that facilitate active recall and spaced repetition.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.7,
+        maxTokens: 1200
+    })
+}
+
+export async function generateStudyGuide(topic, depth = 'comprehensive') {
+    const prompt = `Create a ${depth} study guide for "${topic}".
+    
+Include:
+1. Key Concepts & Definitions
+2. Core Theory/Principles
+3. Important Dates/Figures (if applicable)
+4. Summary or "Big Picture" view
+5. 3 self-test questions
+
+Use structured Markdown with clear headings.`
+
+    const systemPrompt = `You are an academic coach. Create organized, easy-to-digest study guides that help students master complex subjects.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.5,
+        maxTokens: 2000
+    })
+}
+
+export async function generateLessonPlan(subject, gradeLevel = 'middle school', duration = '60') {
+    const prompt = `Develop a ${duration}-minute lesson plan for "${subject}" at a ${gradeLevel} level.
+    
+Include:
+- Learning Objectives
+- Required Materials
+- Introduction (5-10 mins)
+- Core Instruction (20-30 mins)
+- Guided Practice (15 mins)
+- Conclusion/Assessment (5 mins)`
+
+    const systemPrompt = `You are a master teacher. Design engaging, pedagogicaly-sound lesson plans that meet standard learning outcomes.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.6,
+        maxTokens: 1500
+    })
+}
+
+export async function simplifyExplanation(text, targetAudience = 'a 10-year old') {
+    const prompt = `Explain the following complex concept/text so that "${targetAudience}" can understand it perfectly:
+    
+"${text}"
+
+Use analogies, simple language, and break down complex terms.`
+
+    const systemPrompt = `You are an expert communicator who excels at "ELI5" (Explain Like I'm 5) style explanations. Make complex ideas accessible without losing the core truth.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.7,
+        maxTokens: 1000
+    })
+}
+
+export async function generatePracticeProblems(topic, type = 'math', count = 5) {
+    const prompt = `Generate ${count} ${type} practice problems about "${topic}".
+    
+Provide the problems first, followed by a separate "Step-by-Step Solutions" section at the end.`
+
+    const systemPrompt = `You are a math and science tutor. Create problems ranging from basic to challenging, with clear, logical solutions.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.5,
+        maxTokens: 1500
+    })
+}
+
+export async function gradeEssay(essayText, level = 'college') {
+    const prompt = `Act as an academic grader. Evaluate the following ${level}-level essay:
+    
+"${essayText}"
+
+Provide:
+1. **Grade/Score**: (Estimated)
+2. **Strengths**: What worked well.
+3. **Weaknesses**: Areas for improvement.
+4. **Specific Feedback**: Grammar, structure, and argument analysis.
+5. **Revised Snippet**: Rewrite one paragraph to show how it can be improved.`
+
+    const systemPrompt = `You are a professional essay grader and writing mentor. Provide constructive, detailed, and encouraging feedback.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.4,
+        maxTokens: 2000
+    })
+}
+
+export async function generateCitation(sourceData, style = 'APA') {
+    const prompt = `Generate a formal academic citation in ${style} style for the following source information:
+    
+"${sourceData}"
+
+Provide only the citation and a brief note on the style rules used.`
+
+    const systemPrompt = `You are a research librarian. Provide perfectly formatted citations according to the latest style guides (APA, MLA, Chicago, etc.).`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.2,
+        maxTokens: 500
+    })
+}
+
+export async function generateResearchQuestions(topic, field = 'general') {
+    const prompt = `Brainstorm 5 high-quality research questions for a study on "${topic}" within the field of ${field}.
+    
+For each question, briefly explain why it is a valuable area of inquiry.`
+
+    const systemPrompt = `You are a research director. Generate insightful, "google-proof" research questions that drive deep academic or professional investigation.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.8,
+        maxTokens: 1000
+    })
+}
+
+export async function generateThesisStatement(topic, argumentType = 'analytical') {
+    const prompt = `Write 3 different formal thesis statements for an essay about "${topic}".
+    
+Thesis type: ${argumentType}
+
+Ensure they are arguable, specific, and provide a clear roadmap for an essay.`
+
+    const systemPrompt = `You are a writing clinic expert. Craft strong, academic thesis statements that serve as the backbone of a high-quality essay.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.7,
+        maxTokens: 800
+    })
+}
+
+export async function generateAnnotatedBibliography(sources) {
+    const prompt = `Create an annotated bibliography for these sources:
+    
+"${sources}"
+
+For each source, provide a formal citation and a 100-word summary/evaluation of its relevance and quality.`
+
+    const systemPrompt = `You are an academic researcher. Create professional annotated bibliographies that summarize and critically evaluate sources.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.5,
+        maxTokens: 2000
+    })
+}
+
+export async function generateMindMap(topic) {
+    const prompt = `Create a structured text-based Mind Map for "${topic}".
+    
+Format: Use a hierarchical bulleted list where indented bullets represent sub-topics and details.
+Use emojis to make it visual and engaging.`
+
+    const systemPrompt = `You are a visual learning expert. Organize information into logical, hierarchical structures that mimic mind maps.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.7,
+        maxTokens: 1200
+    })
+}
+
+export async function generateMnemonic(concept) {
+    const prompt = `Create 3 creative mnemonic devices (acronyms, acrostics, or rhymes) to help remember: "${concept}".
+    
+Explain how each one works.`
+
+    const systemPrompt = `You are a memory specialist. Create catchy, memorable, and effective mnemonics that make complex information "sticky".`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.9,
+        maxTokens: 800
+    })
+}
+
+export async function languageLearningTutor(level, targetLanguage, goal) {
+    const prompt = `Act as a language tutor for a ${level} student learning ${targetLanguage}.
+    
+Goal: ${goal}
+
+Generate:
+1. A short dialogue or 5 essential phrases.
+2. Grammar/Pronunciation tips.
+3. A small practice exercise.`
+
+    const systemPrompt = `You are a polyglot language tutor. Provide helpful, conversational, and culturally-relevant language learning material.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.7,
+        maxTokens: 1500
+    })
+}
+
+export async function generateAnalogy(concept) {
+    const prompt = `Create 3 powerful analogies to explain the concept of "${concept}".
+    
+For each analogy, explain the "mapping" (how the comparison works).`
+
+    const systemPrompt = `You are a conceptual thinker. Create vivid, relatable analogies that make abstract or difficult ideas immediately clear.`
+
+    return await askGroq(prompt, systemPrompt, {
+        model: MODELS.primary,
+        temperature: 0.8,
+        maxTokens: 1000
+    })
+}
+

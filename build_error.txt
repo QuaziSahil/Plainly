@@ -1,0 +1,66 @@
+﻿[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32mÔ£ô[39m 2103 modules transformed.
+node.exe : [31mÔ£ù[39m Build failed in 2.89s
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" 
+"C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ( 
+   [31mÔ£ù[39m Build failed in 2.89s:Strin  
+  g) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandEr 
+   ror
+ 
+[31merror during build:
+[31msrc/pages/calculators/tech/PasswordGenera
+tor.jsx (4:18): "MODELS" is not exported by 
+"src/services/groqAI.js", imported by "src/pag
+es/calculators/tech/PasswordGenerator.jsx".[3
+1m
+file: [36mC:/Users/rehan/New Apps/Plainly/src
+/pages/calculators/tech/PasswordGenerator.jsx:
+4:18[31m
+[33m
+2: import { KeyRound, Wand2, Loader2, Copy, 
+Check } from 'lucide-react'
+3: import CalculatorLayout from '../../../comp
+onents/Calculator/CalculatorLayout'
+4: import { askGroq, MODELS } from 
+'../../../services/groqAI'
+                     ^
+5: 
+6: function PasswordGenerator() {
+[31m
+    at getRollupError (file:///C:/Users/rehan/
+New%20Apps/Plainly/node_modules/rollup/dist/es
+/shared/parseAst.js:402:41)
+    at error (file:///C:/Users/rehan/New%20App
+s/Plainly/node_modules/rollup/dist/es/shared/p
+arseAst.js:398:42)
+    at Module.error (file:///C:/Users/rehan/Ne
+w%20Apps/Plainly/node_modules/rollup/dist/es/s
+hared/node-entry.js:17037:16)
+    at Module.traceVariable (file:///C:/Users/
+rehan/New%20Apps/Plainly/node_modules/rollup/d
+ist/es/shared/node-entry.js:17449:29)
+    at ModuleScope.findVariable (file:///C:/Us
+ers/rehan/New%20Apps/Plainly/node_modules/roll
+up/dist/es/shared/node-entry.js:15067:39)
+    at FunctionScope.findVariable (file:///C:/
+Users/rehan/New%20Apps/Plainly/node_modules/ro
+llup/dist/es/shared/node-entry.js:5673:38)
+    at FunctionBodyScope.findVariable (file://
+/C:/Users/rehan/New%20Apps/Plainly/node_module
+s/rollup/dist/es/shared/node-entry.js:5673:38)
+    at ReturnValueScope.findVariable (file:///
+C:/Users/rehan/New%20Apps/Plainly/node_modules
+/rollup/dist/es/shared/node-entry.js:5673:38)
+    at FunctionBodyScope.findVariable (file://
+/C:/Users/rehan/New%20Apps/Plainly/node_module
+s/rollup/dist/es/shared/node-entry.js:5673:38)
+    at TrackingScope.findVariable (file:///C:/
+Users/rehan/New%20Apps/Plainly/node_modules/ro
+llup/dist/es/shared/node-entry.js:5673:38)[39
+m

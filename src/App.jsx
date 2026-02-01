@@ -288,6 +288,22 @@ import AIPresentationSlideGenerator from './pages/calculators/ai/AIPresentationS
 import AIMockupGenerator from './pages/calculators/ai/AIMockupGenerator'
 import AIIconGenerator from './pages/calculators/ai/AIIconGenerator'
 import AIQRArtGenerator from './pages/calculators/ai/AIQRArtGenerator'
+// AI Education & Learning Tools (15 NEW)
+import AIQuizGenerator from './pages/calculators/ai/AIQuizGenerator'
+import AIFlashcardGenerator from './pages/calculators/ai/AIFlashcardGenerator'
+import AIStudyGuideGenerator from './pages/calculators/ai/AIStudyGuideGenerator'
+import AILessonPlanGenerator from './pages/calculators/ai/AILessonPlanGenerator'
+import AIExplanationSimplifier from './pages/calculators/ai/AIExplanationSimplifier'
+import AIPracticeProblemGenerator from './pages/calculators/ai/AIPracticeProblemGenerator'
+import AIEssayGrader from './pages/calculators/ai/AIEssayGrader'
+import AICitationGenerator from './pages/calculators/ai/AICitationGenerator'
+import AIResearchQuestionGenerator from './pages/calculators/ai/AIResearchQuestionGenerator'
+import AIThesisStatementGenerator from './pages/calculators/ai/AIThesisStatementGenerator'
+import AIAnnotatedBibliography from './pages/calculators/ai/AIAnnotatedBibliography'
+import AIMindMapGenerator from './pages/calculators/ai/AIMindMapGenerator'
+import AIMnemonicGenerator from './pages/calculators/ai/AIMnemonicGenerator'
+import AILanguageLearningTutor from './pages/calculators/ai/AILanguageLearningTutor'
+import AIAnalogyGenerator from './pages/calculators/ai/AIAnalogyGenerator'
 
 // Converter Tools (15)
 import CookingConverter from './pages/calculators/converter/CookingConverter'
@@ -659,6 +675,23 @@ function App() {
                     <Route path="/ai-mockup-generator" element={<AIMockupGenerator />} />
                     <Route path="/ai-icon-generator" element={<AIIconGenerator />} />
                     <Route path="/ai-qr-art-generator" element={<AIQRArtGenerator />} />
+
+                    {/* AI Education & Learning Tools */}
+                    <Route path="/ai-quiz-generator" element={<AIQuizGenerator />} />
+                    <Route path="/ai-flashcard-generator" element={<AIFlashcardGenerator />} />
+                    <Route path="/ai-study-guide-generator" element={<AIStudyGuideGenerator />} />
+                    <Route path="/ai-lesson-plan-generator" element={<AILessonPlanGenerator />} />
+                    <Route path="/ai-explanation-simplifier" element={<AIExplanationSimplifier />} />
+                    <Route path="/ai-practice-problem-generator" element={<AIPracticeProblemGenerator />} />
+                    <Route path="/ai-essay-grader" element={<AIEssayGrader />} />
+                    <Route path="/ai-citation-generator" element={<AICitationGenerator />} />
+                    <Route path="/ai-research-question-generator" element={<AIResearchQuestionGenerator />} />
+                    <Route path="/ai-thesis-statement-generator" element={<AIThesisStatementGenerator />} />
+                    <Route path="/ai-annotated-bibliography" element={<AIAnnotatedBibliography />} />
+                    <Route path="/ai-mind-map-generator" element={<AIMindMapGenerator />} />
+                    <Route path="/ai-mnemonic-generator" element={<AIMnemonicGenerator />} />
+                    <Route path="/ai-language-learning-tutor" element={<AILanguageLearningTutor />} />
+                    <Route path="/ai-analogy-generator" element={<AIAnalogyGenerator />} />
 
                     {/* Converter Tools */}
                     <Route path="/cooking-converter" element={<CookingConverter />} />

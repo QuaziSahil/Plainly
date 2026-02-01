@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Search, Calculator, Heart, Brain, ArrowRightLeft, ChevronRight, ArrowRight, Star, Clock, Sparkles } from 'lucide-react'
-import { financeCalculators, healthCalculators, mathCalculators, converterCalculators, allCalculators, aiCalculators } from '../data/calculators'
+import { financeCalculators, healthCalculators, converterCalculators, allCalculators, aiCalculators } from '../data/calculators'
 import { useStorage } from '../context/StorageContext'
 import './Home.css'
 
@@ -33,28 +33,28 @@ function Home() {
     const trendingCalculators = [
         financeCalculators[0],  // Mortgage Calculator
         healthCalculators[0],   // BMI Calculator
-        aiCalculators.find(c => c.path === '/ai-code-generator'),  // AI Code Generator
+        aiCalculators.find(c => c.path === '/ai-quiz-generator'),  // NEW: AI Quiz Generator
         financeCalculators[2],  // Compound Interest
-        mathCalculators[1],     // Percentage Calculator
-        aiCalculators.find(c => c.path === '/ai-paraphraser'),  // AI Paraphraser
+        aiCalculators.find(c => c.path === '/ai-study-guide-generator'),  // NEW: AI Study Guide
+        aiCalculators.find(c => c.path === '/ai-code-generator'),  // AI Code Generator
         financeCalculators[5],  // Tip Calculator
         healthCalculators[1],   // Calorie Calculator
-        aiCalculators.find(c => c.path === '/ai-email-generator'),  // AI Email Generator
+        aiCalculators.find(c => c.path === '/ai-explanation-simplifier'),  // NEW: AI Explainer
         converterCalculators[0], // Unit Converter
-        financeCalculators[9],  // Retirement Calculator
-        aiCalculators.find(c => c.path === '/ai-code-debugger'),  // AI Code Debugger
+        aiCalculators.find(c => c.path === '/ai-language-learning-tutor'),  // NEW: AI Language Tutor
+        aiCalculators.find(c => c.path === '/ai-essay-grader'),  // NEW: AI Essay Grader
     ].filter(Boolean)
 
-    // Get latest 8 tools (newest AI Image & Design tools)
+    // Get latest 8 tools (newest AI Education tools)
     const latestTools = [
-        aiCalculators.find(c => c.path === '/ai-face-generator'),  // NEW: Face Generator
-        aiCalculators.find(c => c.path === '/ai-logo-generator'),  // NEW: Logo Generator
-        aiCalculators.find(c => c.path === '/ai-cartoon-avatar-generator'),  // NEW: Cartoon Avatars
-        aiCalculators.find(c => c.path === '/ai-pattern-generator'),  // NEW: Pattern Generator
-        aiCalculators.find(c => c.path === '/ai-album-cover-generator'),  // NEW: Album Covers
-        aiCalculators.find(c => c.path === '/ai-icon-generator'),  // NEW: Icon Generator
-        aiCalculators.find(c => c.path === '/ai-mockup-generator'),  // NEW: Mockups
-        aiCalculators.find(c => c.path === '/ai-qr-art-generator'),  // NEW: QR Art
+        aiCalculators.find(c => c.path === '/ai-quiz-generator'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-flashcard-generator'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-study-guide-generator'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-lesson-plan-generator'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-practice-problem-generator'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-citation-generator'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-mind-map-generator'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-mnemonic-generator'),  // NEW
     ].filter(Boolean).slice(0, 8)
 
     const categories = [
