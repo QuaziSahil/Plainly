@@ -1,136 +1,53 @@
 /**
- * Hugging Face AI Service for Image Generation
- * Uses the Inference API with Stable Diffusion XL
- * Falls back to Pollinations.AI if HF fails
+ * Pollinations.AI Image Generation Service
+ * Free & unlimited image generation with optional API key for priority
  */
 
-const HF_API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY
-
-// Available models for image generation
-const MODELS = {
-    SDXL_TURBO: 'stabilityai/sdxl-turbo',  // Fast, works well
-    FLUX: 'black-forest-labs/FLUX.1-schnell',  // Very fast
-    SD_3: 'stabilityai/stable-diffusion-3-medium-diffusers'
-}
-
-// Default model - SDXL Turbo is faster and more reliable
-const DEFAULT_MODEL = MODELS.SDXL_TURBO
+const POLLINATIONS_API_KEY = import.meta.env.VITE_POLLINATIONS_API_KEY
 
 /**
- * Generate an image using Hugging Face Inference API
- * Falls back to Pollinations.AI if HF fails
+ * Generate an image using Pollinations.AI
+ * @param {string} prompt - The text prompt for image generation
+ * @param {object} options - Generation options
+ * @returns {Promise<string>} - URL of the generated image
  */
 export async function generateImage(prompt, options = {}) {
     const {
         width = 1024,
         height = 1024,
+        model = 'flux',  // Best quality model
+        seed = Math.floor(Math.random() * 1000000)
     } = options
 
-    // Try Hugging Face first if API key is available
-    if (HF_API_KEY) {
-        try {
-            const imageUrl = await generateWithHuggingFace(prompt, { width, height })
-            return imageUrl
-        } catch (error) {
-            console.warn('Hugging Face failed, falling back to Pollinations.AI:', error.message)
-            // Fall through to Pollinations.AI
-        }
-    }
-
-    // Fallback to Pollinations.AI (free, no API key needed)
-    return generateWithPollinations(prompt, { width, height })
-}
-
-/**
- * Generate with Hugging Face API
- */
-async function generateWithHuggingFace(prompt, options = {}) {
-    const { width = 1024, height = 1024 } = options
-
-    const response = await fetch(`https://api-inference.huggingface.co/models/${DEFAULT_MODEL}`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${HF_API_KEY}`,
-            'Content-Type': 'application/json',
-            'x-wait-for-model': 'true'  // Wait for model to load
-        },
-        body: JSON.stringify({
-            inputs: prompt,
-            parameters: {
-                width: Math.min(width, 1024),
-                height: Math.min(height, 1024)
-            }
-        })
-    })
-
-    if (!response.ok) {
-        const errorText = await response.text()
-        let errorMessage = `HF Error ${response.status}`
-
-        try {
-            const errorData = JSON.parse(errorText)
-            if (errorData.error) {
-                errorMessage = errorData.error
-            }
-        } catch {
-            // Not JSON
-        }
-
-        if (response.status === 503) {
-            throw new Error('Model is loading. Please wait 30 seconds and try again.')
-        }
-        if (response.status === 429) {
-            throw new Error('Rate limit reached')
-        }
-
-        throw new Error(errorMessage)
-    }
-
-    // Response is a blob (image)
-    const blob = await response.blob()
-
-    // Convert blob to base64 data URL
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onloadend = () => resolve(reader.result)
-        reader.onerror = reject
-        reader.readAsDataURL(blob)
-    })
-}
-
-/**
- * Generate with Pollinations.AI (free fallback)
- */
-async function generateWithPollinations(prompt, options = {}) {
-    const { width = 1024, height = 1024 } = options
-
     const encodedPrompt = encodeURIComponent(prompt)
-    const seed = Math.floor(Math.random() * 1000000)
 
-    // Pollinations.AI URL - returns image directly
-    const url = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&seed=${seed}&nologo=true`
+    // Build URL with parameters
+    let url = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&seed=${seed}&nologo=true&model=${model}`
 
-    // Return the URL directly (it's a valid image URL)
+    // Add API key if available (removes rate limits)
+    if (POLLINATIONS_API_KEY) {
+        url += `&token=${POLLINATIONS_API_KEY}`
+    }
+
     return url
 }
 
 /**
- * Check if Hugging Face API key is configured
+ * Check if API key is configured (with key = no rate limits)
  */
 export function isConfigured() {
-    return true  // Always return true since we have Pollinations fallback
+    return true  // Always works, API key just removes rate limits
 }
 
 /**
- * Check if using Hugging Face (has API key)
+ * Check if using API key (priority access)
  */
-export function hasHuggingFaceKey() {
-    return !!HF_API_KEY
+export function hasApiKey() {
+    return !!POLLINATIONS_API_KEY
 }
 
 export default {
     generateImage,
     isConfigured,
-    hasHuggingFaceKey,
-    MODELS
+    hasApiKey
 }
