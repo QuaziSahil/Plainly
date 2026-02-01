@@ -49,6 +49,40 @@ Always use the Groq AI fallback chain in `src/services/groqAI.js`:
 
 All AI functions use `askGroq()` which auto-falls back to the next model if rate limited.
 
+### 1b. Pollinations AI - Image/Video/Text Generation
+Use Pollinations AI for image, video, and advanced text generation. Service file: `src/services/pollinationsAI.js`
+
+**API Key:** Set `VITE_POLLINATIONS_API_KEY` in environment variables
+**Budget:** Unlimited | **Models:** 41 (All)
+
+#### API Endpoints:
+| Type | Endpoint | Method |
+|------|----------|--------|
+| Text | `https://text.pollinations.ai/{prompt}?model=MODEL&key=KEY` | GET |
+| Image | `https://image.pollinations.ai/prompt/{prompt}?model=MODEL&key=KEY` | GET |
+| Video | `https://gen.pollinations.ai/video/{prompt}?model=MODEL&key=KEY` | GET |
+
+#### Image Models (12):
+| Model | API ID | Notes |
+|-------|--------|-------|
+| Flux Schnell | `flux` | **Best quality** ⭐ |
+| SDXL Turbo | `turbo` | **Fastest** ⚡ |
+| GPT Image 1 Mini | `gptimage` | Creative |
+| Seedream 4.0 | `seedream` | Artistic |
+| FLUX.2 Klein 4B | `klein` | Fast |
+| NanoBanana | `nanobanana` | Experimental |
+
+#### Video Models (4):
+| Model | API ID |
+|-------|--------|
+| Wan 2.6 | `wan` | **Best** ⭐ |
+| Seedance Pro-Fast | `seedance-pro` |
+| Seedance Lite | `seedance` |
+| Veo 3.1 Fast | `veo` |
+
+#### Text Models (21): 
+Claude (`claude`, `claude-fast`, `claude-large`), GPT (`openai`, `openai-fast`, `openai-large`), Gemini (`gemini`, `gemini-fast`, `gemini-large`), DeepSeek (`deepseek`), Grok (`grok`), Perplexity (`perplexity-reasoning`), Qwen Coder (`qwen-coder`), and more.
+
 ### 2. Existing Code is SACRED
 - **DO NOT** modify, refactor, or delete ANY existing tool without explicit user permission
 - **DO NOT** touch code of previously created tools

@@ -18,12 +18,18 @@ function AIImageGenerator() {
     const resultRef = useRef(null)
 
     const aiModels = [
-        { value: 'flux', label: 'Flux Schnell', desc: 'Best quality, recommended' },
-        { value: 'turbo', label: 'SDXL Turbo', desc: 'Fast generation' },
-        { value: 'gptimage', label: 'GPT Image', desc: 'Creative style' },
+        { value: 'flux', label: 'Flux Schnell', desc: 'Best quality ⭐' },
+        { value: 'turbo', label: 'SDXL Turbo', desc: 'Fastest ⚡' },
+        { value: 'gptimage', label: 'GPT Image 1 Mini', desc: 'Creative' },
+        { value: 'gptimage-large', label: 'GPT Image 1.5', desc: 'Better GPT' },
         { value: 'seedream', label: 'Seedream 4.0', desc: 'Artistic' },
-        { value: 'klein', label: 'FLUX.2 Klein', desc: 'Detailed' },
-        { value: 'nanobanana', label: 'NanoBanana', desc: 'Experimental' }
+        { value: 'seedream-pro', label: 'Seedream 4.5 Pro', desc: 'Best Seedream' },
+        { value: 'klein', label: 'FLUX.2 Klein 4B', desc: 'Fast Flux' },
+        { value: 'klein-large', label: 'FLUX.2 Klein 9B', desc: 'Better Klein' },
+        { value: 'kontext', label: 'FLUX.1 Kontext', desc: 'Context editing' },
+        { value: 'nanobanana', label: 'NanoBanana', desc: 'Experimental' },
+        { value: 'nanobanana-pro', label: 'NanoBanana Pro', desc: 'Better NanoBanana' },
+        { value: 'zimage', label: 'Z-Image Turbo', desc: 'Fast' }
     ]
 
     const styles = [

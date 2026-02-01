@@ -18,6 +18,7 @@ function AIVideoGenerator() {
 
     const videoModels = [
         { value: 'wan', label: 'Wan 2.6', desc: 'Best quality, recommended' },
+        { value: 'veo', label: 'Veo 3.1 Fast', desc: 'Google video AI' },
         { value: 'seedance', label: 'Seedance Lite', desc: 'Fast generation' },
         { value: 'seedance-pro', label: 'Seedance Pro', desc: 'High quality' }
     ]
@@ -77,22 +78,18 @@ Rules:
         setVideoUrl('')
 
         try {
-            // Build video URL using gen.pollinations.ai
+            // Build video URL using gen.pollinations.ai/image/ with video model
+            // Video models use the same /image/ endpoint but return video content
             const encodedPrompt = encodeURIComponent(finalPrompt)
-            let url = `https://gen.pollinations.ai/video/${encodedPrompt}?model=${model}`
+            let url = `https://gen.pollinations.ai/image/${encodedPrompt}?model=${model}`
 
             // Add API key if available
             if (POLLINATIONS_API_KEY) {
                 url += `&key=${POLLINATIONS_API_KEY}`
             }
 
-            // Fetch the video with Authorization header
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: POLLINATIONS_API_KEY ? {
-                    'Authorization': `Bearer ${POLLINATIONS_API_KEY}`
-                } : {}
-            })
+            // Fetch the video
+            const response = await fetch(url)
 
             if (!response.ok) {
                 throw new Error(`Video generation failed: ${response.status}`)
