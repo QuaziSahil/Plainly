@@ -491,15 +491,34 @@ Make them catchy with high click-through potential.`
 export async function checkGrammar(text) {
     const prompt = `Review the following text for grammar, spelling, and punctuation errors:
     
-"${text}"
+"${text}"`
 
-Provide the corrected version and a brief list of the main improvements made.`
+    const systemPrompt = `You are an expert English teacher and editor. Your goal is to provide perfectly corrected text and clear, actionable feedback.
 
-    const systemPrompt = `You are an expert English teacher and editor. Fix all errors while keeping the original meaning.`
+OUTPUT FORMAT:
+Provide your response in these exact sections:
+
+### ✅ Corrected Text
+[The final corrected version of the text here]
+
+### 🔍 Key Improvements
+*   **Grammar:** [Main grammar fixes]
+*   **Spelling/Punctuation:** [Main spelling/punc fixes]
+*   **Style/Flow:** [How the flow was improved]
+
+### 📝 Lessons Learned
+[A one-sentence expert tip on how to avoid these specific mistakes in the future]
+
+STRICT RULES:
+1. ONLY provide the sections above.
+2. DO NOT apologize or mention misunderstandings.
+3. DO NOT use conversational filler like "Here is your corrected text".
+4. If the text is already perfect, just state "Text is already grammatically correct" in the Corrected Text section and explain why it works in the metrics.
+5. Use clean Markdown formatting.`
 
     return await askGroq(prompt, systemPrompt, {
         model: MODELS.primary,
-        temperature: 0.3,
+        temperature: 0.1,
         maxTokens: 1000
     })
 }
