@@ -72,8 +72,29 @@ Every tool MUST be mobile-perfect:
 - ✅ Responsive layouts that work on all screen sizes
 - ✅ 60fps animations
 
-### 5. AI Output Formatting
-All AI-generated content MUST use `AIOutputFormatter` component:
+### 5. AI Output Formatting - Two Components
+
+#### For CODE Output (generators, converters, schema tools):
+Use `CodePreview` component from `src/components/CodePreview/`:
+- **Code-only extraction**: Strips markdown explanations, copies ONLY code
+- **Line numbers**: Shows line numbers for easy reference
+- **Download as file**: Downloads code with proper extension (.js, .py, .sql, etc.)
+- **Copy button**: Copies extracted code only (not explanations)
+- **Placeholder state**: Beautiful empty state before generation
+
+```jsx
+import CodePreview from '../../../components/CodePreview/CodePreview'
+
+// Usage:
+<CodePreview 
+    code={result} 
+    language="javascript" 
+    filename="my-code"
+/>
+```
+
+#### For TEXT Output (explanations, analysis, recommendations):
+Use `AIOutputFormatter` component:
 - Clean markdown stripping (no `**` visible)
 - Proper list formatting (bullets, numbers)
 - Auto-scroll to results
@@ -115,12 +136,12 @@ Before submitting any new tool, verify:
 
 - [ ] Tool doesn't already exist
 - [ ] Uses `askGroq()` for AI features (with fallback)
-- [ ] Uses `AIOutputFormatter` for AI output
+- [ ] Uses `CodePreview` for code output OR `AIOutputFormatter` for text output
 - [ ] Matches existing design system
 - [ ] Mobile responsive (tested at 375px width)
 - [ ] All touch targets ≥ 44px
 - [ ] Has loading and error states
-- [ ] Copy functionality works
+- [ ] Copy functionality works (code-only for code tools)
 - [ ] Added to `calculators.js` with correct category
 - [ ] Route added to `App.jsx`
 - [ ] Build passes without errors (`npm run build`)
@@ -156,7 +177,10 @@ Before submitting any new tool, verify:
 ```
 src/
 ├── components/
-│   ├── AIOutputFormatter.jsx     # AI output formatting
+│   ├── AIOutputFormatter.jsx     # AI text output formatting
+│   ├── CodePreview/
+│   │   ├── CodePreview.jsx       # Code output with line numbers, copy, download
+│   │   └── CodePreview.css       # Code preview styling
 │   ├── Calculator/
 │   │   └── CalculatorLayout.jsx  # Standard layout for tools
 │   └── Layout/
@@ -217,7 +241,8 @@ git add . && git commit -m "message" && git push origin main
 | Add new tool | `src/pages/calculators/{category}/` |
 | Register tool | `src/data/calculators.js` |
 | Add route | `src/App.jsx` |
-| AI output | Use `AIOutputFormatter` |
+| Code output | Use `CodePreview` |
+| Text output | Use `AIOutputFormatter` |
 | AI calls | Use `askGroq()` from `groqAI.js` |
 | Icons | Import from `lucide-react` |
 

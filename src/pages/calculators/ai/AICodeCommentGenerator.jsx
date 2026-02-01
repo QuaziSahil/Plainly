@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
-import { MessageSquareCode, Loader2, Wand2, Copy, Check, RefreshCw } from 'lucide-react'
+import { MessageSquareCode, Loader2, RefreshCw } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
-import AIOutputFormatter from '../../../components/AIOutputFormatter'
+import CodePreview from '../../../components/CodePreview/CodePreview'
 import { askGroq } from '../../../services/groqAI'
 
 function AICodeCommentGenerator() {
@@ -11,7 +11,6 @@ function AICodeCommentGenerator() {
     const [result, setResult] = useState('')
     const resultRef = useRef(null)
     const [loading, setLoading] = useState(false)
-    const [copied, setCopied] = useState(false)
     const [error, setError] = useState('')
 
     const languages = [
@@ -57,7 +56,7 @@ Rules:
 - Explain WHY, not just WHAT
 - Keep inline comments concise
 - Include parameter and return type documentation
-- Add explanation for complex algorithms`
+- IMPORTANT: Return ONLY the commented code in a markdown code block. No extra explanations.`
 
         const prompt = `Add comments to this ${language} code:
 
@@ -65,7 +64,7 @@ Rules:
 ${code}
 \`\`\`
 
-Return the complete code with ${style === 'detailed' ? 'both inline and documentation' : style} comments added.`
+Return ONLY the commented code in a markdown code block.`
 
         try {
             const response = await askGroq(prompt, systemPrompt, { maxTokens: 2048 })
@@ -77,12 +76,6 @@ Return the complete code with ${style === 'detailed' ? 'both inline and document
         } finally {
             setLoading(false)
         }
-    }
-
-    const handleCopy = async () => {
-        await navigator.clipboard.writeText(result)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
     }
 
     const handleReset = () => {
@@ -100,7 +93,7 @@ Return the complete code with ${style === 'detailed' ? 'both inline and document
             category="AI Tools"
             categoryPath="/ai"
             icon={MessageSquareCode}
-            result={result ? 'Commented' : 'Ready'}
+            result={result ? 'Commented Code' : 'Ready'}
             resultLabel="Status"
             onReset={handleReset}
         >
@@ -201,66 +194,14 @@ Return the complete code with ${style === 'detailed' ? 'both inline and document
                 )}
             </button>
 
-            {/* Result */}
-            {result && (
-                <div ref={resultRef} style={{
-                    background: '#1a1a2e',
-                    borderRadius: '12px',
-                    border: '1px solid #333',
-                    overflow: 'hidden'
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '12px 16px',
-                        borderBottom: '1px solid #333',
-                        background: '#0a0a0a'
-                    }}>
-                        <span style={{ fontSize: '12px', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <MessageSquareCode size={12} /> Commented Code
-                        </span>
-                        <button
-                            onClick={handleCopy}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                padding: '8px 14px',
-                                background: copied ? '#10b981' : '#333',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: 'white',
-                                fontSize: '12px',
-                                cursor: 'pointer',
-                                minHeight: '36px'
-                            }}
-                        >
-                            {copied ? <Check size={14} /> : <Copy size={14} />}
-                            {copied ? 'Copied!' : 'Copy'}
-                        </button>
-                    </div>
-                    <div style={{
-                        padding: '20px',
-                        fontSize: '14px',
-                        lineHeight: '1.6',
-                        fontFamily: 'monospace'
-                    }}>
-                        <AIOutputFormatter content={result} />
-                    </div>
-                </div>
-            )}
-
-            {!result && !loading && (
-                <div style={{
-                    textAlign: 'center',
-                    padding: '40px 20px',
-                    opacity: 0.5,
-                    fontSize: '14px'
-                }}>
-                    💬 Paste code and get properly commented documentation
-                </div>
-            )}
+            {/* Code Preview */}
+            <div ref={resultRef}>
+                <CodePreview
+                    code={result}
+                    language={language}
+                    filename={`commented-code`}
+                />
+            </div>
 
             <style>{`
                 @keyframes spin {

@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
-import { Database, Loader2, Wand2, Copy, Check, RefreshCw } from 'lucide-react'
+import { Database, Loader2, RefreshCw } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
-import AIOutputFormatter from '../../../components/AIOutputFormatter'
+import CodePreview from '../../../components/CodePreview/CodePreview'
 import { askGroq } from '../../../services/groqAI'
 
 function AIDatabaseSchemaGenerator() {
@@ -11,7 +11,6 @@ function AIDatabaseSchemaGenerator() {
     const [result, setResult] = useState('')
     const resultRef = useRef(null)
     const [loading, setLoading] = useState(false)
-    const [copied, setCopied] = useState(false)
     const [error, setError] = useState('')
 
     const dbTypes = [
@@ -43,18 +42,13 @@ Rules:
 - ${includeIndexes ? 'Add index recommendations for performance' : 'Skip index recommendations'}
 - Consider relationships (one-to-one, one-to-many, many-to-many)
 - Add constraints (NOT NULL, UNIQUE, CHECK)
-- Include example data inserts`
+- IMPORTANT: Return ONLY the SQL schema code in a markdown code block. No extra explanations.`
 
         const prompt = `Design a ${dbType} database schema for:
 
 ${description}
 
-Provide:
-1. Table definitions with columns and types
-2. Primary and foreign keys
-3. Relationships
-4. ${includeIndexes ? 'Index recommendations' : ''}
-5. Sample INSERT statements`
+Return ONLY the complete SQL schema in a markdown code block.`
 
         try {
             const response = await askGroq(prompt, systemPrompt, { maxTokens: 2048 })
@@ -66,12 +60,6 @@ Provide:
         } finally {
             setLoading(false)
         }
-    }
-
-    const handleCopy = async () => {
-        await navigator.clipboard.writeText(result)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
     }
 
     const handleReset = () => {
@@ -89,7 +77,7 @@ Provide:
             category="AI Tools"
             categoryPath="/ai"
             icon={Database}
-            result={result ? 'Schema Ready' : 'Ready'}
+            result={result ? `${dbType.toUpperCase()} Schema` : 'Ready'}
             resultLabel="Status"
             onReset={handleReset}
         >
@@ -199,66 +187,14 @@ Provide:
                 )}
             </button>
 
-            {/* Result */}
-            {result && (
-                <div ref={resultRef} style={{
-                    background: '#1a1a2e',
-                    borderRadius: '12px',
-                    border: '1px solid #333',
-                    overflow: 'hidden'
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '12px 16px',
-                        borderBottom: '1px solid #333',
-                        background: '#0a0a0a'
-                    }}>
-                        <span style={{ fontSize: '12px', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <Database size={12} /> Database Schema
-                        </span>
-                        <button
-                            onClick={handleCopy}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                padding: '8px 14px',
-                                background: copied ? '#10b981' : '#333',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: 'white',
-                                fontSize: '12px',
-                                cursor: 'pointer',
-                                minHeight: '36px'
-                            }}
-                        >
-                            {copied ? <Check size={14} /> : <Copy size={14} />}
-                            {copied ? 'Copied!' : 'Copy'}
-                        </button>
-                    </div>
-                    <div style={{
-                        padding: '20px',
-                        fontSize: '14px',
-                        lineHeight: '1.6',
-                        fontFamily: 'monospace'
-                    }}>
-                        <AIOutputFormatter content={result} />
-                    </div>
-                </div>
-            )}
-
-            {!result && !loading && (
-                <div style={{
-                    textAlign: 'center',
-                    padding: '40px 20px',
-                    opacity: 0.5,
-                    fontSize: '14px'
-                }}>
-                    🗄️ Describe your data and get a production-ready schema
-                </div>
-            )}
+            {/* Code Preview */}
+            <div ref={resultRef}>
+                <CodePreview
+                    code={result}
+                    language="sql"
+                    filename={`schema`}
+                />
+            </div>
 
             <style>{`
                 @keyframes spin {

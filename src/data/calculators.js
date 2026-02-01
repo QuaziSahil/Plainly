@@ -142,7 +142,8 @@ import {
     FunctionSquare,
     Paintbrush,
     Cpu,
-    Braces
+    Braces,
+    Eye
 } from 'lucide-react'
 
 export const allCalculators = [
@@ -450,6 +451,7 @@ export const allCalculators = [
     { name: 'AI Algorithm Selector', description: 'Find the best algorithm for any problem.', icon: Cpu, path: '/ai-algorithm-selector', category: 'AI' },
     { name: 'AI Tech Stack Recommender', description: 'Get personalized tech stack recommendations.', icon: Layers, path: '/ai-tech-stack-recommender', category: 'AI' },
     { name: 'AI Function Name Generator', description: 'Get perfect function names for your code.', icon: FunctionSquare, path: '/ai-function-name-generator', category: 'AI' },
+    { name: 'Code Preview & Download', description: 'Preview, copy and download any code with line numbers.', icon: Eye, path: '/ai-code-preview', category: 'AI' },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')

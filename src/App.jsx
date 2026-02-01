@@ -264,6 +264,7 @@ import AIDatabaseSchemaGenerator from './pages/calculators/ai/AIDatabaseSchemaGe
 import AIAlgorithmSelector from './pages/calculators/ai/AIAlgorithmSelector'
 import AITechStackRecommender from './pages/calculators/ai/AITechStackRecommender'
 import AIFunctionNameGenerator from './pages/calculators/ai/AIFunctionNameGenerator'
+import AICodePreview from './pages/calculators/ai/AICodePreview'
 
 // Converter Tools (15)
 import CookingConverter from './pages/calculators/converter/CookingConverter'
@@ -611,6 +612,7 @@ function App() {
                     <Route path="/ai-algorithm-selector" element={<AIAlgorithmSelector />} />
                     <Route path="/ai-tech-stack-recommender" element={<AITechStackRecommender />} />
                     <Route path="/ai-function-name-generator" element={<AIFunctionNameGenerator />} />
+                    <Route path="/ai-code-preview" element={<AICodePreview />} />
 
                     {/* Converter Tools */}
                     <Route path="/cooking-converter" element={<CookingConverter />} />
