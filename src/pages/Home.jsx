@@ -29,27 +29,32 @@ function Home() {
         .filter(Boolean)
         .slice(0, 4) // Show max 4 recent
 
-    // Get 12 trending/most useful calculators
+    // Get 12 trending/most useful calculators (including popular AI tools)
     const trendingCalculators = [
         financeCalculators[0],  // Mortgage Calculator
         healthCalculators[0],   // BMI Calculator
+        aiCalculators.find(c => c.path === '/ai-code-generator'),  // AI Code Generator
         financeCalculators[2],  // Compound Interest
         mathCalculators[1],     // Percentage Calculator
+        aiCalculators.find(c => c.path === '/ai-paraphraser'),  // AI Paraphraser
         financeCalculators[5],  // Tip Calculator
         healthCalculators[1],   // Calorie Calculator
-        financeCalculators[1],  // Loan Calculator
-        mathCalculators[0],     // Scientific Calculator
+        aiCalculators.find(c => c.path === '/ai-email-generator'),  // AI Email Generator
         converterCalculators[0], // Unit Converter
         financeCalculators[9],  // Retirement Calculator
-        healthCalculators[6],   // Pregnancy Calculator
-        financeCalculators[3],  // Investment Calculator
-    ]
+        aiCalculators.find(c => c.path === '/ai-code-debugger'),  // AI Code Debugger
+    ].filter(Boolean)
 
-    // Get latest 8 tools (AI tools are newest)
+    // Get latest 8 tools (newest AI Code tools)
     const latestTools = [
-        ...aiCalculators.slice(0, 6),
-        allCalculators.find(c => c.path === '/would-you-rather'),
-        allCalculators.find(c => c.path === '/random-picker'),
+        aiCalculators.find(c => c.path === '/ai-code-generator'),
+        aiCalculators.find(c => c.path === '/ai-code-debugger'),
+        aiCalculators.find(c => c.path === '/ai-code-explainer'),
+        aiCalculators.find(c => c.path === '/ai-sql-generator'),
+        aiCalculators.find(c => c.path === '/ai-regex-generator'),
+        aiCalculators.find(c => c.path === '/ai-react-component-generator'),
+        aiCalculators.find(c => c.path === '/ai-unit-test-generator'),
+        aiCalculators.find(c => c.path === '/ai-tech-stack-recommender'),
     ].filter(Boolean).slice(0, 8)
 
     const categories = [
