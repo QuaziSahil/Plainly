@@ -275,6 +275,19 @@ import AIMemeGenerator from './pages/calculators/ai/AIMemeGenerator'
 import AIThumbnailGenerator from './pages/calculators/ai/AIThumbnailGenerator'
 import AIImageGenerator from './pages/calculators/ai/AIImageGenerator'
 import AIVideoGenerator from './pages/calculators/ai/AIVideoGenerator'
+// AI Image & Design Tools (12 NEW)
+import AIFaceGenerator from './pages/calculators/ai/AIFaceGenerator'
+import AILogoGenerator from './pages/calculators/ai/AILogoGenerator'
+import AICartoonAvatarGenerator from './pages/calculators/ai/AICartoonAvatarGenerator'
+import AIPatternGenerator from './pages/calculators/ai/AIPatternGenerator'
+import AIAlbumCoverGenerator from './pages/calculators/ai/AIAlbumCoverGenerator'
+import AIBusinessCardDesigner from './pages/calculators/ai/AIBusinessCardDesigner'
+import AIInstagramStoryTemplate from './pages/calculators/ai/AIInstagramStoryTemplate'
+import AIInfographicGenerator from './pages/calculators/ai/AIInfographicGenerator'
+import AIPresentationSlideGenerator from './pages/calculators/ai/AIPresentationSlideGenerator'
+import AIMockupGenerator from './pages/calculators/ai/AIMockupGenerator'
+import AIIconGenerator from './pages/calculators/ai/AIIconGenerator'
+import AIQRArtGenerator from './pages/calculators/ai/AIQRArtGenerator'
 
 // Converter Tools (15)
 import CookingConverter from './pages/calculators/converter/CookingConverter'
@@ -633,6 +646,19 @@ function App() {
                     <Route path="/ai-thumbnail-generator" element={<AIThumbnailGenerator />} />
                     <Route path="/ai-image-generator" element={<AIImageGenerator />} />
                     <Route path="/ai-video-generator" element={<AIVideoGenerator />} />
+                    {/* AI Image & Design Tools (12 NEW) */}
+                    <Route path="/ai-face-generator" element={<AIFaceGenerator />} />
+                    <Route path="/ai-logo-generator" element={<AILogoGenerator />} />
+                    <Route path="/ai-cartoon-avatar-generator" element={<AICartoonAvatarGenerator />} />
+                    <Route path="/ai-pattern-generator" element={<AIPatternGenerator />} />
+                    <Route path="/ai-album-cover-generator" element={<AIAlbumCoverGenerator />} />
+                    <Route path="/ai-business-card-designer" element={<AIBusinessCardDesigner />} />
+                    <Route path="/ai-instagram-story-template" element={<AIInstagramStoryTemplate />} />
+                    <Route path="/ai-infographic-generator" element={<AIInfographicGenerator />} />
+                    <Route path="/ai-presentation-slide-generator" element={<AIPresentationSlideGenerator />} />
+                    <Route path="/ai-mockup-generator" element={<AIMockupGenerator />} />
+                    <Route path="/ai-icon-generator" element={<AIIconGenerator />} />
+                    <Route path="/ai-qr-art-generator" element={<AIQRArtGenerator />} />
 
                     {/* Converter Tools */}
                     <Route path="/cooking-converter" element={<CookingConverter />} />

@@ -148,7 +148,15 @@ import {
     Megaphone,
     Target,
     Image,
-    Video
+    Video,
+    // AI Image & Design Tools Icons
+    User,
+    Smile,
+    Disc3,
+    Smartphone,
+    Presentation,
+    Package,
+    Shapes
 } from 'lucide-react'
 
 export const allCalculators = [
@@ -467,6 +475,19 @@ export const allCalculators = [
     { name: 'AI Thumbnail Generator', description: 'Generate high-CTR thumbnail concepts for videos.', icon: Image, path: '/ai-thumbnail-generator', category: 'AI' },
     { name: 'AI Image Generator', description: 'Create stunning images from text with AI - Free & Unlimited.', icon: Image, path: '/ai-image-generator', category: 'AI' },
     { name: 'AI Video Generator', description: 'Create stunning videos from text with AI - Free & Unlimited.', icon: Video, path: '/ai-video-generator', category: 'AI' },
+    // AI Image & Design Tools
+    { name: 'AI Face Generator', description: 'Generate realistic AI faces for profiles and projects.', icon: User, path: '/ai-face-generator', category: 'AI' },
+    { name: 'AI Logo Generator', description: 'Create professional logos for your brand with AI.', icon: Sparkles, path: '/ai-logo-generator', category: 'AI' },
+    { name: 'AI Cartoon Avatar Generator', description: 'Generate unique cartoon avatars in various styles.', icon: Smile, path: '/ai-cartoon-avatar-generator', category: 'AI' },
+    { name: 'AI Pattern Generator', description: 'Create seamless patterns for designs and products.', icon: Grid3x3, path: '/ai-pattern-generator', category: 'AI' },
+    { name: 'AI Album Cover Generator', description: 'Design professional album artwork for your music.', icon: Disc3, path: '/ai-album-cover-generator', category: 'AI' },
+    { name: 'AI Business Card Designer', description: 'Create professional business card designs with AI.', icon: CreditCard, path: '/ai-business-card-designer', category: 'AI' },
+    { name: 'AI Instagram Story Template', description: 'Generate engaging Instagram story templates.', icon: Smartphone, path: '/ai-instagram-story-template', category: 'AI' },
+    { name: 'AI Infographic Generator', description: 'Create stunning infographics and data visualizations.', icon: BarChart3, path: '/ai-infographic-generator', category: 'AI' },
+    { name: 'AI Presentation Slide Generator', description: 'Generate professional presentation slide designs.', icon: Presentation, path: '/ai-presentation-slide-generator', category: 'AI' },
+    { name: 'AI Mockup Generator', description: 'Create product mockups for marketing and portfolios.', icon: Package, path: '/ai-mockup-generator', category: 'AI' },
+    { name: 'AI Icon Generator', description: 'Design custom icons for apps and websites.', icon: Shapes, path: '/ai-icon-generator', category: 'AI' },
+    { name: 'AI QR Art Generator', description: 'Generate artistic QR code designs with AI.', icon: QrCode, path: '/ai-qr-art-generator', category: 'AI' },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')
