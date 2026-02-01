@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { Code, Loader2, Wand2, RefreshCw } from 'lucide-react'
+import { Code, Loader2, RefreshCw } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 import CodePreview from '../../../components/CodePreview/CodePreview'
 import { askGroq } from '../../../services/groqAI'
@@ -16,6 +16,7 @@ function AICodeGenerator() {
 
     const languages = [
         { value: 'javascript', label: 'JavaScript' },
+        { value: 'html', label: 'HTML (with CSS & JS)' },
         { value: 'python', label: 'Python' },
         { value: 'typescript', label: 'TypeScript' },
         { value: 'java', label: 'Java' },
@@ -52,27 +53,81 @@ function AICodeGenerator() {
         setError('')
         setResult('')
 
-        const systemPrompt = `You are an expert programmer. Generate clean, well-documented code based on the user's description.
-Rules:
-- Use ${language} as the programming language
-${framework !== 'none' ? `- Use ${framework} framework/library` : ''}
-- Complexity level: ${complexity}
-- Include helpful comments
-- Follow best practices and conventions
-- Make the code production-ready
-- Include error handling where appropriate
-- IMPORTANT: Return ONLY the code inside a single markdown code block. Do not include explanations outside the code block.`
+        // Special prompt for HTML with embedded CSS/JS
+        const isHTML = language === 'html'
 
-        const prompt = `Generate code for: ${description}
+        const systemPrompt = isHTML
+            ? `You are an expert web developer. Generate COMPLETE, FULLY FUNCTIONAL HTML pages with embedded CSS and JavaScript.
+
+CRITICAL REQUIREMENTS:
+- Create a COMPLETE HTML5 document with <!DOCTYPE html>
+- ALWAYS include embedded <style> in <head> for ALL CSS styling
+- ALWAYS include embedded <script> at end of <body> for ALL JavaScript
+- Make it VISUALLY BEAUTIFUL with modern CSS (gradients, shadows, animations, good colors)
+- Make it FULLY FUNCTIONAL - all buttons, inputs, and interactions must work
+- Include ALL necessary code - no external files, no placeholders, no TODOs
+- The code must work immediately when opened in a browser
+- Use modern CSS: flexbox, grid, CSS variables, smooth transitions
+- Make it responsive for mobile
+- Add hover effects and interactive feedback
+- Use a professional color scheme (dark theme preferred)
+
+Example structure:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <style>
+        /* ALL CSS HERE - make it beautiful */
+    </style>
+</head>
+<body>
+    <!-- ALL HTML HERE -->
+    <script>
+        // ALL JAVASCRIPT HERE - make it functional
+    </script>
+</body>
+</html>
+
+Return ONLY the complete HTML code. No explanations.`
+            : `You are an expert ${language} programmer. Generate COMPLETE, PRODUCTION-READY code.
+
+CRITICAL REQUIREMENTS:
+- Write COMPLETE code that works immediately - no placeholders, no TODOs, no "implement this"
+- Include ALL necessary functions, classes, and logic
+- Add proper error handling and edge cases
+- Include helpful comments explaining complex parts
+- Follow ${language} best practices and conventions
+- Make the code clean, efficient, and maintainable
+${framework !== 'none' ? `- Use ${framework} framework properly with all required imports/setup` : ''}
+- Complexity level: ${complexity === 'beginner' ? 'Simple with detailed comments' : complexity === 'advanced' ? 'Optimized, scalable, with design patterns' : 'Production-ready with proper structure'}
+
+Return ONLY the code in a markdown code block. No explanations outside the code block.`
+
+        const prompt = isHTML
+            ? `Create a COMPLETE, BEAUTIFUL, FULLY FUNCTIONAL HTML page for: ${description}
+
+The page must:
+1. Have a stunning visual design (modern CSS, shadows, gradients, animations)
+2. Be 100% functional with all features working
+3. Include ALL code embedded (CSS in <style>, JS in <script>)
+4. Work immediately when opened in any browser
+
+Return ONLY the complete HTML code.`
+            : `Generate COMPLETE, WORKING ${language} code for: ${description}
 
 Language: ${language}
 ${framework !== 'none' ? `Framework: ${framework}` : ''}
 Complexity: ${complexity}
 
+The code must be complete and work immediately - include all functions, classes, and logic needed.
+
 Return ONLY the code in a markdown code block.`
 
         try {
-            const response = await askGroq(prompt, systemPrompt, { maxTokens: 2048 })
+            const response = await askGroq(prompt, systemPrompt, { maxTokens: 4096 })
             setResult(response)
             setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
         } catch (err) {
@@ -109,7 +164,7 @@ Return ONLY the code in a markdown code block.`
                 <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="e.g., A function that validates email addresses, A REST API endpoint for user authentication, A React component for a todo list..."
+                    placeholder="Be specific! e.g., 'A fully functional calculator with buttons for +, -, ×, ÷, %, clear, and equals. Dark theme with orange accent color.'"
                     rows={4}
                     style={{
                         width: '100%',
@@ -155,6 +210,21 @@ Return ONLY the code in a markdown code block.`
                 </select>
             </div>
 
+            {/* Tip for HTML */}
+            {language === 'html' && (
+                <div style={{
+                    padding: '12px 16px',
+                    background: 'linear-gradient(135deg, #10b98120, #059669120)',
+                    border: '1px solid #10b98140',
+                    borderRadius: '8px',
+                    marginBottom: '16px',
+                    fontSize: '13px',
+                    color: '#10b981'
+                }}>
+                    💡 <strong>Tip:</strong> For HTML, we'll generate a complete page with embedded CSS & JavaScript that works immediately in any browser!
+                </div>
+            )}
+
             {error && (
                 <div style={{
                     padding: '12px',
@@ -199,11 +269,11 @@ Return ONLY the code in a markdown code block.`
                 ) : result ? (
                     <>
                         <RefreshCw size={20} />
-                        Regenerate Code
+                        Regenerate
                     </>
                 ) : (
                     <>
-                        <Wand2 size={20} />
+                        <Code size={20} />
                         Generate Code
                     </>
                 )}
@@ -214,7 +284,7 @@ Return ONLY the code in a markdown code block.`
                 <CodePreview
                     code={result}
                     language={language}
-                    filename={`generated-code`}
+                    filename={language === 'html' ? 'index' : 'code'}
                 />
             </div>
 
