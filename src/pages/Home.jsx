@@ -45,16 +45,16 @@ function Home() {
         aiCalculators.find(c => c.path === '/ai-code-debugger'),  // AI Code Debugger
     ].filter(Boolean)
 
-    // Get latest 8 tools (newest AI Marketing & Code tools)
+    // Get latest 8 tools (newest AI Image & Marketing tools)
     const latestTools = [
-        aiCalculators.find(c => c.path === '/ai-seo-keyword-research'),  // NEW: SEO Research
-        aiCalculators.find(c => c.path === '/ai-ad-copy-generator'),  // NEW: Ad Copy
-        aiCalculators.find(c => c.path === '/ai-customer-persona-generator'),  // NEW: Personas
-        aiCalculators.find(c => c.path === '/ai-code-runner'),
+        aiCalculators.find(c => c.path === '/ai-image-generator'),  // NEW: Image Generator!
+        aiCalculators.find(c => c.path === '/ai-meme-generator'),  // NEW: Meme Generator
+        aiCalculators.find(c => c.path === '/ai-thumbnail-generator'),  // NEW: Thumbnail Ideas
+        aiCalculators.find(c => c.path === '/ai-seo-keyword-research'),  // SEO Research
+        aiCalculators.find(c => c.path === '/ai-ad-copy-generator'),  // Ad Copy
+        aiCalculators.find(c => c.path === '/ai-customer-persona-generator'),  // Personas
         aiCalculators.find(c => c.path === '/ai-code-generator'),
         aiCalculators.find(c => c.path === '/ai-sql-generator'),
-        aiCalculators.find(c => c.path === '/ai-react-component-generator'),
-        aiCalculators.find(c => c.path === '/ai-regex-generator'),
     ].filter(Boolean).slice(0, 8)
 
     const categories = [

@@ -463,6 +463,7 @@ export const allCalculators = [
     // AI Image & Design Tools (Text-based)
     { name: 'AI Meme Generator', description: 'Create viral meme concepts with captions and templates.', icon: Laugh, path: '/ai-meme-generator', category: 'AI' },
     { name: 'AI Thumbnail Generator', description: 'Generate high-CTR thumbnail concepts for videos.', icon: Image, path: '/ai-thumbnail-generator', category: 'AI' },
+    { name: 'AI Image Generator', description: 'Create stunning images from text with AI - Free & Unlimited.', icon: Image, path: '/ai-image-generator', category: 'AI' },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')
