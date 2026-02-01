@@ -1,73 +1,89 @@
 /**
  * Hugging Face AI Service for Image Generation
  * Uses the Inference API with Stable Diffusion XL
+ * Falls back to Pollinations.AI if HF fails
  */
 
 const HF_API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY
 
-// Available models for image generation (best quality, free tier compatible)
+// Available models for image generation
 const MODELS = {
-    SDXL: 'stabilityai/stable-diffusion-xl-base-1.0',
-    SD_TURBO: 'stabilityai/sdxl-turbo',
-    DREAMSHAPER: 'Lykon/dreamshaper-xl-1-0',
-    REALISTIC: 'SG161222/RealVisXL_V4.0'
+    SDXL_TURBO: 'stabilityai/sdxl-turbo',  // Fast, works well
+    FLUX: 'black-forest-labs/FLUX.1-schnell',  // Very fast
+    SD_3: 'stabilityai/stable-diffusion-3-medium-diffusers'
 }
 
-// Default model
-const DEFAULT_MODEL = MODELS.SDXL
+// Default model - SDXL Turbo is faster and more reliable
+const DEFAULT_MODEL = MODELS.SDXL_TURBO
 
 /**
  * Generate an image using Hugging Face Inference API
- * @param {string} prompt - The text prompt for image generation
- * @param {object} options - Generation options
- * @returns {Promise<string>} - Base64 data URL of the generated image
+ * Falls back to Pollinations.AI if HF fails
  */
 export async function generateImage(prompt, options = {}) {
     const {
-        model = DEFAULT_MODEL,
-        negative_prompt = 'blurry, low quality, distorted, ugly, bad anatomy, watermark, text',
         width = 1024,
         height = 1024,
-        num_inference_steps = 30,
-        guidance_scale = 7.5
     } = options
 
-    if (!HF_API_KEY) {
-        throw new Error('Hugging Face API key not configured')
+    // Try Hugging Face first if API key is available
+    if (HF_API_KEY) {
+        try {
+            const imageUrl = await generateWithHuggingFace(prompt, { width, height })
+            return imageUrl
+        } catch (error) {
+            console.warn('Hugging Face failed, falling back to Pollinations.AI:', error.message)
+            // Fall through to Pollinations.AI
+        }
     }
 
-    const response = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
+    // Fallback to Pollinations.AI (free, no API key needed)
+    return generateWithPollinations(prompt, { width, height })
+}
+
+/**
+ * Generate with Hugging Face API
+ */
+async function generateWithHuggingFace(prompt, options = {}) {
+    const { width = 1024, height = 1024 } = options
+
+    const response = await fetch(`https://api-inference.huggingface.co/models/${DEFAULT_MODEL}`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${HF_API_KEY}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-wait-for-model': 'true'  // Wait for model to load
         },
         body: JSON.stringify({
             inputs: prompt,
             parameters: {
-                negative_prompt,
-                width: Math.min(width, 1024),  // Max 1024 on free tier
-                height: Math.min(height, 1024),
-                num_inference_steps,
-                guidance_scale
+                width: Math.min(width, 1024),
+                height: Math.min(height, 1024)
             }
         })
     })
 
     if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
+        const errorText = await response.text()
+        let errorMessage = `HF Error ${response.status}`
 
-        // Handle specific errors
+        try {
+            const errorData = JSON.parse(errorText)
+            if (errorData.error) {
+                errorMessage = errorData.error
+            }
+        } catch {
+            // Not JSON
+        }
+
         if (response.status === 503) {
-            throw new Error('Model is loading. Please try again in 20-30 seconds.')
+            throw new Error('Model is loading. Please wait 30 seconds and try again.')
         }
         if (response.status === 429) {
-            throw new Error('Rate limit reached. Please wait a moment and try again.')
+            throw new Error('Rate limit reached')
         }
-        if (errorData.error) {
-            throw new Error(errorData.error)
-        }
-        throw new Error(`Image generation failed: ${response.status}`)
+
+        throw new Error(errorMessage)
     }
 
     // Response is a blob (image)
@@ -83,26 +99,38 @@ export async function generateImage(prompt, options = {}) {
 }
 
 /**
- * Check if the API key is configured
+ * Generate with Pollinations.AI (free fallback)
  */
-export function isConfigured() {
-    return !!HF_API_KEY
+async function generateWithPollinations(prompt, options = {}) {
+    const { width = 1024, height = 1024 } = options
+
+    const encodedPrompt = encodeURIComponent(prompt)
+    const seed = Math.floor(Math.random() * 1000000)
+
+    // Pollinations.AI URL - returns image directly
+    const url = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&seed=${seed}&nologo=true`
+
+    // Return the URL directly (it's a valid image URL)
+    return url
 }
 
 /**
- * Get list of available models
+ * Check if Hugging Face API key is configured
  */
-export function getModels() {
-    return Object.entries(MODELS).map(([key, value]) => ({
-        id: key,
-        model: value,
-        name: key.replace(/_/g, ' ')
-    }))
+export function isConfigured() {
+    return true  // Always return true since we have Pollinations fallback
+}
+
+/**
+ * Check if using Hugging Face (has API key)
+ */
+export function hasHuggingFaceKey() {
+    return !!HF_API_KEY
 }
 
 export default {
     generateImage,
     isConfigured,
-    getModels,
+    hasHuggingFaceKey,
     MODELS
 }

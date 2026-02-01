@@ -112,15 +112,36 @@ Rules:
         }
     }
 
-    const handleDownload = () => {
+    const handleDownload = async () => {
         if (!imageUrl) return
 
-        const link = document.createElement('a')
-        link.href = imageUrl
-        link.download = `ai-image-${Date.now()}.png`
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+        try {
+            // If it's a URL (not base64), fetch it first
+            if (imageUrl.startsWith('http')) {
+                const response = await fetch(imageUrl)
+                const blob = await response.blob()
+                const url = window.URL.createObjectURL(blob)
+                const link = document.createElement('a')
+                link.href = url
+                link.download = `ai-image-${Date.now()}.png`
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+                window.URL.revokeObjectURL(url)
+            } else {
+                // Base64 data URL - direct download
+                const link = document.createElement('a')
+                link.href = imageUrl
+                link.download = `ai-image-${Date.now()}.png`
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+            }
+        } catch (err) {
+            console.error('Download failed:', err)
+            // Fallback: open in new tab
+            window.open(imageUrl, '_blank')
+        }
     }
 
     const handleCopyPrompt = async () => {
