@@ -505,15 +505,42 @@ Provide the corrected version and a brief list of the main improvements made.`
 }
 
 export async function transformVoice(text, targetVoice = 'active') {
-    const prompt = `Rewrite the following text from passive voice to ${targetVoice} voice:
-    
-"${text}"`
+    const voiceLabel = targetVoice === 'active' ? 'Active Voice (Clear & Direct)' : 'Passive Voice (Formal & Distant)'
 
-    const systemPrompt = `You are an expert editor who specializes in clear, direct writing. Convert passive sentences to active ones for better impact.`
+    const prompt = `Transform the following text into ${voiceLabel}. 
+
+TEXT TO TRANSFORM:
+"${text}"
+
+If the text is already in the target voice, refine it for better clarity.`
+
+    const systemPrompt = `You are an expert linguistics professor and editor. Your goal is to transform text into the specified grammatical voice while providing a clear structural analysis.
+
+OUTPUT FORMAT:
+Provide your response in these exact sections:
+
+### 🔄 Transformed Sentence
+[The final transformed sentence here]
+
+### 📊 Structural Analysis
+*   **Subject:** [Identify the subject]
+*   **Verb:** [Identify the main verb and its tense]
+*   **Object/Complement:** [Identify the object or complement]
+*   **Voice Change:** [Briefly explain what changed from the original]
+
+### 📝 Grammatical Note
+[A one-sentence expert tip on why this voice is better for this specific context]
+
+STRICT RULES:
+1. ONLY provide the sections above. 
+2. DO NOT apologize or mention misunderstandings.
+3. DO NOT use conversational filler like "Here is your transformed text" or "I think you meant".
+4. If the input is not a complete sentence, transform it as best as possible.
+5. Use clean Markdown formatting.`
 
     return await askGroq(prompt, systemPrompt, {
         model: MODELS.primary,
-        temperature: 0.3,
+        temperature: 0.1, // Lower temperature for more consistent structural output
         maxTokens: 1000
     })
 }
