@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { Regex, Loader2, Wand2, Copy, Check, RefreshCw } from 'lucide-react'
+import { Regex, Loader2, RefreshCw, Copy, Check, Download } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 import AIOutputFormatter from '../../../components/AIOutputFormatter'
 import { askGroq } from '../../../services/groqAI'
@@ -9,6 +9,7 @@ function AIRegexGenerator() {
     const [flavor, setFlavor] = useState('javascript')
     const [testStrings, setTestStrings] = useState('')
     const [result, setResult] = useState('')
+    const [regexPattern, setRegexPattern] = useState('')
     const resultRef = useRef(null)
     const [loading, setLoading] = useState(false)
     const [copied, setCopied] = useState(false)
@@ -34,14 +35,15 @@ function AIRegexGenerator() {
         setLoading(true)
         setError('')
         setResult('')
+        setRegexPattern('')
 
         const systemPrompt = `You are a regex expert. Create accurate regular expressions from natural language descriptions.
 
 Rules:
 - Use ${flavor} regex syntax
-- Provide the regex pattern
-- Explain each part of the pattern
+- Start with the REGEX PATTERN on its own line clearly marked
 - Include flags if needed (g, i, m, etc.)
+- Explain each part of the pattern
 - Show example matches and non-matches
 - Consider edge cases`
 
@@ -50,15 +52,18 @@ Rules:
 Language/Flavor: ${flavor}
 ${testStrings ? `Test strings to match: ${testStrings}` : ''}
 
-Provide:
-1. The complete regex pattern
-2. Explanation of each part
-3. Usage example
-4. What it matches and doesn't match`
+Format your response with the regex pattern first, then explanation.`
 
         try {
             const response = await askGroq(prompt, systemPrompt, { maxTokens: 1024 })
             setResult(response)
+
+            // Extract regex pattern from response
+            const regexMatch = response.match(/`{1,3}([^`]+)`{1,3}|\/([^\/]+)\/[gimsuvy]*/m)
+            if (regexMatch) {
+                setRegexPattern(regexMatch[1] || regexMatch[0])
+            }
+
             setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
         } catch (err) {
             setError('Failed to generate regex. Please try again.')
@@ -69,9 +74,23 @@ Provide:
     }
 
     const handleCopy = async () => {
-        await navigator.clipboard.writeText(result)
+        const textToCopy = regexPattern || result
+        await navigator.clipboard.writeText(textToCopy)
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
+    }
+
+    const handleDownload = () => {
+        const content = `// Regex Pattern for: ${description}\n// Flavor: ${flavor}\n\n${result}`
+        const blob = new Blob([content], { type: 'text/plain' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'regex-pattern.txt'
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
     }
 
     const handleReset = () => {
@@ -79,6 +98,7 @@ Provide:
         setFlavor('javascript')
         setTestStrings('')
         setResult('')
+        setRegexPattern('')
         setError('')
     }
 
@@ -192,11 +212,11 @@ Provide:
             </button>
 
             {/* Result */}
-            {result && (
+            {result ? (
                 <div ref={resultRef} style={{
-                    background: '#1a1a2e',
+                    background: '#0d1117',
                     borderRadius: '12px',
-                    border: '1px solid #333',
+                    border: '1px solid #30363d',
                     overflow: 'hidden'
                 }}>
                     <div style={{
@@ -204,50 +224,88 @@ Provide:
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         padding: '12px 16px',
-                        borderBottom: '1px solid #333',
-                        background: '#0a0a0a'
+                        borderBottom: '1px solid #30363d',
+                        background: '#161b22',
+                        flexWrap: 'wrap',
+                        gap: '10px'
                     }}>
-                        <span style={{ fontSize: '12px', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <Regex size={12} /> Regex Pattern
+                        <span style={{
+                            fontSize: '11px',
+                            padding: '4px 10px',
+                            background: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)',
+                            borderRadius: '6px',
+                            fontWeight: '600',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.5px'
+                        }}>
+                            {flavor} regex
                         </span>
-                        <button
-                            onClick={handleCopy}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                padding: '8px 14px',
-                                background: copied ? '#10b981' : '#333',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: 'white',
-                                fontSize: '12px',
-                                cursor: 'pointer',
-                                minHeight: '36px'
-                            }}
-                        >
-                            {copied ? <Check size={14} /> : <Copy size={14} />}
-                            {copied ? 'Copied!' : 'Copy'}
-                        </button>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                            <button
+                                onClick={handleCopy}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    padding: '8px 14px',
+                                    background: copied ? '#238636' : '#21262d',
+                                    border: '1px solid #30363d',
+                                    borderRadius: '8px',
+                                    color: 'white',
+                                    fontSize: '12px',
+                                    cursor: 'pointer',
+                                    minHeight: '36px'
+                                }}
+                            >
+                                {copied ? <Check size={14} /> : <Copy size={14} />}
+                                {copied ? 'Copied!' : 'Copy'}
+                            </button>
+                            <button
+                                onClick={handleDownload}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    padding: '8px 14px',
+                                    background: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    color: 'white',
+                                    fontSize: '12px',
+                                    cursor: 'pointer',
+                                    minHeight: '36px'
+                                }}
+                            >
+                                <Download size={14} />
+                                Download
+                            </button>
+                        </div>
                     </div>
                     <div style={{
                         padding: '20px',
                         fontSize: '14px',
-                        lineHeight: '1.6'
+                        lineHeight: '1.6',
+                        color: '#c9d1d9'
                     }}>
                         <AIOutputFormatter content={result} />
                     </div>
                 </div>
-            )}
-
-            {!result && !loading && (
+            ) : (
                 <div style={{
-                    textAlign: 'center',
-                    padding: '40px 20px',
-                    opacity: 0.5,
-                    fontSize: '14px'
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '60px 20px',
+                    background: 'linear-gradient(135deg, #0d1117 0%, #161b22 100%)',
+                    borderRadius: '12px',
+                    border: '1px dashed #30363d',
+                    color: '#8b949e',
+                    textAlign: 'center'
                 }}>
-                    🔍 Describe what to match and get the perfect regex pattern
+                    <Regex size={48} strokeWidth={1} style={{ color: '#ec4899', opacity: 0.6, marginBottom: '16px' }} />
+                    <p style={{ fontSize: '16px', margin: '0 0 8px', color: '#c9d1d9' }}>Your regex pattern will appear here</p>
+                    <span style={{ fontSize: '13px', opacity: 0.6 }}>Describe what to match and generate</span>
                 </div>
             )}
 

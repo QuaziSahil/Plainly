@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
-import { Code2, Loader2, Wand2, Copy, Check, RefreshCw } from 'lucide-react'
+import { Code2, Loader2, RefreshCw } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
-import AIOutputFormatter from '../../../components/AIOutputFormatter'
+import CodePreview from '../../../components/CodePreview/CodePreview'
 import { askGroq } from '../../../services/groqAI'
 
 function AIHTMLGenerator() {
@@ -11,7 +11,6 @@ function AIHTMLGenerator() {
     const [result, setResult] = useState('')
     const resultRef = useRef(null)
     const [loading, setLoading] = useState(false)
-    const [copied, setCopied] = useState(false)
     const [error, setError] = useState('')
 
     const handleGenerate = async () => {
@@ -32,14 +31,17 @@ Rules:
 - Add meaningful class names
 - ${includeCSS ? 'Include basic inline CSS or a style section' : 'Generate HTML only'}
 - Mobile-friendly structure
-- Include placeholder content`
+- Include placeholder content
+- IMPORTANT: Return ONLY the HTML code in a markdown code block. No extra explanations.`
 
         const prompt = `Generate HTML5 structure for:
 
 ${description}
 
 ${semantic ? 'Use semantic HTML5 elements.' : 'Use div-based structure.'}
-${includeCSS ? 'Include basic styling.' : 'HTML only, no styles.'}`
+${includeCSS ? 'Include basic styling.' : 'HTML only, no styles.'}
+
+Return ONLY the HTML code in a markdown code block.`
 
         try {
             const response = await askGroq(prompt, systemPrompt, { maxTokens: 1536 })
@@ -51,12 +53,6 @@ ${includeCSS ? 'Include basic styling.' : 'HTML only, no styles.'}`
         } finally {
             setLoading(false)
         }
-    }
-
-    const handleCopy = async () => {
-        await navigator.clipboard.writeText(result)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
     }
 
     const handleReset = () => {
@@ -74,7 +70,7 @@ ${includeCSS ? 'Include basic styling.' : 'HTML only, no styles.'}`
             category="AI Tools"
             categoryPath="/ai"
             icon={Code2}
-            result={result ? 'HTML Ready' : 'Ready'}
+            result={result ? 'HTML5 Code' : 'Ready'}
             resultLabel="Status"
             onReset={handleReset}
         >
@@ -190,66 +186,14 @@ ${includeCSS ? 'Include basic styling.' : 'HTML only, no styles.'}`
                 )}
             </button>
 
-            {/* Result */}
-            {result && (
-                <div ref={resultRef} style={{
-                    background: '#1a1a2e',
-                    borderRadius: '12px',
-                    border: '1px solid #333',
-                    overflow: 'hidden'
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '12px 16px',
-                        borderBottom: '1px solid #333',
-                        background: '#0a0a0a'
-                    }}>
-                        <span style={{ fontSize: '12px', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <Code2 size={12} /> Generated HTML
-                        </span>
-                        <button
-                            onClick={handleCopy}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                padding: '8px 14px',
-                                background: copied ? '#10b981' : '#333',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: 'white',
-                                fontSize: '12px',
-                                cursor: 'pointer',
-                                minHeight: '36px'
-                            }}
-                        >
-                            {copied ? <Check size={14} /> : <Copy size={14} />}
-                            {copied ? 'Copied!' : 'Copy'}
-                        </button>
-                    </div>
-                    <div style={{
-                        padding: '20px',
-                        fontSize: '14px',
-                        lineHeight: '1.6',
-                        fontFamily: 'monospace'
-                    }}>
-                        <AIOutputFormatter content={result} />
-                    </div>
-                </div>
-            )}
-
-            {!result && !loading && (
-                <div style={{
-                    textAlign: 'center',
-                    padding: '40px 20px',
-                    opacity: 0.5,
-                    fontSize: '14px'
-                }}>
-                    🏗️ Describe your page and get clean HTML structure
-                </div>
-            )}
+            {/* Code Preview */}
+            <div ref={resultRef}>
+                <CodePreview
+                    code={result}
+                    language="html"
+                    filename={`index`}
+                />
+            </div>
 
             <style>{`
                 @keyframes spin {

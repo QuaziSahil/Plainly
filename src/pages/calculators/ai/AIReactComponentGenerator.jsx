@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
-import { Component, Loader2, Wand2, Copy, Check, RefreshCw } from 'lucide-react'
+import { Component, Loader2, RefreshCw } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
-import AIOutputFormatter from '../../../components/AIOutputFormatter'
+import CodePreview from '../../../components/CodePreview/CodePreview'
 import { askGroq } from '../../../services/groqAI'
 
 function AIReactComponentGenerator() {
@@ -11,7 +11,6 @@ function AIReactComponentGenerator() {
     const [result, setResult] = useState('')
     const resultRef = useRef(null)
     const [loading, setLoading] = useState(false)
-    const [copied, setCopied] = useState(false)
     const [error, setError] = useState('')
 
     const types = [
@@ -45,15 +44,15 @@ Rules:
 - Use modern React hooks (useState, useEffect, etc.)
 - Include proper prop types ${type === 'typescript' ? '(TypeScript interfaces)' : '(PropTypes or JSDoc)'}
 - Make the component reusable and customizable
-- Include helpful comments
 - Follow React best practices
-- Export as default`
+- Export as default
+- IMPORTANT: Return ONLY the component code in a markdown code block. No extra explanations.`
 
         const prompt = `Create a React component for:
 
 ${description}
 
-Make it fully functional, well-styled, and production-ready.`
+Return ONLY the component code in a markdown code block.`
 
         try {
             const response = await askGroq(prompt, systemPrompt, { maxTokens: 2048 })
@@ -65,12 +64,6 @@ Make it fully functional, well-styled, and production-ready.`
         } finally {
             setLoading(false)
         }
-    }
-
-    const handleCopy = async () => {
-        await navigator.clipboard.writeText(result)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
     }
 
     const handleReset = () => {
@@ -88,7 +81,7 @@ Make it fully functional, well-styled, and production-ready.`
             category="AI Tools"
             categoryPath="/ai"
             icon={Component}
-            result={result ? 'Component Ready' : 'Ready'}
+            result={result ? `React ${type === 'typescript' ? 'TSX' : 'JSX'}` : 'Ready'}
             resultLabel="Status"
             onReset={handleReset}
         >
@@ -188,66 +181,14 @@ Make it fully functional, well-styled, and production-ready.`
                 )}
             </button>
 
-            {/* Result */}
-            {result && (
-                <div ref={resultRef} style={{
-                    background: '#1a1a2e',
-                    borderRadius: '12px',
-                    border: '1px solid #333',
-                    overflow: 'hidden'
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '12px 16px',
-                        borderBottom: '1px solid #333',
-                        background: '#0a0a0a'
-                    }}>
-                        <span style={{ fontSize: '12px', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <Component size={12} /> React Component
-                        </span>
-                        <button
-                            onClick={handleCopy}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                padding: '8px 14px',
-                                background: copied ? '#10b981' : '#333',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: 'white',
-                                fontSize: '12px',
-                                cursor: 'pointer',
-                                minHeight: '36px'
-                            }}
-                        >
-                            {copied ? <Check size={14} /> : <Copy size={14} />}
-                            {copied ? 'Copied!' : 'Copy'}
-                        </button>
-                    </div>
-                    <div style={{
-                        padding: '20px',
-                        fontSize: '14px',
-                        lineHeight: '1.6',
-                        fontFamily: 'monospace'
-                    }}>
-                        <AIOutputFormatter content={result} />
-                    </div>
-                </div>
-            )}
-
-            {!result && !loading && (
-                <div style={{
-                    textAlign: 'center',
-                    padding: '40px 20px',
-                    opacity: 0.5,
-                    fontSize: '14px'
-                }}>
-                    ⚛️ Describe your component and get production-ready React code
-                </div>
-            )}
+            {/* Code Preview */}
+            <div ref={resultRef}>
+                <CodePreview
+                    code={result}
+                    language={type === 'typescript' ? 'tsx' : 'jsx'}
+                    filename={`Component`}
+                />
+            </div>
 
             <style>{`
                 @keyframes spin {

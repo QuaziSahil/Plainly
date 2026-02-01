@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
-import { ArrowRightLeft, Loader2, Wand2, Copy, Check, RefreshCw } from 'lucide-react'
+import { ArrowRightLeft, Loader2, RefreshCw } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
-import AIOutputFormatter from '../../../components/AIOutputFormatter'
+import CodePreview from '../../../components/CodePreview/CodePreview'
 import { askGroq } from '../../../services/groqAI'
 
 function AICodeConverter() {
@@ -11,7 +11,6 @@ function AICodeConverter() {
     const [result, setResult] = useState('')
     const resultRef = useRef(null)
     const [loading, setLoading] = useState(false)
-    const [copied, setCopied] = useState(false)
     const [error, setError] = useState('')
 
     const languages = [
@@ -49,8 +48,8 @@ Rules:
 - Maintain the same functionality
 - Use idiomatic patterns for the target language
 - Include proper error handling
-- Add comments explaining any significant differences
-- Use appropriate naming conventions for the target language`
+- Use appropriate naming conventions for the target language
+- IMPORTANT: Return ONLY the converted code in a markdown code block. No extra explanations.`
 
         const prompt = `Convert this ${fromLang} code to ${toLang}:
 
@@ -58,7 +57,7 @@ Rules:
 ${code}
 \`\`\`
 
-Provide the converted ${toLang} code with any necessary explanations of key differences.`
+Return ONLY the converted ${toLang} code in a markdown code block.`
 
         try {
             const response = await askGroq(prompt, systemPrompt, { maxTokens: 2048 })
@@ -70,12 +69,6 @@ Provide the converted ${toLang} code with any necessary explanations of key diff
         } finally {
             setLoading(false)
         }
-    }
-
-    const handleCopy = async () => {
-        await navigator.clipboard.writeText(result)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
     }
 
     const handleSwap = () => {
@@ -99,7 +92,7 @@ Provide the converted ${toLang} code with any necessary explanations of key diff
             category="AI Tools"
             categoryPath="/ai"
             icon={ArrowRightLeft}
-            result={result ? 'Converted' : 'Ready'}
+            result={result ? `${toLang.toUpperCase()} Code` : 'Ready'}
             resultLabel="Status"
             onReset={handleReset}
         >
@@ -205,7 +198,7 @@ Provide the converted ${toLang} code with any necessary explanations of key diff
             >
                 {loading ? (
                     <>
-                        <Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} />
+                        <span style={{ animation: 'spin 1s linear infinite', display: 'inline-block' }}>⏳</span>
                         Converting...
                     </>
                 ) : result ? (
@@ -221,66 +214,14 @@ Provide the converted ${toLang} code with any necessary explanations of key diff
                 )}
             </button>
 
-            {/* Result */}
-            {result && (
-                <div ref={resultRef} style={{
-                    background: '#1a1a2e',
-                    borderRadius: '12px',
-                    border: '1px solid #333',
-                    overflow: 'hidden'
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '12px 16px',
-                        borderBottom: '1px solid #333',
-                        background: '#0a0a0a'
-                    }}>
-                        <span style={{ fontSize: '12px', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <ArrowRightLeft size={12} /> {fromLang} → {toLang}
-                        </span>
-                        <button
-                            onClick={handleCopy}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                padding: '8px 14px',
-                                background: copied ? '#10b981' : '#333',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: 'white',
-                                fontSize: '12px',
-                                cursor: 'pointer',
-                                minHeight: '36px'
-                            }}
-                        >
-                            {copied ? <Check size={14} /> : <Copy size={14} />}
-                            {copied ? 'Copied!' : 'Copy'}
-                        </button>
-                    </div>
-                    <div style={{
-                        padding: '20px',
-                        fontSize: '14px',
-                        lineHeight: '1.6',
-                        fontFamily: 'monospace'
-                    }}>
-                        <AIOutputFormatter content={result} />
-                    </div>
-                </div>
-            )}
-
-            {!result && !loading && (
-                <div style={{
-                    textAlign: 'center',
-                    padding: '40px 20px',
-                    opacity: 0.5,
-                    fontSize: '14px'
-                }}>
-                    🔄 Convert code between 12+ programming languages
-                </div>
-            )}
+            {/* Code Preview */}
+            <div ref={resultRef}>
+                <CodePreview
+                    code={result}
+                    language={toLang}
+                    filename={`converted-code`}
+                />
+            </div>
 
             <style>{`
                 @keyframes spin {

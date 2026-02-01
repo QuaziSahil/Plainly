@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
-import { Code, Loader2, Wand2, Copy, Check, RefreshCw } from 'lucide-react'
+import { Code, Loader2, Wand2, RefreshCw } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
-import AIOutputFormatter from '../../../components/AIOutputFormatter'
+import CodePreview from '../../../components/CodePreview/CodePreview'
 import { askGroq } from '../../../services/groqAI'
 
 function AICodeGenerator() {
@@ -12,7 +12,6 @@ function AICodeGenerator() {
     const [result, setResult] = useState('')
     const resultRef = useRef(null)
     const [loading, setLoading] = useState(false)
-    const [copied, setCopied] = useState(false)
     const [error, setError] = useState('')
 
     const languages = [
@@ -62,7 +61,7 @@ ${framework !== 'none' ? `- Use ${framework} framework/library` : ''}
 - Follow best practices and conventions
 - Make the code production-ready
 - Include error handling where appropriate
-- Format the code properly with correct indentation`
+- IMPORTANT: Return ONLY the code inside a single markdown code block. Do not include explanations outside the code block.`
 
         const prompt = `Generate code for: ${description}
 
@@ -70,7 +69,7 @@ Language: ${language}
 ${framework !== 'none' ? `Framework: ${framework}` : ''}
 Complexity: ${complexity}
 
-Provide the complete, working code with explanations.`
+Return ONLY the code in a markdown code block.`
 
         try {
             const response = await askGroq(prompt, systemPrompt, { maxTokens: 2048 })
@@ -82,12 +81,6 @@ Provide the complete, working code with explanations.`
         } finally {
             setLoading(false)
         }
-    }
-
-    const handleCopy = async () => {
-        await navigator.clipboard.writeText(result)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
     }
 
     const handleReset = () => {
@@ -106,7 +99,7 @@ Provide the complete, working code with explanations.`
             category="AI Tools"
             categoryPath="/ai"
             icon={Code}
-            result={result ? 'Code Ready' : 'Ready'}
+            result={result ? `${language.toUpperCase()} Code` : 'Ready'}
             resultLabel="Status"
             onReset={handleReset}
         >
@@ -216,67 +209,14 @@ Provide the complete, working code with explanations.`
                 )}
             </button>
 
-            {/* Result */}
-            {result && (
-                <div ref={resultRef} style={{
-                    background: '#1a1a2e',
-                    borderRadius: '12px',
-                    border: '1px solid #333',
-                    overflow: 'hidden'
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '12px 16px',
-                        borderBottom: '1px solid #333',
-                        background: '#0a0a0a'
-                    }}>
-                        <span style={{ fontSize: '12px', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <Code size={12} /> Generated Code
-                        </span>
-                        <button
-                            onClick={handleCopy}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                padding: '8px 14px',
-                                background: copied ? '#10b981' : '#333',
-                                border: 'none',
-                                borderRadius: '6px',
-                                color: 'white',
-                                fontSize: '12px',
-                                cursor: 'pointer',
-                                minHeight: '36px'
-                            }}
-                        >
-                            {copied ? <Check size={14} /> : <Copy size={14} />}
-                            {copied ? 'Copied!' : 'Copy Code'}
-                        </button>
-                    </div>
-                    <div style={{
-                        padding: '20px',
-                        fontSize: '14px',
-                        lineHeight: '1.6',
-                        whiteSpace: 'pre-wrap',
-                        fontFamily: 'monospace'
-                    }}>
-                        <AIOutputFormatter content={result} />
-                    </div>
-                </div>
-            )}
-
-            {!result && !loading && (
-                <div style={{
-                    textAlign: 'center',
-                    padding: '40px 20px',
-                    opacity: 0.5,
-                    fontSize: '14px'
-                }}>
-                    💻 Describe what you want to build and get production-ready code
-                </div>
-            )}
+            {/* Code Preview */}
+            <div ref={resultRef}>
+                <CodePreview
+                    code={result}
+                    language={language}
+                    filename={`generated-code`}
+                />
+            </div>
 
             <style>{`
                 @keyframes spin {
