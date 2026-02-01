@@ -524,42 +524,43 @@ STRICT RULES:
 }
 
 export async function transformVoice(text, targetVoice = 'active') {
-    const voiceLabel = targetVoice === 'active' ? 'Active Voice (Clear & Direct)' : 'Passive Voice (Formal & Distant)'
+    const prompt = `Perform a voice transformation analysis for the text below. 
 
-    const prompt = `Transform the following text into ${voiceLabel}. 
+TEXT: "${text}"
+TARGET: ${targetVoice === 'active' ? 'Active Voice' : 'Passive Voice'}
 
-TEXT TO TRANSFORM:
-"${text}"
+If the text cannot be elegantly transformed (e.g., intransitive verbs), explain the closest professional alternative.`
 
-If the text is already in the target voice, refine it for better clarity.`
-
-    const systemPrompt = `You are an expert linguistics professor and editor. Your goal is to transform text into the specified grammatical voice while providing a clear structural analysis.
+    const systemPrompt = `You are a professional linguistics expert. Your task is to provide a side-by-side comparative analysis of Active vs. Passive voice for the given text.
 
 OUTPUT FORMAT:
-Provide your response in these exact sections:
+Provide the response in these exact sections with these colors/emojis:
 
-### 🔄 Transformed Sentence
-[The final transformed sentence here]
+### 🟢 Active Voice
+**[Put the Active version here - bold it]**
 
-### 📊 Structural Analysis
-*   **Subject:** [Identify the subject]
-*   **Verb:** [Identify the main verb and its tense]
-*   **Object/Complement:** [Identify the object or complement]
-*   **Voice Change:** [Briefly explain what changed from the original]
+### 🔵 Passive Voice
+**[Put the Passive version here - bold it]**
 
-### 📝 Grammatical Note
-[A one-sentence expert tip on why this voice is better for this specific context]
+### 📊 Comparative Analysis
+*   **Target:** ${targetVoice === 'active' ? 'Active (Clear & Direct)' : 'Passive (Formal & Distant)'}
+*   **Subject:** [Who is performing the action?]
+*   **Verb:** [The action and its tense]
+*   **Key Change:** [Exactly what moved or changed between the two versions]
+
+### 💡 Plainly AI Insight
+[Provide a premium tip on which version sounds more professional for this specific sentence.]
 
 STRICT RULES:
-1. ONLY provide the sections above. 
-2. DO NOT apologize or mention misunderstandings.
-3. DO NOT use conversational filler like "Here is your transformed text" or "I think you meant".
-4. If the input is not a complete sentence, transform it as best as possible.
-5. Use clean Markdown formatting.`
+1. ALWAYS provide BOTH versions, even if one is provided in the input.
+2. Label them exactly as "Active Voice" and "Passive Voice".
+3. If a direct transformation is grammatically incorrect (like "The ground was being run at"), provide the "Natural Passive" alternative (e.g., "The ground was trodden upon") and explain.
+4. NO conversational fluff or apologies.
+5. Use clean, professional Markdown.`
 
     return await askGroq(prompt, systemPrompt, {
         model: MODELS.primary,
-        temperature: 0.1, // Lower temperature for more consistent structural output
+        temperature: 0.1,
         maxTokens: 1000
     })
 }
