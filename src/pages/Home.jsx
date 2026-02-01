@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Search, Calculator, Heart, Brain, ArrowRightLeft, ChevronRight, ArrowRight, Star, Clock, Sparkles } from 'lucide-react'
 import { financeCalculators, healthCalculators, converterCalculators, allCalculators, aiCalculators } from '../data/calculators'
