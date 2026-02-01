@@ -147,7 +147,8 @@ import {
     Terminal,
     Megaphone,
     Target,
-    Image
+    Image,
+    Video
 } from 'lucide-react'
 
 export const allCalculators = [
@@ -465,6 +466,7 @@ export const allCalculators = [
     { name: 'AI Meme Generator', description: 'Create viral meme concepts with captions and templates.', icon: Laugh, path: '/ai-meme-generator', category: 'AI' },
     { name: 'AI Thumbnail Generator', description: 'Generate high-CTR thumbnail concepts for videos.', icon: Image, path: '/ai-thumbnail-generator', category: 'AI' },
     { name: 'AI Image Generator', description: 'Create stunning images from text with AI - Free & Unlimited.', icon: Image, path: '/ai-image-generator', category: 'AI' },
+    { name: 'AI Video Generator', description: 'Create stunning videos from text with AI - Free & Unlimited.', icon: Video, path: '/ai-video-generator', category: 'AI' },
 ]
 
 export const financeCalculators = allCalculators.filter(c => c.category === 'Finance')

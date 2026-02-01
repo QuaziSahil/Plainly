@@ -9,12 +9,22 @@ function AIImageGenerator() {
     const [enhancedPrompt, setEnhancedPrompt] = useState('')
     const [style, setStyle] = useState('realistic')
     const [aspectRatio, setAspectRatio] = useState('1:1')
+    const [model, setModel] = useState('flux')
     const [imageUrl, setImageUrl] = useState('')
     const [loading, setLoading] = useState(false)
     const [enhancing, setEnhancing] = useState(false)
     const [error, setError] = useState('')
     const [copied, setCopied] = useState(false)
     const resultRef = useRef(null)
+
+    const aiModels = [
+        { value: 'flux', label: 'Flux Schnell', desc: 'Best quality, recommended' },
+        { value: 'turbo', label: 'SDXL Turbo', desc: 'Fast generation' },
+        { value: 'gptimage', label: 'GPT Image', desc: 'Creative style' },
+        { value: 'seedream', label: 'Seedream 4.0', desc: 'Artistic' },
+        { value: 'klein', label: 'FLUX.2 Klein', desc: 'Detailed' },
+        { value: 'nanobanana', label: 'NanoBanana', desc: 'Experimental' }
+    ]
 
     const styles = [
         { value: 'realistic', label: 'Realistic', prompt: 'ultra realistic, photorealistic, 8k, high detail, sharp focus' },
@@ -48,18 +58,23 @@ function AIImageGenerator() {
         setEnhancing(true)
         setError('')
 
-        const systemPrompt = `You are an expert AI image prompt engineer. Enhance the user's prompt to create better AI-generated images.
+        const selectedStyle = styles.find(s => s.value === style)
+        const styleName = selectedStyle?.label || 'Realistic'
+
+        const systemPrompt = `You are an expert AI image prompt engineer. Enhance the user's prompt to create better AI-generated images in the ${styleName} style.
 
 Rules:
-- Add descriptive details (lighting, composition, mood)
+- The image MUST be in ${styleName} style
+- Add style-specific details for ${styleName} (lighting, composition, mood, textures)
 - Include quality boosters (8k, high detail, sharp focus)
-- Keep the original intent
+- Keep the original intent but amplify it for ${styleName} aesthetic
 - Return ONLY the enhanced prompt, no explanations
-- Keep under 150 words`
+- Keep under 150 words
+- Include ${styleName}-specific keywords and descriptors`
 
         try {
             const enhanced = await askGroq(
-                `Enhance this image prompt for better AI generation: "${prompt}"`,
+                `Enhance this image prompt for ${styleName} style AI generation: "${prompt}"`,
                 systemPrompt,
                 { temperature: 0.7, maxTokens: 250 }
             )
@@ -85,7 +100,7 @@ Rules:
         }
 
         if (!isConfigured()) {
-            setError('Hugging Face API key not configured')
+            setError('Image generation service not configured')
             return
         }
 
@@ -103,8 +118,7 @@ Rules:
             const imageDataUrl = await generatePollinationsImage(fullPrompt, {
                 width: selectedRatio?.width || 1024,
                 height: selectedRatio?.height || 1024,
-                num_inference_steps: 30,
-                guidance_scale: 7.5
+                model: model
             })
 
             setImageUrl(imageDataUrl)
@@ -330,6 +344,32 @@ Rules:
                         </button>
                     ))}
                 </div>
+            </div>
+
+            {/* AI Model Selector */}
+            <div className="input-group">
+                <label className="input-label">AI Model</label>
+                <select
+                    value={model}
+                    onChange={(e) => setModel(e.target.value)}
+                    style={{
+                        width: '100%',
+                        padding: '12px 16px',
+                        background: '#21262d',
+                        border: '1px solid #30363d',
+                        borderRadius: '8px',
+                        color: '#e6edf3',
+                        fontSize: '14px',
+                        cursor: 'pointer',
+                        minHeight: '48px'
+                    }}
+                >
+                    {aiModels.map(m => (
+                        <option key={m.value} value={m.value}>
+                            {m.label} - {m.desc}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             {error && (

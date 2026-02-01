@@ -274,6 +274,7 @@ import AICustomerPersonaGenerator from './pages/calculators/ai/AICustomerPersona
 import AIMemeGenerator from './pages/calculators/ai/AIMemeGenerator'
 import AIThumbnailGenerator from './pages/calculators/ai/AIThumbnailGenerator'
 import AIImageGenerator from './pages/calculators/ai/AIImageGenerator'
+import AIVideoGenerator from './pages/calculators/ai/AIVideoGenerator'
 
 // Converter Tools (15)
 import CookingConverter from './pages/calculators/converter/CookingConverter'
@@ -631,6 +632,7 @@ function App() {
                     <Route path="/ai-meme-generator" element={<AIMemeGenerator />} />
                     <Route path="/ai-thumbnail-generator" element={<AIThumbnailGenerator />} />
                     <Route path="/ai-image-generator" element={<AIImageGenerator />} />
+                    <Route path="/ai-video-generator" element={<AIVideoGenerator />} />
 
                     {/* Converter Tools */}
                     <Route path="/cooking-converter" element={<CookingConverter />} />
