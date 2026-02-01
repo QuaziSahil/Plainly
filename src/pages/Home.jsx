@@ -47,14 +47,14 @@ function Home() {
 
     // Get latest 8 tools (newest AI Code tools)
     const latestTools = [
+        aiCalculators.find(c => c.path === '/ai-code-preview'),  // NEW: Code Preview & Download
         aiCalculators.find(c => c.path === '/ai-code-generator'),
         aiCalculators.find(c => c.path === '/ai-code-debugger'),
-        aiCalculators.find(c => c.path === '/ai-code-explainer'),
         aiCalculators.find(c => c.path === '/ai-sql-generator'),
         aiCalculators.find(c => c.path === '/ai-regex-generator'),
         aiCalculators.find(c => c.path === '/ai-react-component-generator'),
         aiCalculators.find(c => c.path === '/ai-unit-test-generator'),
-        aiCalculators.find(c => c.path === '/ai-tech-stack-recommender'),
+        aiCalculators.find(c => c.path === '/ai-css-generator'),
     ].filter(Boolean).slice(0, 8)
 
     const categories = [
