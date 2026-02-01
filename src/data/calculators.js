@@ -146,7 +146,8 @@ import {
     Eye,
     Terminal,
     Megaphone,
-    Target
+    Target,
+    Image
 } from 'lucide-react'
 
 export const allCalculators = [
