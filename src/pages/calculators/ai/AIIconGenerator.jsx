@@ -400,6 +400,23 @@ function AIIconGenerator() {
                     }}>
                         🎨 <strong>Icon Ready!</strong> - Perfect for apps, websites, and UI designs
                     </div>
+
+                    {/* Refresh Tip */}
+                    <div style={{
+                        marginTop: '12px',
+                        padding: '12px 16px',
+                        background: 'linear-gradient(135deg, #1e3a5f10 0%, #3b82f620 100%)',
+                        border: '1px solid #3b82f640',
+                        borderRadius: '10px',
+                        fontSize: '13px',
+                        color: '#60a5fa',
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '10px'
+                    }}>
+                        <span style={{ fontSize: '16px' }}>💡</span>
+                        <span><strong>Tip:</strong> If the tool doesn't respond after generation, try refreshing the page and generating again.</span>
+                    </div>
                 </div>
             )}
 

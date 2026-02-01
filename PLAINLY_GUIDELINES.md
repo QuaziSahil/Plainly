@@ -228,6 +228,34 @@ Before submitting any new tool, verify:
 ❌ Breaking existing functionality
 ❌ Using different styling than the design system
 ❌ **Using an icon without verifying it's imported** (CAUSES SITE-WIDE CRASH!)
+❌ **Deleting or changing code of ANY tool without explicit user permission**
+
+---
+
+## 🔄 AI TOOL REFRESH WARNING (MANDATORY)
+
+Every AI-powered tool MUST include a refresh warning tip. Add this styled tip box after the result section or at the bottom of the tool:
+
+```jsx
+{/* Refresh Tip */}
+<div style={{
+    marginTop: '16px',
+    padding: '12px 16px',
+    background: 'linear-gradient(135deg, #1e3a5f10 0%, #3b82f620 100%)',
+    border: '1px solid #3b82f640',
+    borderRadius: '10px',
+    fontSize: '13px',
+    color: '#60a5fa',
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: '10px'
+}}>
+    <span style={{ fontSize: '16px' }}>💡</span>
+    <span><strong>Tip:</strong> If the tool doesn't respond after generation, try refreshing the page and generating again.</span>
+</div>
+```
+
+This must be included in ALL AI tools to help users troubleshoot common issues.
 
 ---
 
