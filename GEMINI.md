@@ -101,13 +101,31 @@ Use `AIOutputFormatter` component:
 - Copy button functionality
 - Beautiful card-style presentation
 
-### 6. No Duplicate Tools
+### 6. Creative Content Types (CRITICAL)
+When using `generateCreativeContent()` from `groqAI.js`, use the CORRECT type:
+
+| Content Type | Use For |
+|--------------|---------|
+| `storyStarter` | Story opening paragraphs |
+| `plot` | Plot outlines |
+| `poem` | Poems |
+| `lyrics` | Song lyrics |
+| `joke` | Jokes ONLY |
+| `quote` | Quotes ONLY |
+| `pickupLine` | Pickup lines |
+| `rapName` | Rap stage names |
+| `bandName` | Band/music group names |
+| `username` | Usernames |
+
+**⚠️ NEVER use the wrong type (e.g., don't use 'quote' for usernames)**
+
+### 7. No Duplicate Tools
 Before creating ANY new tool:
 1. Check `src/data/calculators.js` for existing tools
 2. Check all category folders in `src/pages/calculators/`
 3. If a similar tool exists, enhance it instead of creating a duplicate
 
-### 7. Research Before Implementation
+### 8. Research Before Implementation
 For every new tool:
 1. Research what features are necessary (check competitors)
 2. Identify all required input fields
@@ -115,14 +133,14 @@ For every new tool:
 4. Design mobile-first layout
 5. Only then implement
 
-### 8. Graphics & Visual Quality
+### 9. Graphics & Visual Quality
 - Use proper icons from `lucide-react`
 - Add subtle gradients and shadows
 - Include loading states with animations
 - Error states must be styled (not just text)
 - Success states should feel rewarding
 
-### 9. Category Management
+### 10. Category Management
 - New tools must be added to `src/data/calculators.js`
 - Assign correct category
 - Latest tools should appear on home page
@@ -192,7 +210,7 @@ src/
 │   ├── Home.jsx
 │   ├── categories/               # Category landing pages
 │   └── calculators/
-│       ├── ai/                   # 35 AI tools
+│       ├── ai/                   # 37 AI tools
 │       ├── finance/              # 38 Finance tools
 │       ├── health/               # 27 Health tools
 │       ├── math/                 # 28 Math tools

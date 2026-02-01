@@ -19,7 +19,7 @@ function AIBandNameGenerator() {
         setResult('')
 
         try {
-            const names = await generateCreativeContent('quote', `band names for a ${genre} group ${topic ? `about ${topic}` : ''}`, 'List only the names', 'creative')
+            const names = await generateCreativeContent('bandName', `${genre} ${topic ? `about ${topic}` : ''}`, '', 'creative')
             setResult(names)
             setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
         } catch (err) {
