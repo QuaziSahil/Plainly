@@ -133,6 +133,43 @@
     background: rgba(255, 221, 0, 0.15);
 }
 
+/* Keyboard Shortcuts Hints */
+.keyboard-hints {
+    display: none;
+    gap: var(--space-4);
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-primary);
+}
+
+@media (min-width: 768px) {
+    .keyboard-hints {
+        display: flex;
+    }
+}
+
+.keyboard-hint {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.keyboard-hint kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 6px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 4px;
+    font-family: var(--font-family-mono);
+    font-size: 10px;
+    color: var(--text-secondary);
+    min-width: 20px;
+}
+
 /* ===== MAIN GRID ===== */
 .calc-grid {
     display: grid;

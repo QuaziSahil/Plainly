@@ -7,6 +7,7 @@ import { SettingsProvider } from './context/SettingsContext'
 import Settings from './components/Settings/Settings'
 import CommandPalette from './components/CommandPalette/CommandPalette'
 import ToolRequestWidget from './components/ToolRequestWidget/ToolRequestWidget'
+import AIAssistant from './components/AIAssistant/AIAssistant'
 import App from './App'
 import './styles/global.css'
 
@@ -20,10 +21,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                         <Settings />
                         <CommandPalette />
                         <ToolRequestWidget />
+                        <AIAssistant />
                     </StorageProvider>
                 </SettingsProvider>
             </BrowserRouter>
         </HelmetProvider>
     </React.StrictMode>
 )
+
 

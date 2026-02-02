@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { ChevronLeft, Share2, Star, RotateCcw, Bug, Copy, Check, Link2, X, Twitter, Facebook, Linkedin, Mail, Download, Code } from 'lucide-react'
@@ -20,11 +20,12 @@ function CalculatorLayout({
     resultLabel,
     resultUnit,
     resultDetails,
-    onReset
+    onReset,
+    toolType = 'calculator' // 'calculator', 'ai', or 'converter'
 }) {
     const navigate = useNavigate()
     const location = useLocation()
-    const { isFavorite, toggleFavorite } = useStorage()
+    const { isFavorite, toggleFavorite, addToHistory } = useStorage()
     const [showBugReport, setShowBugReport] = useState(false)
     const [showCopied, setShowCopied] = useState(false)
     const [showShareModal, setShowShareModal] = useState(false)
@@ -43,9 +44,66 @@ function CalculatorLayout({
             .slice(0, 4)
     }, [category, currentPath])
 
+    // Auto-save result to history when it changes
+    useEffect(() => {
+        if (result) {
+            addToHistory({
+                path: currentPath,
+                name: title,
+                result: String(result),
+                resultUnit: resultUnit,
+                type: toolType
+            })
+        }
+    }, [result, currentPath, title, resultUnit, toolType])
+
     const handleFavoriteClick = () => {
         toggleFavorite(currentPath)
     }
+
+    const handleCopyResult = async () => {
+        const textToCopy = result ? `${result}${resultUnit ? ' ' + resultUnit : ''}` : ''
+        if (textToCopy) {
+            try {
+                await navigator.clipboard.writeText(textToCopy)
+                setShowCopied(true)
+                setTimeout(() => setShowCopied(false), 2000)
+            } catch (_err) {
+                console.error('Failed to copy result')
+            }
+        }
+    }
+
+    // Keyboard shortcuts
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            // Don't trigger if user is typing in an input field
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                return
+            }
+
+            // R - Reset
+            if (e.key === 'r' && onReset && !e.metaKey && !e.ctrlKey) {
+                e.preventDefault()
+                onReset()
+            }
+
+            // C - Copy result (only when not pressing ctrl/cmd for system copy)
+            if (e.key === 'c' && result && !e.metaKey && !e.ctrlKey) {
+                e.preventDefault()
+                handleCopyResult()
+            }
+
+            // F - Toggle favorite
+            if (e.key === 'f' && !e.metaKey && !e.ctrlKey) {
+                e.preventDefault()
+                toggleFavorite(currentPath)
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [onReset, result, currentPath, toggleFavorite])
 
     const shareUrl = window.location.href
 
@@ -82,19 +140,6 @@ function CalculatorLayout({
         facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
         linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
         email: `mailto:?subject=${encodeURIComponent(`${title} - Plainly Tools`)}&body=${encodeURIComponent(`${description}\n\nCheck it out: ${shareUrl}`)}`
-    }
-
-    const handleCopyResult = async () => {
-        const textToCopy = result ? `${result}${resultUnit ? ' ' + resultUnit : ''}` : ''
-        if (textToCopy) {
-            try {
-                await navigator.clipboard.writeText(textToCopy)
-                setShowCopied(true)
-                setTimeout(() => setShowCopied(false), 2000)
-            } catch (_err) {
-                console.error('Failed to copy result')
-            }
-        }
     }
 
     return (
@@ -136,13 +181,14 @@ function CalculatorLayout({
                         </div>
                     </div>
                     <div className="calc-actions">
-                        <button className="action-btn" onClick={handleShare} aria-label="Share">
+                        <button className="action-btn" onClick={handleShare} aria-label="Share" title="Share this tool">
                             <Share2 size={18} />
                         </button>
                         <button
                             className={`action-btn ${isCurrentFavorite ? 'active' : ''}`}
                             onClick={handleFavoriteClick}
                             aria-label={isCurrentFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                            title={`${isCurrentFavorite ? 'Remove from favorites' : 'Add to favorites'} (F)`}
                         >
                             <Star size={18} fill={isCurrentFavorite ? 'currentColor' : 'none'} />
                         </button>
@@ -150,7 +196,7 @@ function CalculatorLayout({
                             className="action-btn"
                             onClick={onReset || (() => window.location.reload())}
                             aria-label="Reset"
-                            title="Reset values"
+                            title="Reset values (R)"
                         >
                             <RotateCcw size={18} />
                         </button>
@@ -162,6 +208,22 @@ function CalculatorLayout({
                         >
                             <Bug size={18} />
                         </button>
+                    </div>
+
+                    {/* Keyboard Shortcuts Hint */}
+                    <div className="keyboard-hints">
+                        <span className="keyboard-hint">
+                            <kbd>R</kbd> Reset
+                        </span>
+                        <span className="keyboard-hint">
+                            <kbd>C</kbd> Copy
+                        </span>
+                        <span className="keyboard-hint">
+                            <kbd>F</kbd> Favorite
+                        </span>
+                        <span className="keyboard-hint">
+                            <kbd>Ctrl+K</kbd> Search
+                        </span>
                     </div>
                 </header>
 
