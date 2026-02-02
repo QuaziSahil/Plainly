@@ -195,6 +195,31 @@ When adding new tools to `calculators.js`, you **MUST**:
 
 **❌ NEVER assume an icon is imported - ALWAYS VERIFY!**
 
+### 12. SEO Optimization (Automatic via CalculatorLayout)
+Every tool using `CalculatorLayout` automatically gets dynamic SEO meta tags:
+
+| Meta Tag | Format |
+|----------|--------|
+| **Title** | `{title} - Free Online Calculator | Plainly Tools` |
+| **Description** | `{description} Use this free {title} tool online at Plainly Tools.` |
+| **Canonical URL** | `https://www.plainly.live{path}` |
+| **Open Graph** | og:title, og:description, og:url |
+| **Twitter Card** | twitter:title, twitter:description |
+
+**How it works:**
+- `CalculatorLayout` uses `react-helmet-async` to inject dynamic `<title>` and `<meta>` tags
+- Each tool's `title` and `description` props are used
+- The current path is used for canonical URL
+
+**Requirements for new tools:**
+1. ✅ Always use `CalculatorLayout` wrapper
+2. ✅ Provide meaningful `title` prop (e.g., "BMI Calculator")
+3. ✅ Provide descriptive `description` prop that includes keywords
+4. ✅ Keep titles concise (under 60 characters)
+5. ✅ Keep descriptions informative (100-160 characters ideal)
+
+**❌ NEVER skip the CalculatorLayout wrapper - this breaks SEO!**
+
 ---
 
 ## 📋 MANDATORY CHECKLIST FOR NEW TOOLS

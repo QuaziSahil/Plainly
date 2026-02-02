@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { ChevronLeft, Share2, Star, RotateCcw, Bug } from 'lucide-react'
 import { useStorage } from '../../context/StorageContext'
 import BugReportModal from '../BugReportModal'
@@ -55,6 +56,18 @@ function CalculatorLayout({
 
     return (
         <div className="calculator-page">
+            {/* Dynamic SEO Meta Tags */}
+            <Helmet>
+                <title>{title} - Free Online Calculator | Plainly Tools</title>
+                <meta name="description" content={`${description} Use this free ${title.toLowerCase()} tool online at Plainly Tools.`} />
+                <meta property="og:title" content={`${title} | Plainly Tools`} />
+                <meta property="og:description" content={description} />
+                <meta property="og:url" content={`https://www.plainly.live${currentPath}`} />
+                <meta name="twitter:title" content={`${title} | Plainly Tools`} />
+                <meta name="twitter:description" content={description} />
+                <link rel="canonical" href={`https://www.plainly.live${currentPath}`} />
+            </Helmet>
+
             <div className="container">
                 {/* Breadcrumb */}
                 <div className="calc-breadcrumb">
