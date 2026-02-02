@@ -82,10 +82,14 @@ function CalculatorLayout({
                 return
             }
 
-            // R - Reset
-            if (e.key === 'r' && onReset && !e.metaKey && !e.ctrlKey) {
+            // R - Reset (use onReset if provided, otherwise reload page)
+            if (e.key === 'r' && !e.metaKey && !e.ctrlKey) {
                 e.preventDefault()
-                onReset()
+                if (onReset) {
+                    onReset()
+                } else {
+                    window.location.reload()
+                }
             }
 
             // C - Copy result (only when not pressing ctrl/cmd for system copy)
