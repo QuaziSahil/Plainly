@@ -1,0 +1,239 @@
+/* =====================================================
+   EXPORT RESULT - Download Modal
+   ===================================================== */
+
+.export-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    animation: exportFade 0.15s ease-out;
+}
+
+@keyframes exportFade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.export-modal {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-6);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: exportSlide 0.2s ease-out;
+}
+
+@keyframes exportSlide {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.export-modal-close {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.export-modal-close:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.export-modal-header {
+    text-align: center;
+    margin-bottom: var(--space-5);
+}
+
+.export-modal-icon {
+    color: #22c55e;
+    margin-bottom: var(--space-3);
+}
+
+.export-modal-header h3 {
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.export-modal-header p {
+    font-size: var(--font-size-body-sm);
+    color: var(--text-muted);
+}
+
+/* Preview Card */
+.export-preview {
+    margin-bottom: var(--space-5);
+}
+
+.export-preview-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    text-align: center;
+}
+
+.export-preview-title {
+    display: block;
+    font-size: var(--font-size-body-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-3);
+}
+
+.export-preview-result {
+    display: block;
+    font-size: var(--font-size-display-sm);
+    font-weight: var(--font-weight-bold);
+    color: #a78bfa;
+    margin-bottom: var(--space-3);
+}
+
+.export-preview-unit {
+    font-size: var(--font-size-h3);
+    color: var(--text-secondary);
+    margin-left: var(--space-1);
+}
+
+.export-preview-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-bottom: var(--space-3);
+}
+
+.export-preview-detail {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-caption);
+    color: var(--text-muted);
+}
+
+.export-preview-brand {
+    display: block;
+    font-size: var(--font-size-caption);
+    color: var(--text-muted);
+    opacity: 0.5;
+    margin-top: var(--space-2);
+}
+
+/* Export Options */
+.export-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.export-option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    width: 100%;
+    padding: var(--space-4);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: left;
+    color: var(--text-primary);
+}
+
+.export-option:hover:not(:disabled) {
+    border-color: var(--border-secondary);
+    background: var(--bg-secondary);
+}
+
+.export-option:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.export-option.success {
+    border-color: #22c55e;
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.export-option.success svg {
+    color: #22c55e;
+}
+
+.export-option svg {
+    flex-shrink: 0;
+    color: var(--accent-primary);
+}
+
+.export-option .spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.export-option-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.export-option-title {
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+}
+
+.export-option-desc {
+    font-size: var(--font-size-caption);
+    color: var(--text-muted);
+}
+
+/* Mobile */
+@media (max-width: 639px) {
+    .export-modal {
+        padding: var(--space-5);
+    }
+
+    .export-preview-result {
+        font-size: var(--font-size-display-xs);
+    }
+}

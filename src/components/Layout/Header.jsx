@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Search, Menu, X, Settings, ArrowRight, ChevronDown, Coffee } from 'lucide-react'
 import { allCalculators } from '../../data/calculators'
 import { useSettings } from '../../context/SettingsContext'
+import FavoritesDropdown from '../FavoritesDropdown/FavoritesDropdown'
 import './Header.css'
 
 function Header() {
@@ -229,6 +230,8 @@ function Header() {
                                 </div>
                             )}
                         </div>
+
+                        <FavoritesDropdown />
 
                         <button className="header-icon-btn" aria-label="Settings" onClick={openSettings}>
                             <Settings size={18} />
