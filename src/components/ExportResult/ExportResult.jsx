@@ -2,82 +2,128 @@ import { useState, useCallback } from 'react'
 import { Download, FileText, File, X, Loader, Check } from 'lucide-react'
 import './ExportResult.css'
 
-// Convert markdown to HTML
-function markdownToHtml(markdown) {
+// Convert markdown to beautifully styled HTML for PDF
+function markdownToStyledHtml(markdown) {
     if (!markdown) return ''
 
-    let html = markdown
+    const lines = markdown.split('\n')
+    const result = []
+    let sectionNumber = 0
+    let questionNumber = 0
 
-    // Escape HTML entities first
-    html = html.replace(/&/g, '&amp;')
+    lines.forEach((line, index) => {
+        const trimmed = line.trim()
 
-    // Headers (must be done before other replacements)
-    html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>')
-    html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>')
+        // Skip empty lines
+        if (!trimmed) {
+            result.push('<div class="spacer"></div>')
+            return
+        }
 
-    // Bold text with ** or __
-    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    html = html.replace(/__(.+?)__/g, '<strong>$1</strong>')
+        // Dividers (=== or ---)
+        if (/^[=]{3,}$/.test(trimmed)) {
+            result.push('<hr class="section-divider">')
+            return
+        }
+        if (/^[-]{3,}$/.test(trimmed)) {
+            result.push('<hr>')
+            return
+        }
 
-    // Italic text with * or _
-    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>')
-    html = html.replace(/_([^_]+)_/g, '<em>$1</em>')
+        // H1: # Header
+        const h1Match = trimmed.match(/^#\s+(.+)$/)
+        if (h1Match) {
+            result.push(`<h1 class="main-title">${cleanInlineMarkdown(h1Match[1])}</h1>`)
+            return
+        }
 
-    // Code blocks with ```
-    html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+        // H2: ## Header (with numbered badge)
+        const h2Match = trimmed.match(/^##\s+(.+)$/)
+        if (h2Match) {
+            sectionNumber++
+            result.push(`<h2 class="section-header"><span class="section-badge">${sectionNumber}</span>${cleanInlineMarkdown(h2Match[1])}</h2>`)
+            return
+        }
 
-    // Inline code with `
-    html = html.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
+        // H3: ### Header
+        const h3Match = trimmed.match(/^###\s+(.+)$/)
+        if (h3Match) {
+            result.push(`<h3 class="sub-header">${cleanInlineMarkdown(h3Match[1])}</h3>`)
+            return
+        }
 
-    // Horizontal rules (=== or ---)
-    html = html.replace(/^={3,}$/gm, '<hr class="section-divider">')
-    html = html.replace(/^-{3,}$/gm, '<hr>')
+        // H4: #### Header
+        const h4Match = trimmed.match(/^####\s+(.+)$/)
+        if (h4Match) {
+            result.push(`<h4 class="sub-sub-header">${cleanInlineMarkdown(h4Match[1])}</h4>`)
+            return
+        }
 
-    // Unordered lists (bullets with *, -, •)
-    html = html.replace(/^[\*\-•] (.+)$/gm, '<li>$1</li>')
+        // Numbered section like "1. Key Concepts"
+        const numberedSectionMatch = trimmed.match(/^(\d+)\.\s+(.+)$/)
+        if (numberedSectionMatch && !trimmed.match(/^[a-d]\)/i)) {
+            const num = numberedSectionMatch[1]
+            const text = cleanInlineMarkdown(numberedSectionMatch[2])
+            // Check if it's a major section (short text, likely a title)
+            if (text.length < 60 && !text.includes(':')) {
+                result.push(`<h2 class="section-header"><span class="section-badge">${num}</span>${text}</h2>`)
+            } else {
+                result.push(`<div class="numbered-item"><span class="number-badge">${num}</span><span class="item-text">${text}</span></div>`)
+            }
+            return
+        }
 
-    // Wrap consecutive li elements in ul
-    html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => `<ul>${match}</ul>`)
+        // Bullet points: * item, - item, • item
+        const bulletMatch = trimmed.match(/^[\*\-•]\s+(.+)$/)
+        if (bulletMatch) {
+            result.push(`<div class="bullet-item"><span class="bullet-dot"></span><span class="bullet-text">${cleanInlineMarkdown(bulletMatch[1])}</span></div>`)
+            return
+        }
 
-    // Numbered lists
-    html = html.replace(/^\d+\. (.+)$/gm, '<li class="numbered">$1</li>')
+        // Answer choices: a) b) c) d) or A) B) C) D)
+        const choiceMatch = trimmed.match(/^([a-dA-D])[)]\s+(.+)$/)
+        if (choiceMatch) {
+            result.push(`<div class="choice-item"><span class="choice-badge">${choiceMatch[1].toLowerCase()}</span><span class="choice-text">${cleanInlineMarkdown(choiceMatch[2])}</span></div>`)
+            return
+        }
 
-    // Wrap consecutive numbered li in ol
-    html = html.replace(/(<li class="numbered">.*<\/li>\n?)+/g, (match) => `<ol>${match.replace(/ class="numbered"/g, '')}</ol>`)
+        // Question detection
+        if (/^(Question\s*\d*|Q\d+)/i.test(trimmed)) {
+            questionNumber++
+            const questionText = trimmed.replace(/^(Question\s*\d*:?\s*|Q\d+:?\s*)/i, '')
+            result.push(`<div class="question-box"><span class="question-badge">${questionNumber}</span><span class="question-text">${cleanInlineMarkdown(questionText)}</span></div>`)
+            return
+        }
 
-    // Links [text](url)
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+        // Answer detection
+        if (/^Answer:/i.test(trimmed)) {
+            const answerText = trimmed.replace(/^Answer:\s*/i, '')
+            result.push(`<div class="answer-box"><span class="answer-label">✓ ANSWER</span><div class="answer-text">${cleanInlineMarkdown(answerText)}</div></div>`)
+            return
+        }
 
-    // Questions with answers (special formatting)
-    html = html.replace(/^(Question \d+|Q\d+:?)(.*)$/gm, '<div class="question"><span class="question-label">$1</span>$2</div>')
-    html = html.replace(/^(Answer:?)(.*)$/gm, '<div class="answer"><span class="answer-label">$1</span>$2</div>')
+        // Regular paragraph
+        result.push(`<p class="paragraph">${cleanInlineMarkdown(trimmed)}</p>`)
+    })
 
-    // Line breaks (double newline = paragraph, single = br)
-    html = html.replace(/\n\n/g, '</p><p>')
-    html = html.replace(/\n/g, '<br>')
+    return result.join('\n')
+}
 
-    // Wrap in paragraphs
-    html = '<p>' + html + '</p>'
+// Clean inline markdown (bold, italic, code)
+function cleanInlineMarkdown(text) {
+    if (!text) return ''
 
-    // Clean up empty paragraphs
-    html = html.replace(/<p><\/p>/g, '')
-    html = html.replace(/<p>(<h[123]>)/g, '$1')
-    html = html.replace(/(<\/h[123]>)<\/p>/g, '$1')
-    html = html.replace(/<p>(<ul>)/g, '$1')
-    html = html.replace(/(<\/ul>)<\/p>/g, '$1')
-    html = html.replace(/<p>(<ol>)/g, '$1')
-    html = html.replace(/(<\/ol>)<\/p>/g, '$1')
-    html = html.replace(/<p>(<pre>)/g, '$1')
-    html = html.replace(/(<\/pre>)<\/p>/g, '$1')
-    html = html.replace(/<p>(<hr[^>]*>)/g, '$1')
-    html = html.replace(/(<hr[^>]*>)<\/p>/g, '$1')
-    html = html.replace(/<p>(<div)/g, '<div')
-    html = html.replace(/(<\/div>)<\/p>/g, '</div>')
-    html = html.replace(/<p><br>/g, '<p>')
-    html = html.replace(/<br><\/p>/g, '</p>')
+    // Bold with **
+    text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    text = text.replace(/__(.+?)__/g, '<strong>$1</strong>')
 
-    return html
+    // Italic with *
+    text = text.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>')
+
+    // Inline code
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>')
+
+    return text
 }
 
 function ExportResult({
@@ -154,14 +200,14 @@ function ExportResult({
         }
     }, [title, getExportContent])
 
-    // Export as PDF with proper formatting
+    // Export as PDF with beautiful styling
     const exportAsPDF = useCallback(() => {
         setExporting(true)
         setExportType('pdf')
 
         try {
             const rawContent = fullContent || (typeof resultDetails === 'string' ? resultDetails : '')
-            const formattedContent = markdownToHtml(rawContent)
+            const formattedContent = markdownToStyledHtml(rawContent)
 
             const printWindow = window.open('', '_blank')
 
@@ -184,210 +230,303 @@ function ExportResult({
         
         body {
             font-family: 'Inter', system-ui, sans-serif;
-            padding: 48px;
+            padding: 40px 48px;
             line-height: 1.7;
             color: #1f2937;
             background: #fff;
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
         }
         
         /* Header */
-        .header {
+        .pdf-header {
             text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 24px;
-            border-bottom: 3px solid #a78bfa;
-        }
-        
-        .header h1 {
-            font-size: 32px;
-            font-weight: 700;
-            color: #1f2937;
-            margin-bottom: 8px;
-        }
-        
-        .header .subtitle {
-            font-size: 14px;
-            color: #6b7280;
-        }
-        
-        /* Result Box */
-        .result-box {
-            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
-            border: 2px solid #a78bfa;
-            border-radius: 16px;
-            padding: 24px;
             margin-bottom: 32px;
-            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #7c3aed;
         }
         
-        .result-box .label {
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #7c3aed;
-            margin-bottom: 8px;
-        }
-        
-        .result-box .value {
-            font-size: 36px;
-            font-weight: 700;
-            color: #5b21b6;
-        }
-        
-        /* Content */
-        .content {
-            font-size: 15px;
-            line-height: 1.8;
-        }
-        
-        .content h1 {
+        .pdf-header h1 {
             font-size: 28px;
             font-weight: 700;
             color: #1f2937;
-            margin: 32px 0 16px 0;
-            padding-bottom: 12px;
+            margin-bottom: 6px;
+        }
+        
+        .pdf-header .subtitle {
+            font-size: 13px;
+            color: #6b7280;
+        }
+        
+        /* Main Title */
+        .main-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 24px 0 16px 0;
+            padding-bottom: 10px;
             border-bottom: 2px solid #e5e7eb;
         }
         
-        .content h2 {
-            font-size: 22px;
+        /* Section Headers with Badge */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
             font-weight: 600;
-            color: #374151;
-            margin: 28px 0 14px 0;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #e5e7eb;
+            color: #7c3aed;
+            margin: 28px 0 16px 0;
         }
         
-        .content h3 {
-            font-size: 18px;
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        /* Sub Headers */
+        .sub-header {
+            font-size: 17px;
             font-weight: 600;
             color: #4b5563;
-            margin: 24px 0 12px 0;
+            margin: 20px 0 10px 0;
         }
         
-        .content p {
-            margin: 12px 0;
+        .sub-sub-header {
+            font-size: 15px;
+            font-weight: 600;
+            color: #6b7280;
+            margin: 16px 0 8px 0;
+        }
+        
+        /* Paragraphs */
+        .paragraph {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #374151;
+            margin: 10px 0;
+        }
+        
+        /* Numbered Items */
+        .numbered-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 16px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 10px;
+            border: 1px solid #ddd6fe;
+        }
+        
+        .number-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 26px;
+            height: 26px;
+            background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+            color: white;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .item-text {
+            font-size: 14px;
+            line-height: 1.6;
             color: #374151;
         }
         
-        .content ul, .content ol {
-            margin: 16px 0;
-            padding-left: 24px;
+        /* Bullet Items */
+        .bullet-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 16px;
+            margin: 6px 0 6px 16px;
+            border-left: 3px solid #a78bfa;
+            background: #faf5ff;
         }
         
-        .content li {
-            margin: 8px 0;
+        .bullet-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, #a78bfa, #7c3aed);
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+        
+        .bullet-text {
+            font-size: 14px;
+            line-height: 1.6;
             color: #374151;
         }
         
-        .content li::marker {
-            color: #7c3aed;
+        /* Answer Choices */
+        .choice-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 14px;
+            margin: 4px 0 4px 20px;
         }
         
-        .content strong {
+        .choice-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+            flex-shrink: 0;
+        }
+        
+        .choice-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #374151;
+        }
+        
+        /* Question Box */
+        .question-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px 20px;
+            margin: 20px 0 12px 0;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 12px;
+            border: 1px solid #93c5fd;
+        }
+        
+        .question-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .question-text {
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.6;
+            color: #1e40af;
+        }
+        
+        /* Answer Box */
+        .answer-box {
+            padding: 14px 20px;
+            margin: 8px 0 20px 0;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-radius: 12px;
+            border: 1px solid #86efac;
+        }
+        
+        .answer-label {
+            display: inline-block;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        .answer-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: #166534;
+        }
+        
+        /* Dividers */
+        hr {
+            border: none;
+            height: 1px;
+            background: #e5e7eb;
+            margin: 20px 0;
+        }
+        
+        hr.section-divider {
+            height: 3px;
+            background: linear-gradient(90deg, #a78bfa, #7c3aed, #a78bfa);
+            margin: 28px 0;
+        }
+        
+        /* Inline Styles */
+        strong {
             font-weight: 600;
             color: #1f2937;
         }
         
-        .content em {
+        em {
             font-style: italic;
-            color: #4b5563;
+            color: #6b7280;
         }
         
-        .content hr {
-            border: none;
-            height: 1px;
-            background: #e5e7eb;
-            margin: 24px 0;
-        }
-        
-        .content hr.section-divider {
-            height: 3px;
-            background: linear-gradient(90deg, #a78bfa, #7c3aed);
-            margin: 32px 0;
-        }
-        
-        .content pre {
-            background: #1f2937;
-            color: #f3f4f6;
-            padding: 20px;
-            border-radius: 12px;
-            overflow-x: auto;
-            margin: 20px 0;
-            font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-        
-        .content code.inline-code {
-            background: #f3f4f6;
+        code {
+            background: #f3e8ff;
             color: #7c3aed;
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
             font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 14px;
+            font-size: 13px;
         }
         
-        .content .question {
-            background: #eff6ff;
-            border-left: 4px solid #3b82f6;
-            padding: 16px 20px;
-            margin: 20px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        
-        .content .question-label {
-            font-weight: 700;
-            color: #1d4ed8;
-        }
-        
-        .content .answer {
-            background: #f0fdf4;
-            border-left: 4px solid #22c55e;
-            padding: 16px 20px;
-            margin: 12px 0 24px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        
-        .content .answer-label {
-            font-weight: 700;
-            color: #16a34a;
-        }
-        
-        .content a {
-            color: #7c3aed;
-            text-decoration: none;
+        .spacer {
+            height: 8px;
         }
         
         /* Footer */
-        .footer {
-            margin-top: 48px;
-            padding-top: 24px;
+        .pdf-footer {
+            margin-top: 40px;
+            padding-top: 20px;
             border-top: 2px solid #e5e7eb;
             text-align: center;
             font-size: 12px;
             color: #9ca3af;
         }
         
-        .footer a {
-            color: #7c3aed;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .footer .logo {
+        .pdf-footer .logo {
             font-size: 14px;
             font-weight: 600;
-            color: #6b7280;
+            color: #7c3aed;
             margin-bottom: 4px;
+        }
+        
+        .pdf-footer a {
+            color: #7c3aed;
+            text-decoration: none;
         }
         
         @media print {
             body { 
-                padding: 24px;
+                padding: 20px;
                 max-width: 100%;
             }
             .no-print { display: none; }
@@ -395,23 +534,16 @@ function ExportResult({
     </style>
 </head>
 <body>
-    <div class="header">
+    <div class="pdf-header">
         <h1>${title}</h1>
         <p class="subtitle">Generated by Plainly Tools</p>
     </div>
-    
-    ${result && result !== 'Ready' && !result.includes('Ready') ? `
-    <div class="result-box">
-        <div class="label">Result</div>
-        <div class="value">${result}${resultUnit ? ' ' + resultUnit : ''}</div>
-    </div>
-    ` : ''}
     
     <div class="content">
         ${formattedContent}
     </div>
     
-    <div class="footer">
+    <div class="pdf-footer">
         <p class="logo">📊 Plainly Tools</p>
         <p><a href="https://plainly.live${window.location.pathname}">${window.location.href}</a></p>
         <p>${new Date().toLocaleDateString('en-US', {
@@ -450,7 +582,7 @@ function ExportResult({
         }
     }, [title, result, resultUnit, resultDetails, fullContent])
 
-    // Preview content for display
+    // Preview content
     const previewContent = fullContent
         ? fullContent.substring(0, 200) + (fullContent.length > 200 ? '...' : '')
         : (typeof resultDetails === 'string'
@@ -470,7 +602,6 @@ function ExportResult({
                     <p>Download your result as a file</p>
                 </div>
 
-                {/* Preview */}
                 <div className="export-preview">
                     <div className="export-preview-card">
                         <span className="export-preview-title">{title}</span>
@@ -481,7 +612,6 @@ function ExportResult({
                     </div>
                 </div>
 
-                {/* Export Options */}
                 <div className="export-options">
                     <button
                         className={`export-option ${exported && exportType === 'text' ? 'success' : ''}`}
