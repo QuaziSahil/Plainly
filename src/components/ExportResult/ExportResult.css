@@ -109,8 +109,24 @@
 .export-preview-title {
     display: block;
     font-size: var(--font-size-body-sm);
-    color: var(--text-muted);
+    font-weight: var(--font-weight-medium);
+    color: #a78bfa;
     margin-bottom: var(--space-3);
+}
+
+.export-preview-content {
+    font-size: var(--font-size-body-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    text-align: left;
+    max-height: 150px;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin-bottom: var(--space-3);
+    padding: var(--space-3);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-md);
 }
 
 .export-preview-result {

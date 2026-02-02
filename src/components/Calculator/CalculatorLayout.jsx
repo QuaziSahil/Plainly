@@ -20,6 +20,7 @@ function CalculatorLayout({
     resultLabel,
     resultUnit,
     resultDetails,
+    fullContent, // Full content for AI tools export
     onReset,
     toolType = 'calculator' // 'calculator', 'ai', or 'converter'
 }) {
@@ -392,7 +393,8 @@ function CalculatorLayout({
                         title={title}
                         result={result}
                         resultUnit={resultUnit}
-                        resultDetails={typeof resultDetails === 'object' ? null : resultDetails}
+                        resultDetails={typeof resultDetails === 'string' ? resultDetails : null}
+                        fullContent={fullContent}
                         onClose={() => setShowExport(false)}
                     />
                 )}
