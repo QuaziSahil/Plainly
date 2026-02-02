@@ -59,6 +59,8 @@ function AIPracticeProblemGenerator() {
             icon={Calculator}
             result={result ? "Problems Ready" : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

@@ -59,6 +59,8 @@ function AIMetaDescriptionGenerator() {
             icon={Search}
             result={result ? 'Descriptions Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

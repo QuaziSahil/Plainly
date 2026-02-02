@@ -59,6 +59,8 @@ function AIInstagramCaptionGenerator() {
             icon={Instagram}
             result={result ? 'Captions Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

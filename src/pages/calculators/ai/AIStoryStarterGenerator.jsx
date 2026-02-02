@@ -52,6 +52,8 @@ function AIStoryStarterGenerator() {
             icon={PenTool}
             result={result ? 'Starters Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

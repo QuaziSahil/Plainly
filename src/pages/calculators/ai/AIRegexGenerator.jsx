@@ -111,6 +111,8 @@ Format your response with the regex pattern first, then explanation.`
             icon={Regex}
             result={result ? 'Pattern Ready' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Description Input */}

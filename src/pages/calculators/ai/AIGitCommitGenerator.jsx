@@ -89,6 +89,8 @@ Provide 3 alternative commit messages, from most concise to most detailed.`
             icon={GitCommit}
             result={result ? 'Messages Ready' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Changes Input */}

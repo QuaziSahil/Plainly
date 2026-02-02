@@ -97,6 +97,8 @@ Provide 5 naming suggestions following ${language} conventions.`
             icon={FunctionSquare}
             result={result ? 'Names Ready' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Description Input */}

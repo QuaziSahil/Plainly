@@ -91,6 +91,8 @@ Provide a complete, well-reasoned technology stack recommendation.`
             icon={Layers}
             result={result ? 'Stack Ready' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Project Type Input */}

@@ -52,6 +52,8 @@ function AIJokeGenerator() {
             icon={Laugh}
             result={result ? 'Jokes Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

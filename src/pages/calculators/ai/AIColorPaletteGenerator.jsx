@@ -60,6 +60,8 @@ function AIColorPaletteGenerator() {
             icon={Palette}
             result={result ? 'Palette Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

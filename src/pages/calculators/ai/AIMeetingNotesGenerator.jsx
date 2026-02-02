@@ -57,6 +57,8 @@ function AIMeetingNotesGenerator() {
             icon={ClipboardList}
             result={result ? 'Notes Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

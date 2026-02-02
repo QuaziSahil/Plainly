@@ -59,6 +59,8 @@ function AIQuizGenerator() {
             icon={ListChecks}
             result={result ? "Quiz Ready" : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

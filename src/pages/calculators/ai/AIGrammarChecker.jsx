@@ -55,6 +55,8 @@ function AIGrammarChecker() {
             icon={CheckSquare}
             result={result ? 'Corrected' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

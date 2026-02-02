@@ -96,6 +96,8 @@ Provide a clear, educational explanation.`
             icon={BookOpen}
             result={result ? 'Explained' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Code Input */}

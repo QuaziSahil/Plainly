@@ -61,6 +61,8 @@ function AIEmailGenerator() {
             icon={Mail}
             result={result ? 'Draft Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Purpose Input */}

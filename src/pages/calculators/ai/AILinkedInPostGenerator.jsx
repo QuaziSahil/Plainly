@@ -59,6 +59,8 @@ function AILinkedInPostGenerator() {
             icon={Linkedin}
             result={result ? 'Posts Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

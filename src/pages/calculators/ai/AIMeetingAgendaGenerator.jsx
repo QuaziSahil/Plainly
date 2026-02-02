@@ -59,6 +59,8 @@ function AIMeetingAgendaGenerator() {
             icon={Calendar}
             result={result ? 'Agenda Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

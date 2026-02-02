@@ -55,6 +55,8 @@ function AIMnemonicGenerator() {
             icon={Brain}
             result={result ? "Mnemonic Ready" : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

@@ -57,6 +57,8 @@ function AIVoiceTransformer() {
             icon={Volume2}
             result={result ? 'Analysis Complete' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group" style={{ marginBottom: '24px' }}>

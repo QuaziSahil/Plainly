@@ -72,6 +72,8 @@ Return ONLY the HTML code in a markdown code block.`
             icon={Code2}
             result={result ? 'HTML5 Code' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Description Input */}

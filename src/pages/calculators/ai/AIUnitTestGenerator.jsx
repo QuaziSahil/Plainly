@@ -109,6 +109,8 @@ Return ONLY the test code in a markdown code block.`
             icon={FlaskConical}
             result={result ? `${framework.toUpperCase()} Tests` : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Code Input */}

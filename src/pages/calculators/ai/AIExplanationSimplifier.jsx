@@ -57,6 +57,8 @@ function AIExplanationSimplifier() {
             icon={BrainCircuit}
             result={result ? "Explanation Ready" : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

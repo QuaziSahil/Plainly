@@ -82,6 +82,8 @@ Include:
             icon={Server}
             result={result ? 'API Designed' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Description Input */}

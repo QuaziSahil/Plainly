@@ -57,6 +57,8 @@ function AIStudyGuideGenerator() {
             icon={GraduationCap}
             result={result ? "Guide Ready" : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

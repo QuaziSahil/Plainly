@@ -75,6 +75,8 @@ Return ONLY the CSS code in a markdown code block.`
             icon={Paintbrush}
             result={result ? `${method.toUpperCase()} CSS` : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Description Input */}

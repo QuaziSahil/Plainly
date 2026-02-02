@@ -68,6 +68,8 @@ function TextSummarizer() {
             icon={FileSearch}
             result={result ? `${reduction}% shorter` : 'Ready'}
             resultLabel="Reduction"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Text Input */}

@@ -73,6 +73,8 @@ Provide a detailed recommendation with complexity analysis and implementation gu
             icon={Cpu}
             result={result ? 'Recommended' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Problem Input */}

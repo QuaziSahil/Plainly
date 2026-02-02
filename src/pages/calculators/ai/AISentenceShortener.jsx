@@ -55,6 +55,8 @@ function AISentenceShortener() {
             icon={Minimize2}
             result={result ? 'Shortened' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

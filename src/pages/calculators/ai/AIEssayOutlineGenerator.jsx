@@ -57,6 +57,8 @@ function AIEssayOutlineGenerator() {
             icon={BookOpen}
             result={result ? 'Outline Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

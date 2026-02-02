@@ -94,6 +94,8 @@ Return ONLY the converted ${toLang} code in a markdown code block.`
             icon={ArrowRightLeft}
             result={result ? `${toLang.toUpperCase()} Code` : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Code Input */}

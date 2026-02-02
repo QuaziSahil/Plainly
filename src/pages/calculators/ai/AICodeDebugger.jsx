@@ -94,6 +94,8 @@ Find and fix any issues.`
             icon={Bug}
             result={result ? 'Analysis Ready' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Code Input */}

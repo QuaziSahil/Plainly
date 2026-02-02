@@ -61,6 +61,8 @@ function ParagraphGenerator() {
             icon={FileText}
             result={result ? `${wordCount} words` : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Topic Input */}

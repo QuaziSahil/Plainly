@@ -94,6 +94,8 @@ Provide 5 naming suggestions with brief explanation of each.`
             icon={Variable}
             result={result ? 'Names Ready' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Description Input */}

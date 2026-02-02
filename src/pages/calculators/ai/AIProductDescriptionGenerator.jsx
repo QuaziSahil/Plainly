@@ -61,6 +61,8 @@ function AIProductDescriptionGenerator() {
             icon={ShoppingBag}
             result={result ? 'Description Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

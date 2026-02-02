@@ -52,6 +52,8 @@ function AIBandNameGenerator() {
             icon={Disc}
             result={result ? 'Names Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

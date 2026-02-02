@@ -59,6 +59,8 @@ function AITweetGenerator() {
             icon={Twitter}
             result={result ? 'Tweets Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

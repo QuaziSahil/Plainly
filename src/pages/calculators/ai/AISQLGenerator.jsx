@@ -77,6 +77,8 @@ Return ONLY the SQL query in a markdown code block.`
             icon={Database}
             result={result ? `${dbType.toUpperCase()} Query` : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Description Input */}

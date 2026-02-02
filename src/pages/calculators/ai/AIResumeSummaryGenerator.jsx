@@ -59,6 +59,8 @@ function AIResumeSummaryGenerator() {
             icon={UserCircle}
             result={result ? 'Summaries Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

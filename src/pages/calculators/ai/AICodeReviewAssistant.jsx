@@ -104,6 +104,8 @@ Provide a thorough code review with specific suggestions for improvement.`
             icon={Search}
             result={result ? 'Review Ready' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Code Input */}

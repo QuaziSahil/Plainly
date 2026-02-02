@@ -57,6 +57,8 @@ function AICitationGenerator() {
             icon={Quote}
             result={result ? "Citation Generated" : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

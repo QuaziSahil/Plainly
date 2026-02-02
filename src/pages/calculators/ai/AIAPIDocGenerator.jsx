@@ -83,6 +83,8 @@ Provide complete, professional API documentation.`
             icon={FileText}
             result={result ? 'Docs Ready' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Code Input */}

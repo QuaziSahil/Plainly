@@ -55,6 +55,8 @@ function AIAnnotatedBibliography() {
             icon={Library}
             result={result ? "Bibliography Ready" : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

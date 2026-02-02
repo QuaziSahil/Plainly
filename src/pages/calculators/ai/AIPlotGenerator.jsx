@@ -52,6 +52,8 @@ function AIPlotGenerator() {
             icon={Map}
             result={result ? 'Plot Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

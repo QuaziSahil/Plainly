@@ -79,6 +79,8 @@ Return ONLY the complete SQL schema in a markdown code block.`
             icon={Database}
             result={result ? `${dbType.toUpperCase()} Schema` : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Description Input */}

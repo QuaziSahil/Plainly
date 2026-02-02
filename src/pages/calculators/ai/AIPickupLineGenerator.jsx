@@ -52,6 +52,8 @@ function AIPickupLineGenerator() {
             icon={Heart}
             result={result ? 'Lines Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

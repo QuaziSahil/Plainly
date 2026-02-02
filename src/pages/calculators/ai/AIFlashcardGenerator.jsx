@@ -57,6 +57,8 @@ function AIFlashcardGenerator() {
             icon={BookOpen}
             result={result ? "Flashcards Ready" : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

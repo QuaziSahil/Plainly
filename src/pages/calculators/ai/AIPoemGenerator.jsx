@@ -59,6 +59,8 @@ function AIPoemGenerator() {
             icon={Feather}
             result={result ? 'Poem Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

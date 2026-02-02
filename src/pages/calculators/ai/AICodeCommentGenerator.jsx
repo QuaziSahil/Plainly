@@ -95,6 +95,8 @@ Return ONLY the commented code in a markdown code block.`
             icon={MessageSquareCode}
             result={result ? 'Commented Code' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Code Input */}

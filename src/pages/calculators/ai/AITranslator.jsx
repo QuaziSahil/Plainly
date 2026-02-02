@@ -65,6 +65,8 @@ function AITranslator() {
             icon={Languages}
             result={result ? '✓ Translated' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Input Text */}

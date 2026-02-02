@@ -59,6 +59,8 @@ function AILessonPlanGenerator() {
             icon={Presentation}
             result={result ? "Plan Ready" : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

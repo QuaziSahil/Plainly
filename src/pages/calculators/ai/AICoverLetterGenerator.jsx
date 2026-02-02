@@ -63,6 +63,8 @@ function AICoverLetterGenerator() {
             icon={Briefcase}
             result={result ? 'Draft Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-row">

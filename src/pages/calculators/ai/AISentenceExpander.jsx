@@ -55,6 +55,8 @@ function AISentenceExpander() {
             icon={Maximize2}
             result={result ? 'Expanded' : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

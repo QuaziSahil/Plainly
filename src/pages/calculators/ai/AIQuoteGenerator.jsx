@@ -57,6 +57,8 @@ function AIQuoteGenerator() {
             icon={Quote}
             result={result ? 'Quotes Ready' : 'Ready'}
             resultLabel="Generated"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">

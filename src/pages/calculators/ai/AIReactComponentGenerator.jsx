@@ -83,6 +83,8 @@ Return ONLY the component code in a markdown code block.`
             icon={Component}
             result={result ? `React ${type === 'typescript' ? 'TSX' : 'JSX'}` : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             {/* Description Input */}

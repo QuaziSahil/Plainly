@@ -55,6 +55,8 @@ function AIAnalogyGenerator() {
             icon={ArrowRightLeft}
             result={result ? "Analogies Ready" : 'Ready'}
             resultLabel="Status"
+            fullContent={result}
+            toolType="ai"
             onReset={handleReset}
         >
             <div className="input-group">
