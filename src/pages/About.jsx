@@ -1,4 +1,4 @@
-import { Calculator, Heart, Brain, ArrowRightLeft, Sparkles, Shield, Zap } from 'lucide-react'
+import { Calculator, Heart, Brain, ArrowRightLeft, Sparkles, Shield, Zap, Wand2, Type, Cpu, Leaf, Home, Gamepad2 } from 'lucide-react'
 import './About.css'
 
 function About() {
@@ -6,25 +6,32 @@ function About() {
         {
             icon: Sparkles,
             title: 'Precision First',
-            description: 'Every calculator is built with mathematical accuracy at its core. No approximations, no shortcuts.'
+            description: 'Every tool is built with accuracy at its core. From AI generators to calculators — no approximations, no shortcuts.'
         },
         {
             icon: Zap,
             title: 'Lightning Fast',
-            description: 'Instant calculations with no loading screens. Just pure, immediate results when you need them.'
+            description: 'Instant results with no loading screens. Just pure, immediate output when you need it.'
         },
         {
             icon: Shield,
             title: 'Privacy Focused',
-            description: 'All calculations happen locally in your browser. Your data never leaves your device.'
+            description: 'All processing happens locally in your browser. Your data never leaves your device.'
         }
     ]
 
     const categories = [
-        { icon: Calculator, name: 'Finance', count: '8+ Tools', desc: 'Mortgages, investments, loans, and more' },
-        { icon: Heart, name: 'Health', count: '6+ Tools', desc: 'BMI, calories, macros, and fitness trackers' },
-        { icon: Brain, name: 'Mathematics', count: '6+ Tools', desc: 'Percentages, fractions, and advanced math' },
-        { icon: ArrowRightLeft, name: 'Converters', count: '6+ Tools', desc: 'Units, currencies, and measurements' }
+        { icon: Wand2, name: 'AI Tools', count: '43 Tools', desc: 'Text generators, code helpers, image creators & more' },
+        { icon: Calculator, name: 'Finance', count: '38 Tools', desc: 'Mortgages, investments, loans, taxes & crypto' },
+        { icon: Heart, name: 'Health', count: '27 Tools', desc: 'BMI, calories, macros, pregnancy & fitness' },
+        { icon: Brain, name: 'Mathematics', count: '28 Tools', desc: 'Percentages, fractions, statistics & geometry' },
+        { icon: ArrowRightLeft, name: 'Converters', count: '16 Tools', desc: 'Units, temperature, weight & measurements' },
+        { icon: Type, name: 'Text Tools', count: '11 Tools', desc: 'Word counter, formatters & text utilities' },
+        { icon: Cpu, name: 'Tech', count: '13 Tools', desc: 'QR codes, hashing, base converters & dev tools' },
+        { icon: Leaf, name: 'Sustainability', count: '9 Tools', desc: 'Carbon footprint, solar & eco calculators' },
+        { icon: Home, name: 'Real Estate', count: '7 Tools', desc: 'Flooring, paint, tile & property tools' },
+        { icon: Gamepad2, name: 'Fun', count: '17 Tools', desc: 'Dice, spinners, games & random generators' },
+        { icon: Sparkles, name: 'Other', count: '40 Tools', desc: 'Age, GPA, time zones & everyday utilities' }
     ]
 
     return (
@@ -46,17 +53,17 @@ function About() {
                         <h2>Our Mission</h2>
                         <p className="lead-text">
                             In a world cluttered with ads, trackers, and unnecessary complexity,
-                            <strong> Plainly Calculate</strong> stands as a sanctuary of simplicity.
+                            <strong> Plainly Tools</strong> stands as a sanctuary of simplicity.
                         </p>
                         <p>
-                            We believe that calculation tools should be exactly that — tools.
+                            We believe that online tools should be exactly that — tools.
                             Not advertising platforms. Not data collection points. Just clean,
                             fast, accurate instruments that help you get your work done.
                         </p>
                         <p>
-                            Every calculator on this platform is designed with intention.
-                            The dark interface reduces eye strain. The minimal design eliminates
-                            distractions. The instant calculations respect your time.
+                            Every tool on this platform — from AI generators to calculators to converters —
+                            is designed with intention. The dark interface reduces eye strain. The minimal
+                            design eliminates distractions. The instant results respect your time.
                         </p>
                     </div>
                 </section>
@@ -81,7 +88,7 @@ function About() {
                 <section className="about-section">
                     <h2>Our Instruments</h2>
                     <p className="section-intro">
-                        A curated collection of calculators spanning four essential categories.
+                        A curated collection of 249+ tools spanning 11 categories.
                     </p>
                     <div className="categories-grid">
                         {categories.map((cat) => (
@@ -108,7 +115,7 @@ function About() {
                             <p className="creator-role">Developer & Designer</p>
                             <p className="creator-bio">
                                 A developer passionate about creating tools that are both
-                                beautiful and functional. Plainly Calculate is part of a
+                                beautiful and functional. Plainly Tools is part of a
                                 larger vision to build digital products that respect users —
                                 their time, their privacy, and their intelligence.
                             </p>
