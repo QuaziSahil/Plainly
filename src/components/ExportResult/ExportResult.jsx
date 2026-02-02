@@ -2,12 +2,90 @@ import { useState, useCallback } from 'react'
 import { Download, FileText, File, X, Loader, Check } from 'lucide-react'
 import './ExportResult.css'
 
+// Convert markdown to HTML
+function markdownToHtml(markdown) {
+    if (!markdown) return ''
+
+    let html = markdown
+
+    // Escape HTML entities first
+    html = html.replace(/&/g, '&amp;')
+
+    // Headers (must be done before other replacements)
+    html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>')
+
+    // Bold text with ** or __
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    html = html.replace(/__(.+?)__/g, '<strong>$1</strong>')
+
+    // Italic text with * or _
+    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    html = html.replace(/_([^_]+)_/g, '<em>$1</em>')
+
+    // Code blocks with ```
+    html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+
+    // Inline code with `
+    html = html.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
+
+    // Horizontal rules (=== or ---)
+    html = html.replace(/^={3,}$/gm, '<hr class="section-divider">')
+    html = html.replace(/^-{3,}$/gm, '<hr>')
+
+    // Unordered lists (bullets with *, -, •)
+    html = html.replace(/^[\*\-•] (.+)$/gm, '<li>$1</li>')
+
+    // Wrap consecutive li elements in ul
+    html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => `<ul>${match}</ul>`)
+
+    // Numbered lists
+    html = html.replace(/^\d+\. (.+)$/gm, '<li class="numbered">$1</li>')
+
+    // Wrap consecutive numbered li in ol
+    html = html.replace(/(<li class="numbered">.*<\/li>\n?)+/g, (match) => `<ol>${match.replace(/ class="numbered"/g, '')}</ol>`)
+
+    // Links [text](url)
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+
+    // Questions with answers (special formatting)
+    html = html.replace(/^(Question \d+|Q\d+:?)(.*)$/gm, '<div class="question"><span class="question-label">$1</span>$2</div>')
+    html = html.replace(/^(Answer:?)(.*)$/gm, '<div class="answer"><span class="answer-label">$1</span>$2</div>')
+
+    // Line breaks (double newline = paragraph, single = br)
+    html = html.replace(/\n\n/g, '</p><p>')
+    html = html.replace(/\n/g, '<br>')
+
+    // Wrap in paragraphs
+    html = '<p>' + html + '</p>'
+
+    // Clean up empty paragraphs
+    html = html.replace(/<p><\/p>/g, '')
+    html = html.replace(/<p>(<h[123]>)/g, '$1')
+    html = html.replace(/(<\/h[123]>)<\/p>/g, '$1')
+    html = html.replace(/<p>(<ul>)/g, '$1')
+    html = html.replace(/(<\/ul>)<\/p>/g, '$1')
+    html = html.replace(/<p>(<ol>)/g, '$1')
+    html = html.replace(/(<\/ol>)<\/p>/g, '$1')
+    html = html.replace(/<p>(<pre>)/g, '$1')
+    html = html.replace(/(<\/pre>)<\/p>/g, '$1')
+    html = html.replace(/<p>(<hr[^>]*>)/g, '$1')
+    html = html.replace(/(<hr[^>]*>)<\/p>/g, '$1')
+    html = html.replace(/<p>(<div)/g, '<div')
+    html = html.replace(/(<\/div>)<\/p>/g, '</div>')
+    html = html.replace(/<p><br>/g, '<p>')
+    html = html.replace(/<br><\/p>/g, '</p>')
+
+    return html
+}
+
 function ExportResult({
     title,
     result,
     resultUnit,
     resultDetails,
-    fullContent, // New prop for full AI content
+    fullContent,
     onClose
 }) {
     const [exporting, setExporting] = useState(false)
@@ -18,16 +96,13 @@ function ExportResult({
     const getExportContent = useCallback(() => {
         let content = `${title}\n${'='.repeat(title.length)}\n\n`
 
-        // If fullContent is provided (for AI tools), use it
         if (fullContent) {
             content += fullContent
         } else {
-            // For calculators, build from result and details
             if (result) {
                 content += `Result: ${result}${resultUnit ? ' ' + resultUnit : ''}\n\n`
             }
 
-            // Handle resultDetails - could be string, array, or React element
             if (resultDetails) {
                 if (typeof resultDetails === 'string') {
                     content += resultDetails
@@ -35,9 +110,9 @@ function ExportResult({
                     content += 'Details:\n'
                     resultDetails.forEach(detail => {
                         if (detail.label && detail.value) {
-                            content += `  • ${detail.label}: ${detail.value}\n`
+                            content += `• ${detail.label}: ${detail.value}\n`
                         } else if (typeof detail === 'string') {
-                            content += `  • ${detail}\n`
+                            content += `• ${detail}\n`
                         }
                     })
                 }
@@ -79,15 +154,15 @@ function ExportResult({
         }
     }, [title, getExportContent])
 
-    // Export as PDF
+    // Export as PDF with proper formatting
     const exportAsPDF = useCallback(() => {
         setExporting(true)
         setExportType('pdf')
 
         try {
-            const content = getExportContent()
+            const rawContent = fullContent || (typeof resultDetails === 'string' ? resultDetails : '')
+            const formattedContent = markdownToHtml(rawContent)
 
-            // Create a new window for printing as PDF
             const printWindow = window.open('', '_blank')
 
             if (!printWindow) {
@@ -97,75 +172,224 @@ function ExportResult({
                 return
             }
 
-            // Format content with proper HTML/CSS for PDF
-            const htmlContent = `
-<!DOCTYPE html>
+            const htmlContent = `<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>${title} - Plainly Tools</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            padding: 40px;
-            line-height: 1.6;
-            color: #1a1a1a;
+            font-family: 'Inter', system-ui, sans-serif;
+            padding: 48px;
+            line-height: 1.7;
+            color: #1f2937;
             background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
         }
+        
+        /* Header */
         .header {
-            border-bottom: 2px solid #a78bfa;
-            padding-bottom: 16px;
-            margin-bottom: 24px;
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 3px solid #a78bfa;
         }
-        h1 {
-            font-size: 28px;
-            color: #1a1a1a;
+        
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1f2937;
             margin-bottom: 8px;
         }
+        
+        .header .subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        /* Result Box */
         .result-box {
             background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
-            border: 1px solid #a78bfa;
-            border-radius: 12px;
+            border: 2px solid #a78bfa;
+            border-radius: 16px;
             padding: 24px;
-            margin: 20px 0;
+            margin-bottom: 32px;
+            text-align: center;
         }
-        .result-label {
-            font-size: 14px;
-            color: #666;
+        
+        .result-box .label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #7c3aed;
             margin-bottom: 8px;
         }
-        .result-value {
-            font-size: 32px;
-            font-weight: bold;
+        
+        .result-box .value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #5b21b6;
+        }
+        
+        /* Content */
+        .content {
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        .content h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 32px 0 16px 0;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .content h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #374151;
+            margin: 28px 0 14px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .content h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #4b5563;
+            margin: 24px 0 12px 0;
+        }
+        
+        .content p {
+            margin: 12px 0;
+            color: #374151;
+        }
+        
+        .content ul, .content ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+        
+        .content li {
+            margin: 8px 0;
+            color: #374151;
+        }
+        
+        .content li::marker {
             color: #7c3aed;
         }
-        .result-unit {
-            font-size: 20px;
-            color: #9f7aea;
+        
+        .content strong {
+            font-weight: 600;
+            color: #1f2937;
         }
-        .content {
-            white-space: pre-wrap;
-            font-size: 14px;
-            line-height: 1.8;
-            margin: 20px 0;
+        
+        .content em {
+            font-style: italic;
+            color: #4b5563;
+        }
+        
+        .content hr {
+            border: none;
+            height: 1px;
+            background: #e5e7eb;
+            margin: 24px 0;
+        }
+        
+        .content hr.section-divider {
+            height: 3px;
+            background: linear-gradient(90deg, #a78bfa, #7c3aed);
+            margin: 32px 0;
+        }
+        
+        .content pre {
+            background: #1f2937;
+            color: #f3f4f6;
             padding: 20px;
-            background: #f9fafb;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.5;
         }
-        .footer {
-            margin-top: 40px;
-            padding-top: 16px;
-            border-top: 1px solid #e5e7eb;
-            font-size: 12px;
-            color: #666;
+        
+        .content code.inline-code {
+            background: #f3f4f6;
+            color: #7c3aed;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
         }
-        .footer a {
+        
+        .content .question {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .content .question-label {
+            font-weight: 700;
+            color: #1d4ed8;
+        }
+        
+        .content .answer {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 16px 20px;
+            margin: 12px 0 24px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .content .answer-label {
+            font-weight: 700;
+            color: #16a34a;
+        }
+        
+        .content a {
             color: #7c3aed;
             text-decoration: none;
         }
+        
+        /* Footer */
+        .footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 2px solid #e5e7eb;
+            text-align: center;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        
+        .footer a {
+            color: #7c3aed;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .footer .logo {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        
         @media print {
-            body { padding: 20px; }
+            body { 
+                padding: 24px;
+                max-width: 100%;
+            }
             .no-print { display: none; }
         }
     </style>
@@ -173,26 +397,37 @@ function ExportResult({
 <body>
     <div class="header">
         <h1>${title}</h1>
+        <p class="subtitle">Generated by Plainly Tools</p>
     </div>
     
-    ${result ? `
+    ${result && result !== 'Ready' && !result.includes('Ready') ? `
     <div class="result-box">
-        <div class="result-label">Result</div>
-        <div class="result-value">${result} ${resultUnit ? `<span class="result-unit">${resultUnit}</span>` : ''}</div>
+        <div class="label">Result</div>
+        <div class="value">${result}${resultUnit ? ' ' + resultUnit : ''}</div>
     </div>
     ` : ''}
     
-    <div class="content">${(fullContent || (typeof resultDetails === 'string' ? resultDetails : '')).replace(/\n/g, '<br>')}</div>
+    <div class="content">
+        ${formattedContent}
+    </div>
     
     <div class="footer">
-        <p>Generated by <a href="https://plainly.live">Plainly Tools</a></p>
-        <p>${new Date().toLocaleString()}</p>
+        <p class="logo">📊 Plainly Tools</p>
+        <p><a href="https://plainly.live${window.location.pathname}">${window.location.href}</a></p>
+        <p>${new Date().toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            })}</p>
     </div>
     
     <script>
         window.onload = function() {
-            window.print();
-            setTimeout(function() { window.close(); }, 500);
+            setTimeout(function() { window.print(); }, 300);
+            window.onafterprint = function() { window.close(); };
         }
     </script>
 </body>
@@ -213,7 +448,7 @@ function ExportResult({
             setExporting(false)
             setExportType(null)
         }
-    }, [title, result, resultUnit, resultDetails, fullContent, getExportContent])
+    }, [title, result, resultUnit, resultDetails, fullContent])
 
     // Preview content for display
     const previewContent = fullContent
@@ -284,7 +519,7 @@ function ExportResult({
                             <span className="export-option-title">
                                 {exported && exportType === 'pdf' ? 'Downloaded!' : 'Save as PDF'}
                             </span>
-                            <span className="export-option-desc">Print to PDF format</span>
+                            <span className="export-option-desc">Beautifully formatted PDF</span>
                         </div>
                     </button>
                 </div>
