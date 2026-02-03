@@ -152,13 +152,27 @@ function AIAssistant() {
         }
     }, [isOpen])
 
-    // Parse tool recommendation from response
+    // Parse tool recommendation from response - improved detection
     const parseToolSuggestion = (text) => {
-        const pathMatch = text.match(/\/[\w-]+/)
-        if (pathMatch) {
-            const tool = allCalculators.find(c => c.path === pathMatch[0])
-            if (tool) return tool
+        // First, try to find any explicit paths like /bmi-calculator
+        const pathMatches = text.match(/\/[\w-]+/g)
+        if (pathMatches) {
+            for (const path of pathMatches) {
+                const tool = allCalculators.find(c => c.path === path)
+                if (tool) return tool
+            }
         }
+
+        // Fallback: search for tool name mentions in the text
+        const textLower = text.toLowerCase()
+        for (const calc of allCalculators) {
+            // Check if the tool name is mentioned (case insensitive)
+            const nameLower = calc.name.toLowerCase()
+            if (textLower.includes(nameLower) && nameLower.length > 5) {
+                return calc
+            }
+        }
+
         return null
     }
 

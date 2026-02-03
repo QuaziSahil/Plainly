@@ -38,21 +38,33 @@ export default function AIChat({ visible, onClose }: AIChatProps) {
   const slideAnim = useRef(new Animated.Value(1000)).current;
   const router = useRouter();
 
-  // Parse tool suggestion from response text
+  // Parse tool suggestion from response text - improved detection
   const parseToolSuggestion = (text: string) => {
-    const pathMatch = text.match(/\/[\w-]+/);
-    if (pathMatch) {
-      const path = pathMatch[0];
-      // First check our database
-      const dbTool = getToolFromPath(path);
-      if (dbTool) return dbTool;
+    // First, try to find any explicit paths like /bmi-calculator
+    const pathMatches = text.match(/\/[\w-]+/g);
+    if (pathMatches) {
+      for (const path of pathMatches) {
+        // Check our database first
+        const dbTool = getToolFromPath(path);
+        if (dbTool) return dbTool;
 
-      // Then check allTools
-      const tool = allTools.find(t => t.path === path);
-      if (tool) {
+        // Then check allTools
+        const tool = allTools.find(t => t.path === path);
+        if (tool) {
+          return { name: tool.name, description: tool.description, path: tool.path };
+        }
+      }
+    }
+
+    // Fallback: search for tool name mentions in the text
+    const textLower = text.toLowerCase();
+    for (const tool of allTools) {
+      const nameLower = tool.name.toLowerCase();
+      if (textLower.includes(nameLower) && nameLower.length > 5) {
         return { name: tool.name, description: tool.description, path: tool.path };
       }
     }
+
     return null;
   };
 
