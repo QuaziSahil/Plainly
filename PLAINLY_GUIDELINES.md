@@ -1182,6 +1182,65 @@ Remove-Item -Recurse -Force .\android -ErrorAction SilentlyContinue
 npx expo prebuild --platform android --clean
 ```
 
+---
+
+### ⚠️ CRITICAL: DEPLOYMENT SEPARATION (Website vs Mobile)
+
+The Plainly project contains **two separate deployable apps** in one repository:
+
+| Component | Location | Deployment Target | Build Command |
+|-----------|----------|-------------------|---------------|
+| **Website** | `src/` | Cloudflare Pages | `npm run build` (Vite) |
+| **Mobile App** | `mobile/` | Local APK build | `gradlew assembleRelease` |
+
+#### 🚨 Rules to Prevent Build Failures
+
+**1. NEVER put hard-coded API keys in `mobile/` folder:**
+```typescript
+// ❌ WRONG - Will block GitHub push (secret scanning)
+const API_KEY = 'gsk_xxxxxx';
+
+// ✅ CORRECT - Use environment variable
+const API_KEY = process.env.EXPO_PUBLIC_GROQ_API_KEY || '';
+```
+
+**2. NEVER make `mobile/` a git submodule:**
+- `mobile/` must be a **regular directory** in the repo
+- If `mobile` has its own `.git` folder, **DELETE IT**
+- Cloudflare fails if `mobile/` is a submodule without `.gitmodules` URL
+
+**3. The `mobile/.env` file is gitignored:**
+- API keys stored in `mobile/.env` (not pushed to GitHub)
+- Format: `EXPO_PUBLIC_GROQ_API_KEY=your_key_here`
+- Copy from `mobile/.env.example` if missing
+
+**4. Cloudflare ONLY builds the website:**
+- Cloudflare runs `npm run build` which builds `src/` via Vite
+- Cloudflare ignores `mobile/` folder (it's just code storage)
+- Mobile app is built locally and installed via ADB
+
+#### 🔧 If Cloudflare Build Fails
+
+Common errors and fixes:
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `No url found for submodule 'mobile'` | `mobile/` was added as submodule | Delete `mobile/.git` folder, re-add as regular dir |
+| `GH013: Repository rule violations` | API key in code | Replace with env variable |
+| `fatal: remote origin already exists` | Corrupted `.git/config` | Reset `.git/config` with correct remote URL |
+
+```powershell
+# Fix submodule issue:
+cd c:\Users\rehan\New Apps\Plainly
+Remove-Item -Recurse -Force mobile\.git -ErrorAction SilentlyContinue
+git rm --cached mobile
+git add mobile
+git commit -m "Fix: Add mobile as regular directory"
+git push origin main
+```
+
+---
+
 ### 🎨 AI OUTPUT FORMATTING (MANDATORY FOR ALL AI TOOLS)
 
 **⚠️ CRITICAL RULE:** All AI tools in the mobile app MUST format their output exactly like the website. No raw markdown symbols should ever be visible to users.
