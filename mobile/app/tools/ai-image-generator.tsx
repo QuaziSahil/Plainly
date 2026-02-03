@@ -18,6 +18,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import { Copy, Check, Sparkles, Wand2, Image as ImageIcon, Download, ExternalLink, Share2 } from 'lucide-react-native';
 import * as Clipboard from 'expo-clipboard';
+import { Paths, File as ExpoFile } from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
 import { Colors } from '@/constants/Colors';
 import { askGroq, OfflineError } from '@/services/groqAI';
 import { generateImage, isConfigured } from '@/services/pollinationsAI';
@@ -170,20 +172,76 @@ Rules:
     if (!imageUrl) return;
 
     try {
-      // Open the image in browser so user can save it
+      // Request permissions
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(
+          'Permission Required',
+          'Please allow access to save images to your gallery.',
+          [{ text: 'OK' }]
+        );
+        return;
+      }
+
+      // Show saving indicator
+      Alert.alert('Saving...', 'Downloading image to your gallery...');
+
+      // Generate unique filename
+      const filename = `plainly_ai_${Date.now()}.jpg`;
+
+      // Download image using fetch
+      const response = await fetch(imageUrl);
+      if (!response.ok) {
+        throw new Error('Failed to download image');
+      }
+
+      const blob = await response.blob();
+
+      // Create file in cache directory using new expo-file-system v19 API
+      const file = new ExpoFile(Paths.cache, filename);
+
+      // Convert blob to base64 and write
+      const reader = new FileReader();
+      const base64Promise = new Promise<string>((resolve, reject) => {
+        reader.onload = () => {
+          const result = reader.result as string;
+          // Remove data:image/jpeg;base64, prefix
+          const base64 = result.split(',')[1];
+          resolve(base64);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+
+      const base64Data = await base64Promise;
+      file.write(base64Data);
+
+      // Save to media library/gallery using file URI
+      const asset = await MediaLibrary.createAssetAsync(file.uri);
+
+      // Optionally create album
+      const album = await MediaLibrary.getAlbumAsync('Plainly AI');
+      if (album) {
+        await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+      } else {
+        await MediaLibrary.createAlbumAsync('Plainly AI', asset, false);
+      }
+
+      // Clean up temp file
+      file.delete();
+
       Alert.alert(
-        'Save Image',
-        'The image will open in your browser. Long-press on the image to save it to your device.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { 
-            text: 'Open Image', 
-            onPress: () => Linking.openURL(imageUrl)
-          },
-        ]
+        '✅ Saved!',
+        'Image has been saved to your gallery in "Plainly AI" album.',
+        [{ text: 'Great!' }]
       );
     } catch (err: any) {
-      setError('Failed to save image. Please try again.');
+      console.error('Save error:', err);
+      Alert.alert(
+        'Save Failed',
+        'Could not save image. Please try again or use the share button.',
+        [{ text: 'OK' }]
+      );
     }
   };
 
