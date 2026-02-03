@@ -3,8 +3,8 @@
  * Powered by Pollinations.AI with automatic model fallback
  * Users see "Plainly AI" branding, models auto-fallback from best to worst
  * 
- * Updated Feb 2026: User has UNLIMITED API key with ALL models access
- * Models ordered from BEST QUALITY to WORST for optimal results
+ * Updated Feb 2026: Using gen.pollinations.ai unified API endpoint
+ * User has UNLIMITED API key with ALL models access
  */
 
 const POLLINATIONS_API_KEY = import.meta.env.VITE_POLLINATIONS_API_KEY
@@ -13,35 +13,36 @@ const POLLINATIONS_API_KEY = import.meta.env.VITE_POLLINATIONS_API_KEY
 // User has unlimited access to all models
 const IMAGE_MODELS = [
     // PREMIUM models (best quality first)
-    'seedream-pro',   // #1 ranked, best consistency - Seedream 4.5 Pro
-    'gptimage-large', // GPT Image 1.5 - high quality creative
-    'flux',           // Flux Schnell - excellent quality
-    'gptimage',       // GPT Image 1 Mini - good creative
+    'flux',           // Flux Schnell - most reliable, excellent quality
+    'turbo',          // SDXL Turbo - fast and reliable
     'seedream',       // Seedream 4.0 - artistic
-    'klein-large',    // FLUX.2 Klein 9B - higher quality
+    'gptimage',       // GPT Image 1 Mini - good creative
     'klein',          // FLUX.2 Klein 4B - fast quality
-    'turbo',          // SDXL Turbo - fast reliable
-    'nanobanana-pro', // NanoBanana Pro - creative
+    'seedream-pro',   // Seedream 4.5 Pro - premium
+    'gptimage-large', // GPT Image 1.5 - high quality
+    'klein-large',    // FLUX.2 Klein 9B - higher quality
     'nanobanana',     // NanoBanana - experimental
+    'nanobanana-pro', // NanoBanana Pro - creative
     'zimage',         // Z-Image Turbo
     'kontext',        // FLUX.1 Kontext - context editing
 ]
 
 // Video models ranked from BEST to WORST quality
 const VIDEO_MODELS = [
-    'veo',           // Veo 3.1 - Google's best video AI
-    'wan',           // Wan 2.6 - excellent quality
-    'seedance-pro',  // Seedance Pro - high quality
+    'wan',           // Wan 2.6 - best free quality
     'seedance',      // Seedance Lite - fast
+    'seedance-pro',  // Seedance Pro - high quality
+    'veo',           // Veo 3.1 - Google's video AI
 ]
 
-// Timeout for image generation (some models take longer)
-const FETCH_TIMEOUT = 90000 // 90 seconds (increased for premium models)
+// Timeout for generation
+const IMAGE_TIMEOUT = 90000  // 90 seconds
+const VIDEO_TIMEOUT = 180000 // 3 minutes
 
 /**
  * Fetch with timeout wrapper
  */
-async function fetchWithTimeout(url, timeout = FETCH_TIMEOUT) {
+async function fetchWithTimeout(url, timeout) {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), timeout)
 
@@ -60,7 +61,7 @@ async function fetchWithTimeout(url, timeout = FETCH_TIMEOUT) {
 
 /**
  * Generate an image with automatic model fallback
- * Tries best model first, falls back to next if it fails
+ * Uses gen.pollinations.ai unified endpoint
  */
 export async function generateImage(prompt, options = {}) {
     const {
@@ -72,58 +73,62 @@ export async function generateImage(prompt, options = {}) {
     const encodedPrompt = encodeURIComponent(prompt)
     const errors = []
 
+    console.log('🎨 Image Generation Started')
     console.log('API Key present:', !!POLLINATIONS_API_KEY)
-    console.log('API Key value (first 10 chars):', POLLINATIONS_API_KEY?.substring(0, 10) || 'MISSING')
 
     // Try each model in order until one succeeds
     for (let i = 0; i < IMAGE_MODELS.length; i++) {
         const model = IMAGE_MODELS[i]
 
         try {
-            console.log(`🎨 Trying image model: ${model} (${i + 1}/${IMAGE_MODELS.length})`)
+            console.log(`🎨 Trying: ${model} (${i + 1}/${IMAGE_MODELS.length})`)
 
-            // Build URL with API key
-            let imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&seed=${seed}&nologo=true&model=${model}`
+            // Use gen.pollinations.ai unified endpoint
+            const params = new URLSearchParams({
+                width: width.toString(),
+                height: height.toString(),
+                seed: seed.toString(),
+                nologo: 'true',
+                model: model,
+            })
 
-            // CRITICAL: Add API key for premium model access
             if (POLLINATIONS_API_KEY) {
-                imageUrl += `&key=${POLLINATIONS_API_KEY}`
-            } else {
-                console.warn('⚠️ No API key found - premium models may not work')
+                params.append('key', POLLINATIONS_API_KEY)
             }
 
-            console.log('Request URL:', imageUrl.substring(0, 100) + '...')
+            const imageUrl = `https://gen.pollinations.ai/image/${encodedPrompt}?${params.toString()}`
+            console.log('URL:', imageUrl.substring(0, 80) + '...')
 
-            const response = await fetchWithTimeout(imageUrl)
+            const response = await fetchWithTimeout(imageUrl, IMAGE_TIMEOUT)
 
             if (!response.ok) {
-                const errMsg = `Model ${model} failed with HTTP ${response.status}`
+                const errMsg = `${model}: HTTP ${response.status}`
                 console.warn('❌', errMsg)
                 errors.push(errMsg)
                 continue
             }
 
-            // Check if response is actually an image (not rate limit page)
+            // Check content type
             const contentType = response.headers.get('content-type')
             if (!contentType || !contentType.startsWith('image/')) {
-                const errMsg = `Model ${model} returned non-image: ${contentType}`
+                const errMsg = `${model}: Not an image (${contentType})`
                 console.warn('❌', errMsg)
                 errors.push(errMsg)
                 continue
             }
 
-            // Convert to data URL
+            // Get blob
             const blob = await response.blob()
 
-            // Check blob size - rate limit images are usually small
+            // Verify size (small = likely error page)
             if (blob.size < 10000) {
-                const errMsg = `Model ${model} returned small image (${blob.size} bytes)`
+                const errMsg = `${model}: Too small (${blob.size}b)`
                 console.warn('❌', errMsg)
                 errors.push(errMsg)
                 continue
             }
 
-            console.log(`✅ SUCCESS with model: ${model} (${blob.size} bytes)`)
+            console.log(`✅ SUCCESS: ${model} (${(blob.size / 1024).toFixed(1)}KB)`)
 
             return new Promise((resolve, reject) => {
                 const reader = new FileReader()
@@ -132,70 +137,57 @@ export async function generateImage(prompt, options = {}) {
                 reader.readAsDataURL(blob)
             })
         } catch (error) {
-            const errMsg = `Model ${model} error: ${error.message}`
+            const errMsg = `${model}: ${error.message}`
             console.warn('❌', errMsg)
             errors.push(errMsg)
             continue
         }
     }
 
-    // All models failed
-    console.error('🚨 All image models failed:', errors)
+    // All failed
+    console.error('🚨 All models failed:', errors)
     throw new Error('All models failed. Please try again later.')
 }
 
 /**
  * Generate a video with automatic model fallback
- * Uses gen.pollinations.ai endpoint
  */
 export async function generateVideo(prompt, _options = {}) {
     const encodedPrompt = encodeURIComponent(prompt)
     const errors = []
 
-    console.log('🎬 Starting video generation...')
-    console.log('API Key present:', !!POLLINATIONS_API_KEY)
+    console.log('🎬 Video Generation Started')
 
-    // Try each video model in order
     for (let i = 0; i < VIDEO_MODELS.length; i++) {
         const model = VIDEO_MODELS[i]
 
         try {
-            console.log(`🎬 Trying video model: ${model} (${i + 1}/${VIDEO_MODELS.length})`)
+            console.log(`🎬 Trying: ${model} (${i + 1}/${VIDEO_MODELS.length})`)
 
-            // Use gen.pollinations.ai for video
-            let videoUrl = `https://gen.pollinations.ai/video/${encodedPrompt}?model=${model}`
-
-            // Add API key for premium access
+            const params = new URLSearchParams({ model })
             if (POLLINATIONS_API_KEY) {
-                videoUrl += `&key=${POLLINATIONS_API_KEY}`
+                params.append('key', POLLINATIONS_API_KEY)
             }
 
-            const response = await fetchWithTimeout(videoUrl, 180000) // 3 min for video
+            const videoUrl = `https://gen.pollinations.ai/video/${encodedPrompt}?${params.toString()}`
+
+            const response = await fetchWithTimeout(videoUrl, VIDEO_TIMEOUT)
 
             if (!response.ok) {
-                const errMsg = `Video model ${model} failed with ${response.status}`
-                console.warn('❌', errMsg)
-                errors.push(errMsg)
+                errors.push(`${model}: HTTP ${response.status}`)
                 continue
             }
 
-            // Convert to blob URL for video playback
             const blob = await response.blob()
-
-            // Check if it's actually video content
             if (blob.size < 50000) {
-                const errMsg = `Video model ${model} returned small file (${blob.size} bytes)`
-                console.warn('❌', errMsg)
-                errors.push(errMsg)
+                errors.push(`${model}: Too small`)
                 continue
             }
 
-            console.log(`✅ SUCCESS with video model: ${model} (${blob.size} bytes)`)
+            console.log(`✅ SUCCESS: ${model} (${(blob.size / 1024).toFixed(1)}KB)`)
             return URL.createObjectURL(blob)
         } catch (error) {
-            const errMsg = `Video model ${model} error: ${error.message}`
-            console.warn('❌', errMsg)
-            errors.push(errMsg)
+            errors.push(`${model}: ${error.message}`)
             continue
         }
     }
