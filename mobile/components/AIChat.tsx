@@ -46,7 +46,7 @@ export default function AIChat({ visible, onClose }: AIChatProps) {
       // First check our database
       const dbTool = getToolFromPath(path);
       if (dbTool) return dbTool;
-      
+
       // Then check allTools
       const tool = allTools.find(t => t.path === path);
       if (tool) {
@@ -56,17 +56,36 @@ export default function AIChat({ visible, onClose }: AIChatProps) {
     return null;
   };
 
-  // Format message text - convert markdown-style formatting
+  // Format message text - convert markdown to clean display text
   const formatMessageText = (text: string) => {
-    // Remove markdown formatting for cleaner display
     let formatted = text;
-    // Remove ** for bold (we'll handle emphasis differently in RN)
+
+    // Step 1: Handle bold text (**text** or __text__) - extract content
     formatted = formatted.replace(/\*\*(.*?)\*\*/g, '$1');
-    // Remove ` for code blocks
+    formatted = formatted.replace(/__(.*?)__/g, '$1');
+
+    // Step 2: Handle code blocks (`text`) - extract content
     formatted = formatted.replace(/`([^`]+)`/g, '$1');
-    // Remove bullets
-    formatted = formatted.replace(/^[\-\•]\s/gm, '• ');
-    return formatted;
+
+    // Step 3: Convert markdown bullets (*, -, •) to clean bullet points
+    // Handle lines starting with * (followed by space or bold text)
+    formatted = formatted.replace(/^\*\s+/gm, '• ');
+    formatted = formatted.replace(/^-\s+/gm, '• ');
+
+    // Step 4: Handle bold text that starts a bullet line like "* **Bold:** text"
+    formatted = formatted.replace(/^\•\s*\*\*(.*?)\*\*:/gm, '• $1:');
+
+    // Step 5: Clean up any remaining asterisks used for emphasis mid-text
+    // Replace *text* with just text (but be careful not to break bullets)
+    formatted = formatted.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '$1');
+
+    // Step 6: Clean up any remaining double asterisks
+    formatted = formatted.replace(/\*\*/g, '');
+
+    // Step 7: Clean up extra whitespace and newlines
+    formatted = formatted.replace(/\n{3,}/g, '\n\n');
+
+    return formatted.trim();
   };
 
   useEffect(() => {
@@ -154,7 +173,7 @@ export default function AIChat({ visible, onClose }: AIChatProps) {
   if (!visible) return null;
 
   return (
-    <Animated.View 
+    <Animated.View
       style={[
         styles.container,
         { transform: [{ translateY: slideAnim }] }
@@ -182,7 +201,7 @@ export default function AIChat({ visible, onClose }: AIChatProps) {
       </View>
 
       {/* Messages */}
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         style={styles.chatContainer}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={100}
@@ -244,12 +263,12 @@ export default function AIChat({ visible, onClose }: AIChatProps) {
                 </View>
                 <Text style={styles.messageText}>{formatMessageText(message.content)}</Text>
               </View>
-              
+
               {/* Tool Recommendation Card - like website */}
               {message.role === 'assistant' && message.toolSuggestion && (
                 <View style={styles.toolCardContainer}>
                   <Text style={styles.toolCardLabel}>Recommended Tool</Text>
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={styles.toolCard}
                     onPress={() => {
                       // Find the tool in allTools to get its ID

@@ -5,7 +5,7 @@ import { askGroq, MODELS } from '../../services/groqAI'
 import { allCalculators } from '../../data/calculators'
 import './AIAssistant.css'
 
-// Simple markdown parser for formatting
+// Simple markdown parser for formatting - handles *, -, • bullets cleanly
 const parseMarkdown = (text) => {
     if (!text) return ''
 
@@ -14,42 +14,54 @@ const parseMarkdown = (text) => {
     let result = []
     let inList = false
 
-    lines.forEach((line, index) => {
+    lines.forEach((line) => {
+        // Trim the line for processing
+        const trimmedLine = line.trim()
+
         // Bold: **text** or __text__
         line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         line = line.replace(/__(.*?)__/g, '<strong>$1</strong>')
 
-        // Italic: *text* or _text_
-        line = line.replace(/\*([^*]+)\*/g, '<em>$1</em>')
-        line = line.replace(/_([^_]+)_/g, '<em>$1</em>')
-
-        // Code: `text`
+        // Code: `text` - do this BEFORE italic processing
         line = line.replace(/`([^`]+)`/g, '<code>$1</code>')
 
-        // Tool paths: /path-name
-        line = line.replace(/\s(\/[\w-]+)/g, ' <code>$1</code>')
+        // Tool paths: /path-name - make them clickable-looking
+        line = line.replace(/\s(\/[\w-]+)/g, ' <code class="tool-path">$1</code>')
 
-        // Bullet lists
-        if (line.match(/^[\-\•]\s/)) {
+        // Bullet lists: *, -, •, or numbered (1., 2., etc)
+        const bulletMatch = trimmedLine.match(/^[\*\-\•]\s+(.*)/)
+        const numberedMatch = trimmedLine.match(/^\d+\.\s+(.*)/)
+
+        if (bulletMatch) {
             if (!inList) {
-                result.push('<ul>')
+                result.push('<ul class="ai-list">')
                 inList = true
             }
-            line = '<li>' + line.replace(/^[\-\•]\s/, '') + '</li>'
-        } else if (inList && line.trim() === '') {
-            result.push('</ul>')
+            // Remove the bullet and wrap in li
+            line = '<li>' + bulletMatch[1]
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>') + '</li>'
+        } else if (numberedMatch) {
+            if (!inList) {
+                result.push('<ol class="ai-list">')
+                inList = 'ol'
+            }
+            line = '<li>' + numberedMatch[1]
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>') + '</li>'
+        } else if (inList && trimmedLine === '') {
+            result.push(inList === 'ol' ? '</ol>' : '</ul>')
             inList = false
+            line = ''
         }
 
-        // Numbered lists
-        if (line.match(/^\d+\.\s/)) {
-            line = '<li>' + line.replace(/^\d+\.\s/, '') + '</li>'
+        if (line.trim()) {
+            result.push(line)
         }
-
-        result.push(line)
     })
 
-    if (inList) result.push('</ul>')
+    // Close any open list
+    if (inList) result.push(inList === 'ol' ? '</ol>' : '</ul>')
 
     return result.join('<br/>')
 }
