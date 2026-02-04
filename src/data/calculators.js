@@ -536,6 +536,7 @@ export const allCalculators = [
     { name: 'AI Invention History', description: 'Discover the fascinating stories behind great inventions.', icon: Lightbulb, path: '/ai-invention-history', category: 'AI' },
     { name: 'AI War Summary', description: 'Get balanced educational summaries of historical conflicts.', icon: Swords, path: '/ai-war-summary', category: 'AI' },
     { name: 'AI Philosophy Explainer', description: 'Understand philosophical concepts in simple terms.', icon: Brain, path: '/ai-philosophy-explainer', category: 'AI' },
+    { name: 'AI Infographic Designer', description: 'Create infographics with AI-generated HTML/CSS code - fully editable and downloadable.', icon: Layers, path: '/ai-infographic-designer', category: 'AI' },
 ]
 
 

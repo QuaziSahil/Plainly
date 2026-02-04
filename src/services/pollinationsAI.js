@@ -37,7 +37,7 @@ const VIDEO_MODELS = [
 
 // Timeout for generation
 const IMAGE_TIMEOUT = 90000  // 90 seconds
-const VIDEO_TIMEOUT = 180000 // 3 minutes
+const VIDEO_TIMEOUT = 300000 // 5 minutes (video generation takes longer)
 
 /**
  * Fetch with timeout wrapper
@@ -151,12 +151,14 @@ export async function generateImage(prompt, options = {}) {
 
 /**
  * Generate a video with automatic model fallback
+ * Uses gen.pollinations.ai unified endpoint (same as image)
  */
 export async function generateVideo(prompt, _options = {}) {
     const encodedPrompt = encodeURIComponent(prompt)
     const errors = []
 
     console.log('🎬 Video Generation Started')
+    console.log('API Key present:', !!POLLINATIONS_API_KEY)
 
     for (let i = 0; i < VIDEO_MODELS.length; i++) {
         const model = VIDEO_MODELS[i]
@@ -164,30 +166,53 @@ export async function generateVideo(prompt, _options = {}) {
         try {
             console.log(`🎬 Trying: ${model} (${i + 1}/${VIDEO_MODELS.length})`)
 
-            const params = new URLSearchParams({ model })
+            // Use same parameter structure as image generator
+            const params = new URLSearchParams({
+                model: model,
+                nologo: 'true',
+            })
+
             if (POLLINATIONS_API_KEY) {
                 params.append('key', POLLINATIONS_API_KEY)
             }
 
             const videoUrl = `https://gen.pollinations.ai/video/${encodedPrompt}?${params.toString()}`
+            console.log('URL:', videoUrl.substring(0, 80) + '...')
 
             const response = await fetchWithTimeout(videoUrl, VIDEO_TIMEOUT)
 
             if (!response.ok) {
-                errors.push(`${model}: HTTP ${response.status}`)
+                const errMsg = `${model}: HTTP ${response.status}`
+                console.warn('❌', errMsg)
+                errors.push(errMsg)
+                continue
+            }
+
+            // Check content type (same as image generator)
+            const contentType = response.headers.get('content-type')
+            if (!contentType || !contentType.startsWith('video/')) {
+                const errMsg = `${model}: Not a video (${contentType})`
+                console.warn('❌', errMsg)
+                errors.push(errMsg)
                 continue
             }
 
             const blob = await response.blob()
+
+            // Verify size (small = likely error page)
             if (blob.size < 50000) {
-                errors.push(`${model}: Too small`)
+                const errMsg = `${model}: Too small (${blob.size}b)`
+                console.warn('❌', errMsg)
+                errors.push(errMsg)
                 continue
             }
 
             console.log(`✅ SUCCESS: ${model} (${(blob.size / 1024).toFixed(1)}KB)`)
             return URL.createObjectURL(blob)
         } catch (error) {
-            errors.push(`${model}: ${error.message}`)
+            const errMsg = `${model}: ${error.message}`
+            console.warn('❌', errMsg)
+            errors.push(errMsg)
             continue
         }
     }

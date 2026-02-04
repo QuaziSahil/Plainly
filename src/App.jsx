@@ -320,6 +320,7 @@ import AIFamousQuotes from './pages/calculators/ai/AIFamousQuotes'
 import AIInventionHistory from './pages/calculators/ai/AIInventionHistory'
 import AIWarSummary from './pages/calculators/ai/AIWarSummary'
 import AIPhilosophyExplainer from './pages/calculators/ai/AIPhilosophyExplainer'
+import AIInfographicDesigner from './pages/calculators/ai/AIInfographicDesigner'
 
 // Converter Tools (15)
 import CookingConverter from './pages/calculators/converter/CookingConverter'
@@ -724,6 +725,7 @@ function App() {
                     <Route path="/ai-invention-history" element={<AIInventionHistory />} />
                     <Route path="/ai-war-summary" element={<AIWarSummary />} />
                     <Route path="/ai-philosophy-explainer" element={<AIPhilosophyExplainer />} />
+                    <Route path="/ai-infographic-designer" element={<AIInfographicDesigner />} />
 
                     {/* Converter Tools */}
                     <Route path="/cooking-converter" element={<CookingConverter />} />

@@ -8,18 +8,18 @@
 
 | Category | Tools Count |
 |----------|-------------|
-| AI Tools | 43 |
-| Finance | 38 |
-| Health | 27 |
-| Math | 28 |
+| AI Tools | 121 |
+| Finance | 63 |
+| Health | 26 |
+| Math | 27 |
 | Converter | 16 |
 | Fun | 17 |
-| Other | 40 |
+| Other | 37 |
 | Real Estate | 7 |
 | Sustainability | 9 |
 | Tech | 13 |
 | Text | 11 |
-| **TOTAL** | **249** |
+| **TOTAL** | **317+** |
 
 ---
 
@@ -104,31 +104,40 @@ Claude (`claude`, `claude-fast`, `claude-large`), GPT (`openai`, `openai-fast`, 
 
 ### 2b. 🤖 AI ASSISTANT KNOWLEDGE - CRITICAL RULE
 
-**⚠️ AFTER EVERY TOOL UPDATE, THE AI ASSISTANT MUST BE UPDATED!**
+**⚠️ AFTER EVERY TOOL UPDATE, BOTH WEB AND MOBILE AI ASSISTANTS MUST BE UPDATED!**
 
-The AI Assistant (both web and mobile) must know about EVERY single tool so it can:
-- Accurately suggest the right tool for user queries
-- Provide clickable links that users can tap to go directly to tools
-- Cover all 309+ tools across all categories
+The AI Assistant on **BOTH platforms** must have complete knowledge of ALL 317+ tools so it can:
+- Accurately suggest the right tool with **EXACT names** (e.g., "AI Email Generator" not "Email Writer")
+- Provide **EXACT paths** (e.g., `/ai-email-generator` not `/email-writer`)
+- Cover ALL tools across ALL categories (Finance, Health, Math, Converter, AI, Fun, Tech, Text, Real Estate, Sustainability, Other)
 
-**Files to Update When Adding/Modifying Tools:**
+**🔴 MANDATORY: Files to Update When Adding/Modifying Tools:**
 
 | Platform | File | What to Update |
 |----------|------|----------------|
 | Web | `src/data/calculators.js` | Add tool entry (name, path, description, icon, category) |
+| Web AI | `src/components/AIAssistant/AIAssistant.jsx` | Add to AI_TOOLS_KNOWLEDGE or ALL_TOOLS_KNOWLEDGE constants |
 | Mobile | `mobile/constants/Tools.ts` | Add tool entry to `allTools` array |
-| Mobile AI | `mobile/services/groqAI.ts` | Auto-updates from `allTools` (no manual change needed) |
-| Web AI | `src/components/AIAssistant/AIAssistant.jsx` | Auto-updates from `allCalculators` (no manual change needed) |
+| Mobile AI | `mobile/services/groqAI.ts` | Verify tool appears in AI_ASSISTANT_PROMPT (auto-builds from allTools) |
 
-**AI Assistant Knowledge Sources:**
-- Web: `src/data/calculators.js` → `allCalculators` array (automatically builds prompt)
-- Mobile: `mobile/constants/Tools.ts` → `allTools` array (automatically builds `TOOL_DATABASE` and prompt)
+**AI Assistant Knowledge Architecture:**
+- **Web**: `AIAssistant.jsx` contains `AI_TOOLS_KNOWLEDGE` (for AI tools) and `ALL_TOOLS_KNOWLEDGE` (for all other categories) - **317+ tools with exact names and paths**
+- **Mobile**: `groqAI.ts` contains `AI_ASSISTANT_PROMPT` which auto-builds from `allTools` array
 
-**Checklist After Adding Any Tool:**
-- [ ] Tool added to web `calculators.js` with correct path
+**✅ MANDATORY Checklist After Adding Any Tool:**
+- [ ] Tool added to web `calculators.js` with correct name, path, category
+- [ ] Tool added to `AIAssistant.jsx` knowledge base (AI_TOOLS_KNOWLEDGE or ALL_TOOLS_KNOWLEDGE)
 - [ ] Tool added to mobile `Tools.ts` with matching path
-- [ ] AI Assistant can now suggest the tool (test by typing related keywords)
-- [ ] Tool card appears when AI recommends it (test clicking to verify navigation)
+- [ ] Mobile AI prompt auto-updated (verify by checking `groqAI.ts`)
+- [ ] Test: AI Assistant recommends tool with EXACT name
+- [ ] Test: AI Assistant shows EXACT path in response
+- [ ] Test: Tool card appears and navigation works on both platforms
+
+**❌ NEVER:**
+- Add a tool without updating the AI Assistant knowledge
+- Use approximate tool names (must be exact)
+- Use approximate paths (must be exact)
+- Update only web OR only mobile (must update BOTH)
 
 ### 3. Design & Styling Consistency
 Keep ALL designs consistent with existing Plainly style:
@@ -412,8 +421,8 @@ git add . && git commit -m "message" && git push origin main
 
 ---
 
-**Last Updated**: 2026-02-02  
-**Total Tools**: 309  
+**Last Updated**: 2026-02-04  
+**Total Tools**: 317+  
 **AI Models in Fallback**: 6
 
 ---
