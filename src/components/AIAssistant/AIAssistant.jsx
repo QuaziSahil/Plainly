@@ -72,7 +72,7 @@ const CATEGORIES_SUMMARY = {
     'Health': 'BMI, calories, nutrition, fitness, pregnancy calculators',
     'Math': 'Percentage, algebra, geometry, statistics calculators',
     'Converter': 'Unit, currency, time, temperature converters',
-    'AI': 'Text generators, name generators, content creators, code generators',
+    'AI': 'Text generators, name generators, content creators, code generators, knowledge tools',
     'Fun': 'Games, random generators, entertainment tools',
     'Tech': 'Developer tools, code generators, QR codes',
     'Text': 'Grammar checker, summarizer, translator, paraphraser',
@@ -81,49 +81,434 @@ const CATEGORIES_SUMMARY = {
     'Other': 'Various utility tools'
 }
 
-const POPULAR_TOOLS = allCalculators.slice(0, 30).map(c =>
-    `• **${c.name}** (${c.path})`
-).join('\n')
+// Complete AI Tools list with EXACT names and paths
+const AI_TOOLS_KNOWLEDGE = `
+## AI WRITING & CONTENT TOOLS:
+• **AI Email Generator** (/ai-email-generator) - Draft professional emails instantly
+• **AI Cover Letter Generator** (/ai-cover-letter-generator) - Create tailored cover letters
+• **AI Resume Summary Generator** (/ai-resume-summary-generator) - Produce impactful resume summaries
+• **AI Product Description Generator** (/ai-product-description-generator) - Write compelling product copy
+• **AI Slogan Generator** (/ai-slogan-generator) - Find catchy taglines for brands
+• **AI Tweet Generator** (/ai-tweet-generator) - Generate engaging tweets
+• **AI Instagram Caption Generator** (/ai-instagram-caption-generator) - Create Instagram captions
+• **AI YouTube Title Generator** (/ai-youtube-title-generator) - Generate high-CTR video titles
+• **AI Blog Post Generator** (/ai-blog-post-generator) - Draft complete blog posts
+• **AI Meta Description Generator** (/ai-meta-description-generator) - Generate SEO meta tags
+• **AI Paraphraser** (/ai-paraphraser) - Rewrite and improve text
+• **AI LinkedIn Post Generator** (/ai-linkedin-post-generator) - Create professional LinkedIn posts
+• **AI Grammar Checker** (/ai-grammar-checker) - Fix grammar and spelling errors
+• **AI Voice Transformer** (/ai-voice-transformer) - Convert passive to active voice
+• **AI Sentence Expander** (/ai-sentence-expander) - Add detail to writing
+• **AI Sentence Shortener** (/ai-sentence-shortener) - Make writing concise
+• **AI Essay Outline Generator** (/ai-essay-outline-generator) - Create essay outlines
+• **AI Meeting Notes Generator** (/ai-meeting-notes-generator) - Turn transcripts into notes
+• **AI Paragraph Generator** (/ai-paragraph-generator) - Generate paragraphs instantly
+• **AI Text Summarizer** (/ai-text-summarizer) - Summarize long text
+• **AI Translator** (/ai-translator) - Translate to 25+ languages
+• **AI Hashtag Generator** (/ai-hashtag-generator) - Generate trending hashtags
+
+## AI CREATIVE TOOLS:
+• **AI Story Starter Generator** (/ai-story-starter-generator) - Find story ideas
+• **AI Plot Generator** (/ai-plot-generator) - Generate story plots
+• **AI Poem Generator** (/ai-poem-generator) - Compose poetry
+• **AI Song Lyrics Generator** (/ai-song-lyrics-generator) - Write song lyrics
+• **AI Joke Generator** (/ai-joke-generator) - Generate original jokes
+• **AI Quote Generator** (/ai-quote-generator) - Generate inspirational quotes
+• **AI Pickup Line Generator** (/ai-pickup-line-generator) - Witty pickup lines
+• **AI Band Name Generator** (/ai-band-name-generator) - Find band names
+• **AI Rap Name Generator** (/ai-rap-name-generator) - Get stage names
+• **AI Username Generator** (/ai-username-generator) - Find unique usernames
+• **AI Business Name Generator** (/ai-business-name-generator) - Generate brand names
+• **AI Color Palette Generator** (/ai-color-palette-generator) - Generate color schemes
+• **AI Meeting Agenda Generator** (/ai-meeting-agenda-generator) - Plan meeting agendas
+
+## AI CODE & DEVELOPMENT TOOLS:
+• **AI Code Generator** (/ai-code-generator) - Generate code in any language
+• **AI Code Debugger** (/ai-code-debugger) - Find and fix bugs
+• **AI Code Explainer** (/ai-code-explainer) - Explain code snippets
+• **AI Code Converter** (/ai-code-converter) - Convert between languages
+• **AI SQL Generator** (/ai-sql-generator) - Generate SQL queries
+• **AI Regex Generator** (/ai-regex-generator) - Create regex patterns
+• **AI Git Commit Generator** (/ai-git-commit-generator) - Generate commit messages
+• **AI API Documentation Generator** (/ai-api-doc-generator) - Generate API docs
+• **AI Unit Test Generator** (/ai-unit-test-generator) - Generate unit tests
+• **AI Code Comment Generator** (/ai-code-comment-generator) - Add code comments
+• **AI Code Review Assistant** (/ai-code-review-assistant) - Get code review feedback
+• **AI Variable Name Generator** (/ai-variable-name-generator) - Get variable names
+• **AI CSS Generator** (/ai-css-generator) - Generate CSS styles
+• **AI HTML Generator** (/ai-html-generator) - Generate HTML structure
+• **AI React Component Generator** (/ai-react-component-generator) - Generate React components
+• **AI REST API Designer** (/ai-rest-api-designer) - Design RESTful APIs
+• **AI Database Schema Generator** (/ai-database-schema-generator) - Design database schemas
+• **AI Algorithm Selector** (/ai-algorithm-selector) - Find best algorithms
+• **AI Tech Stack Recommender** (/ai-tech-stack-recommender) - Get tech recommendations
+• **AI Function Name Generator** (/ai-function-name-generator) - Get function names
+• **Code Preview & Download** (/ai-code-preview) - Preview and download code
+• **Code Runner** (/ai-code-runner) - Run JavaScript code
+
+## AI MARKETING & SEO TOOLS:
+• **AI SEO Keyword Research** (/ai-seo-keyword-research) - Find keyword opportunities
+• **AI Ad Copy Generator** (/ai-ad-copy-generator) - Create ad copy
+• **AI Customer Persona Generator** (/ai-customer-persona-generator) - Create buyer personas
+
+## AI IMAGE & DESIGN TOOLS:
+• **AI Image Generator** (/ai-image-generator) - Create images from text
+• **AI Video Generator** (/ai-video-generator) - Create videos from text
+• **AI Face Generator** (/ai-face-generator) - Generate realistic faces
+• **AI Logo Generator** (/ai-logo-generator) - Create logos
+• **AI Cartoon Avatar Generator** (/ai-cartoon-avatar-generator) - Generate cartoon avatars
+• **AI Pattern Generator** (/ai-pattern-generator) - Create seamless patterns
+• **AI Album Cover Generator** (/ai-album-cover-generator) - Design album artwork
+• **AI Business Card Designer** (/ai-business-card-designer) - Create business cards
+• **AI Instagram Story Template** (/ai-instagram-story-template) - Generate story templates
+• **AI Infographic Generator** (/ai-infographic-generator) - Create infographics
+• **AI Presentation Slide Generator** (/ai-presentation-slide-generator) - Generate slides
+• **AI Mockup Generator** (/ai-mockup-generator) - Create product mockups
+• **AI Icon Generator** (/ai-icon-generator) - Design custom icons
+• **AI QR Art Generator** (/ai-qr-art-generator) - Generate artistic QR codes
+• **AI Meme Generator** (/ai-meme-generator) - Create meme concepts
+• **AI Thumbnail Generator** (/ai-thumbnail-generator) - Generate thumbnail concepts
+
+## AI EDUCATION & LEARNING TOOLS:
+• **AI Quiz Generator** (/ai-quiz-generator) - Generate custom quizzes
+• **AI Flashcard Generator** (/ai-flashcard-generator) - Create study flashcards
+• **AI Study Guide Generator** (/ai-study-guide-generator) - Create study materials
+• **AI Lesson Plan Generator** (/ai-lesson-plan-generator) - Generate teaching materials
+• **AI Explanation Simplifier** (/ai-explanation-simplifier) - Simplify complex topics
+• **AI Practice Problem Generator** (/ai-practice-problem-generator) - Generate math problems
+• **AI Essay Grader** (/ai-essay-grader) - Get essay feedback
+• **AI Citation Generator** (/ai-citation-generator) - Generate perfect citations
+• **AI Research Question Generator** (/ai-research-question-generator) - Generate research ideas
+• **AI Thesis Statement Generator** (/ai-thesis-statement-generator) - Draft thesis statements
+• **AI Annotated Bibliography** (/ai-annotated-bibliography) - Summarize sources
+• **AI Mind Map Generator** (/ai-mind-map-generator) - Create visual outlines
+• **AI Mnemonic Generator** (/ai-mnemonic-generator) - Create memory aids
+• **AI Language Learning Tutor** (/ai-language-learning-tutor) - Practice languages
+• **AI Analogy Generator** (/ai-analogy-generator) - Explain with analogies
+
+## AI KNOWLEDGE & HISTORY TOOLS (NEW!):
+• **AI Encyclopedia** (/ai-encyclopedia) - Get Wikipedia-style explanations on any topic
+• **AI History Explorer** (/ai-history-explorer) - Explore historical events and eras
+• **AI Biography Generator** (/ai-biography-generator) - Get biographies of famous people
+• **AI Fact Checker** (/ai-fact-checker) - Verify claims with AI analysis
+• **AI Timeline Generator** (/ai-timeline-generator) - Generate chronological timelines
+• **AI Country Guide** (/ai-country-guide) - Get information about any country
+• **AI Science Explainer** (/ai-science-explainer) - Understand scientific concepts
+• **AI Word Origin Finder** (/ai-word-origin-finder) - Discover etymology of words
+• **AI Historical Comparison** (/ai-historical-comparison) - Compare historical events
+• **AI Mythology Guide** (/ai-mythology-guide) - Explore myths and legends
+• **AI Cultural Explorer** (/ai-cultural-explorer) - Learn about cultures worldwide
+• **AI Famous Quotes Finder** (/ai-famous-quotes) - Find quotes with context
+• **AI Invention History** (/ai-invention-history) - Stories behind inventions
+• **AI War Summary** (/ai-war-summary) - Educational conflict summaries
+• **AI Philosophy Explainer** (/ai-philosophy-explainer) - Understand philosophy concepts
+`
+
+const POPULAR_FINANCE_TOOLS = `
+## POPULAR CALCULATORS:
+• **Mortgage Calculator** (/mortgage-calculator) - Calculate home loan payments
+• **BMI Calculator** (/bmi-calculator) - Calculate Body Mass Index
+• **Compound Interest Calculator** (/compound-interest-calculator) - Visualize growth
+• **Calorie Calculator** (/calorie-calculator) - Estimate daily caloric needs
+• **Tip Calculator** (/tip-calculator) - Calculate tips and split bills
+• **Percentage Calculator** (/percentage-calculator) - Calculate percentages
+• **Unit Converter** (/unit-converter) - Convert between units
+• **Currency Converter** (/currency-converter) - Convert world currencies
+• **Age Calculator** (/age-calculator) - Calculate exact age
+• **GPA Calculator** (/gpa-calculator) - Calculate Grade Point Average
+`
+
+// ALL OTHER TOOLS - Complete knowledge base
+const ALL_TOOLS_KNOWLEDGE = `
+## FINANCE CALCULATORS (63 tools):
+• **Mortgage Calculator** (/mortgage-calculator) - Calculate monthly payments and amortization
+• **Loan Calculator** (/loan-calculator) - Compute loan payments and interest
+• **Compound Interest Calculator** (/compound-interest-calculator) - Visualize exponential growth
+• **Investment Calculator** (/investment-calculator) - Project investment growth
+• **Salary Calculator** (/salary-calculator) - Convert hourly/monthly/annual salary
+• **Tip Calculator** (/tip-calculator) - Calculate tips and split bills
+• **Auto Loan Calculator** (/auto-loan-calculator) - Calculate auto loan payments
+• **Interest Calculator** (/interest-calculator) - Calculate simple and compound interest
+• **Payment Calculator** (/payment-calculator) - Calculate loan payments
+• **Retirement Calculator** (/retirement-calculator) - Plan retirement savings
+• **Amortization Calculator** (/amortization-calculator) - Calculate loan amortization
+• **Inflation Calculator** (/inflation-calculator) - Calculate purchasing power over time
+• **Finance Calculator** (/finance-calculator) - General financial calculations
+• **Income Tax Calculator** (/income-tax-calculator) - Estimate federal income tax
+• **Interest Rate Calculator** (/interest-rate-calculator) - Calculate interest rate needed
+• **Sales Tax Calculator** (/sales-tax-calculator) - Calculate sales tax
+• **EMI Calculator** (/emi-calculator) - Calculate monthly installments
+• **SIP Calculator** (/sip-calculator) - Calculate SIP investment returns
+• **GST Calculator** (/gst-calculator) - Calculate Goods and Services Tax
+• **Profit Margin Calculator** (/profit-margin-calculator) - Calculate profit margins
+• **Break Even Calculator** (/break-even-calculator) - Calculate break-even point
+• **ROI Calculator** (/roi-calculator) - Calculate Return on Investment
+• **Rent vs Buy Calculator** (/rent-vs-buy-calculator) - Compare renting vs buying
+• **401k Calculator** (/401k-calculator) - Project 401k retirement savings
+• **Net Worth Calculator** (/net-worth-calculator) - Track assets and liabilities
+• **Currency Converter** (/currency-converter) - Convert world currencies
+• **Crypto Converter** (/crypto-converter) - Convert cryptocurrency
+• **Budget Calculator** (/budget-calculator) - Plan monthly budget
+• **CAGR Calculator** (/cagr-calculator) - Calculate Compound Annual Growth Rate
+• **Stock Profit Calculator** (/stock-profit-calculator) - Calculate stock profits
+• **Dividend Calculator** (/dividend-calculator) - Calculate dividend income
+• **Bond Yield Calculator** (/bond-yield-calculator) - Calculate bond yields
+• **Debt Payoff Calculator** (/debt-payoff-calculator) - Plan debt payoff
+• **Emergency Fund Calculator** (/emergency-fund-calculator) - Calculate emergency fund needs
+• **Savings Goal Calculator** (/savings-goal-calculator) - Plan savings for goals
+• **Home Affordability Calculator** (/home-affordability-calculator) - Calculate home affordability
+• **Rule of 72 Calculator** (/rule-of-72-calculator) - Calculate investment doubling time
+• **Compound Growth Calculator** (/compound-growth-calculator) - Calculate compound growth
+• **FIRE Calculator** (/fire-calculator) - Financial Independence, Retire Early
+• **Coast FIRE Calculator** (/coast-fire-calculator) - Coast to retirement calculator
+• **Lean FIRE Calculator** (/lean-fire-calculator) - Minimalist financial independence
+• **Fat FIRE Calculator** (/fat-fire-calculator) - Luxury retirement planning
+• **Crypto Portfolio Calculator** (/crypto-portfolio-calculator) - Track crypto holdings
+• **DeFi Yield Calculator** (/defi-yield-calculator) - Calculate DeFi yields
+• **NFT Profit Calculator** (/nft-profit-calculator) - Calculate NFT profits
+• **Staking Rewards Calculator** (/staking-rewards-calculator) - Calculate staking earnings
+• **Gas Fee Calculator** (/gas-fee-calculator) - Estimate Ethereum gas costs
+• **Dollar Cost Averaging Calculator** (/dca-calculator) - Plan DCA strategy
+• **Side Hustle Calculator** (/side-hustle-calculator) - Track side hustle income
+• **Freelance Rate Calculator** (/freelance-rate-calculator) - Calculate freelance rate
+• **Invoice Generator** (/invoice-generator) - Create invoices
+• **Hourly to Salary Converter** (/hourly-to-salary-converter) - Convert pay rates
+• **Take Home Pay Calculator** (/take-home-pay-calculator) - Calculate net pay
+• **Paycheck Calculator** (/paycheck-calculator) - Calculate net paycheck
+• **Overtime Calculator** (/overtime-calculator) - Calculate overtime pay
+• **Commission Calculator** (/commission-calculator) - Calculate sales commission
+• **Subscription Cost Calculator** (/subscription-cost-calculator) - Track subscriptions
+• **Cost Per Use Calculator** (/cost-per-use-calculator) - Calculate true value
+• **Rent Affordability Calculator** (/rent-affordability-calculator) - Calculate rent affordability
+• **Utility Bill Splitter** (/utility-bill-splitter) - Split utility bills
+• **Wealth Tax Calculator** (/wealth-tax-calculator) - Calculate wealth tax
+• **Estate Tax Calculator** (/estate-tax-calculator) - Estimate estate tax
+• **Gift Tax Calculator** (/gift-tax-calculator) - Calculate gift tax
+
+## HEALTH CALCULATORS (26 tools):
+• **BMI Calculator** (/bmi-calculator) - Calculate Body Mass Index
+• **Calorie Calculator** (/calorie-calculator) - Estimate daily caloric needs
+• **BMR Calculator** (/bmr-calculator) - Calculate Basal Metabolic Rate
+• **Body Fat Calculator** (/body-fat-calculator) - Estimate body fat percentage
+• **Ideal Weight Calculator** (/ideal-weight-calculator) - Find ideal body weight
+• **Pace Calculator** (/pace-calculator) - Calculate running/cycling pace
+• **Pregnancy Calculator** (/pregnancy-calculator) - Calculate due date
+• **Conception Calculator** (/conception-calculator) - Estimate conception date
+• **Due Date Calculator** (/due-date-calculator) - Calculate pregnancy due date
+• **Water Intake Calculator** (/water-intake-calculator) - Calculate daily water needs
+• **Macro Calculator** (/macro-calculator) - Calculate macronutrient needs
+• **Sleep Calculator** (/sleep-calculator) - Calculate optimal sleep times
+• **TDEE Calculator** (/tdee-calculator) - Calculate Total Daily Energy Expenditure
+• **One Rep Max Calculator** (/one-rep-max-calculator) - Calculate one-rep max
+• **Heart Rate Zone Calculator** (/heart-rate-zone-calculator) - Calculate heart rate zones
+• **Ovulation Calculator** (/ovulation-calculator) - Calculate ovulation dates
+• **Period Calculator** (/period-calculator) - Track menstrual cycle
+• **BAC Calculator** (/bac-calculator) - Estimate blood alcohol content
+• **Weight Loss Calculator** (/weight-loss-calculator) - Plan weight loss
+• **Caffeine Calculator** (/caffeine-calculator) - Track caffeine intake
+• **Calorie Burn Calculator** (/calorie-burn-calculator) - Calculate calories burned
+• **Lean Body Mass Calculator** (/lean-body-mass-calculator) - Calculate lean mass
+• **Sleep Cycle Calculator** (/sleep-cycle-calculator) - Optimize sleep cycles
+• **VO2 Max Calculator** (/vo2-max-calculator) - Estimate cardiovascular fitness
+• **Running Calorie Calculator** (/running-calorie-calculator) - Calories burned running
+• **Pregnancy Weight Calculator** (/pregnancy-weight-calculator) - Healthy pregnancy weight
+
+## MATH CALCULATORS (27 tools):
+• **Scientific Calculator** (/scientific-calculator) - Advanced calculations
+• **Percentage Calculator** (/percentage-calculator) - Calculate percentages
+• **Fraction Calculator** (/fraction-calculator) - Add, subtract, multiply fractions
+• **Random Number Generator** (/random-number-generator) - Generate random numbers
+• **Triangle Calculator** (/triangle-calculator) - Calculate triangle properties
+• **Standard Deviation Calculator** (/standard-deviation-calculator) - Calculate statistics
+• **Quadratic Equation Solver** (/quadratic-calculator) - Solve quadratic equations
+• **Prime Number Checker** (/prime-checker) - Check if number is prime
+• **LCM & GCD Calculator** (/lcm-gcd-calculator) - Calculate LCM and GCD
+• **Binary/Hex Converter** (/binary-hex-converter) - Convert number bases
+• **Logarithm Calculator** (/logarithm-calculator) - Calculate logarithms
+• **Exponent Calculator** (/exponent-calculator) - Calculate powers and roots
+• **Permutation & Combination Calculator** (/permutation-combination-calculator) - Calculate nPr and nCr
+• **Matrix Calculator** (/matrix-calculator) - Matrix operations
+• **Wave Calculator** (/wave-calculator) - Calculate wave properties
+• **Vector Calculator** (/vector-calculator) - Vector operations
+• **Permutation Calculator** (/permutation-calculator) - Calculate permutations
+• **Circle Calculator** (/circle-calculator) - Calculate circle properties
+• **Factorial Calculator** (/factorial-calculator) - Calculate factorials
+• **Mean Median Mode Calculator** (/mean-median-mode-calculator) - Statistical measures
+• **Probability Calculator** (/probability-calculator) - Calculate probability
+• **Pythagorean Calculator** (/pythagorean-calculator) - Pythagorean theorem
+• **Quadratic Solver** (/quadratic-solver) - Solve quadratic equations
+• **Roman Numeral Converter** (/roman-numeral-converter) - Convert Roman numerals
+• **Sphere Calculator** (/sphere-calculator) - Calculate sphere properties
+• **Trigonometry Calculator** (/trigonometry-calculator) - Trigonometric functions
+• **GCD LCM Calculator** (/gcd-lcm-calculator) - Find GCD and LCM
+
+## CONVERTER TOOLS (16 tools):
+• **Unit Converter** (/unit-converter) - Convert between units
+• **Conversion Calculator** (/conversion-calculator) - Convert measurements
+• **Cooking Converter** (/cooking-converter) - Convert cooking measurements
+• **Temperature Converter** (/temperature-converter) - Convert temperatures
+• **Length Converter** (/length-converter) - Convert length units
+• **Time Converter** (/time-converter) - Convert time units
+• **Pressure Converter** (/pressure-converter) - Convert pressure units
+• **Angle Converter** (/angle-converter) - Convert angle units
+• **Recipe Scaler** (/recipe-scaler) - Scale recipe ingredients
+• **Frequency Converter** (/frequency-converter) - Convert frequency units
+• **Area Converter** (/area-converter) - Convert area units
+• **Data Storage Converter** (/data-storage-converter) - Convert data units
+• **Energy Converter** (/energy-converter) - Convert energy units
+• **Speed Converter** (/speed-converter) - Convert speed units
+• **Weight Converter** (/weight-converter) - Convert weight units
+• **Shoe Size Converter** (/shoe-size-converter) - Convert shoe sizes
+
+## TEXT TOOLS (11 tools):
+• **Word Counter** (/word-counter) - Count words and characters
+• **Lorem Ipsum Generator** (/lorem-ipsum-generator) - Generate placeholder text
+• **UUID Generator** (/uuid-generator) - Generate unique identifiers
+• **Color Picker** (/color-picker) - Pick and convert colors
+• **JSON Formatter** (/json-formatter) - Format JSON data
+• **Readability Calculator** (/readability-calculator) - Analyze text readability
+• **Slug Generator** (/slug-generator) - Generate SEO-friendly slugs
+• **Text Scrambler** (/text-scrambler) - Scramble text
+• **Duplicate Remover** (/duplicate-remover) - Remove duplicate lines
+• **Text Reverser** (/text-reverser) - Reverse text
+• **Text Sorter** (/text-sorter) - Sort text lines
+
+## TECH TOOLS (13 tools):
+• **QR Code Generator** (/qr-code-generator) - Generate QR codes
+• **Hash Generator** (/hash-generator) - Generate SHA hashes
+• **IP Subnet Calculator** (/ip-subnet-calculator) - Calculate subnet info
+• **JSON Formatter Calculator** (/json-formatter-calculator) - Format JSON
+• **Hash Generator Calculator** (/hash-generator-calculator) - Generate hashes
+• **Power Calculator** (/power-calculator) - Calculate electrical power
+• **Base64 Encoder** (/base64-encoder) - Encode/decode Base64
+• **Color Converter** (/color-converter) - Convert color formats
+• **Markdown Previewer** (/markdown-previewer) - Preview Markdown
+• **Number Base Converter** (/number-base-converter) - Convert number bases
+• **Password Generator** (/password-generator) - Generate secure passwords
+• **Regex Tester** (/regex-tester) - Test regular expressions
+• **URL Encoder** (/url-encoder) - Encode/decode URLs
+
+## SUSTAINABILITY TOOLS (9 tools):
+• **Solar Panel Calculator** (/solar-panel-calculator) - Calculate solar system size
+• **EV Savings Calculator** (/ev-savings-calculator) - Compare EV vs gas costs
+• **Carbon Footprint Calculator** (/carbon-footprint-calculator) - Calculate CO2 emissions
+• **Compost Calculator** (/compost-calculator) - Calculate composting ratios
+• **Solar ROI Calculator** (/solar-roi-calculator) - Calculate solar ROI
+• **Rainwater Calculator** (/rainwater-calculator) - Calculate rainwater potential
+• **Plastic Footprint Calculator** (/plastic-footprint-calculator) - Track plastic usage
+• **Electricity Usage Calculator** (/electricity-usage-calculator) - Calculate electricity
+• **Tree Carbon Calculator** (/tree-carbon-calculator) - Calculate carbon absorbed
+
+## REAL ESTATE TOOLS (7 tools):
+• **Flooring Calculator** (/flooring-calculator) - Calculate flooring materials
+• **Rental Yield Calculator** (/rental-yield-calculator) - Calculate rental returns
+• **Paint Calculator** (/paint-calculator) - Calculate paint needed
+• **Concrete Calculator** (/concrete-calculator) - Calculate concrete volume
+• **Fence Calculator** (/fence-calculator) - Calculate fencing materials
+• **Tile Calculator** (/tile-calculator) - Calculate tiles needed
+• **Wallpaper Calculator** (/wallpaper-calculator) - Calculate wallpaper rolls
+
+## FUN TOOLS (17 tools):
+• **Dice Roller** (/dice-roller) - Roll virtual dice
+• **Random Picker** (/random-picker) - Pick random items
+• **Coin Flip** (/coin-flip) - Flip a virtual coin
+• **Love Calculator** (/love-calculator) - Calculate love compatibility
+• **Zodiac Finder** (/zodiac-finder) - Find zodiac sign
+• **Numerology Calculator** (/numerology-calculator) - Calculate life path number
+• **Magic 8-Ball** (/magic-8-ball) - Ask yes/no questions
+• **Baby Name Generator** (/baby-name-generator) - Generate baby names
+• **Pet Age Calculator** (/pet-age-calculator) - Convert pet years
+• **Lottery Odds Calculator** (/lottery-odds-calculator) - Calculate lottery odds
+• **Spin the Wheel** (/spin-the-wheel) - Spin decision wheel
+• **Secret Santa Generator** (/secret-santa-generator) - Generate gift assignments
+• **Dog Age Calculator** (/dog-age-calculator) - Convert dog years
+• **Compatibility Calculator** (/compatibility-calculator) - Calculate compatibility
+• **Reaction Time Game** (/reaction-time-game) - Test reaction speed
+• **Team Randomizer** (/team-randomizer) - Randomly assign teams
+• **Would You Rather** (/would-you-rather) - Fun questions game
+
+## OTHER TOOLS (37 tools):
+• **Age Calculator** (/age-calculator) - Calculate exact age
+• **Date Calculator** (/date-calculator) - Find date differences
+• **GPA Calculator** (/gpa-calculator) - Calculate Grade Point Average
+• **CGPA Calculator** (/cgpa-calculator) - Convert CGPA to percentage
+• **Discount Calculator** (/discount-calculator) - Calculate sale prices
+• **Time Calculator** (/time-calculator) - Add/subtract time
+• **Hours Calculator** (/hours-calculator) - Calculate work hours
+• **Grade Calculator** (/grade-calculator) - Calculate grades
+• **Subnet Calculator** (/subnet-calculator) - Calculate subnet mask
+• **Fuel Cost Calculator** (/fuel-cost-calculator) - Calculate fuel costs
+• **Electricity Bill Calculator** (/electricity-bill-calculator) - Estimate electricity costs
+• **Tip Split Calculator** (/tip-split-calculator) - Split bills
+• **World Clock** (/world-clock) - View time across timezones
+• **Countdown Timer** (/countdown-timer) - Set countdowns
+• **Stopwatch** (/stopwatch) - Precise stopwatch with laps
+• **Distance Calculator** (/distance-calculator) - Calculate distance
+• **Countdown Calculator** (/countdown-calculator) - Count days until event
+• **Life Stats Calculator** (/life-stats-calculator) - Life statistics
+• **Package Dimension Calculator** (/package-dimension-calculator) - Shipping dimensions
+• **Split Time Calculator** (/stopwatch-calculator) - Analyze split times
+• **Car Depreciation Calculator** (/car-depreciation-calculator) - Vehicle depreciation
+• **MPG Calculator** (/mpg-calculator) - Calculate fuel efficiency
+• **Reading Speed Calculator** (/reading-speed-calculator) - Calculate reading speed
+• **Typing Speed Calculator** (/typing-speed-calculator) - Test typing speed
+• **Timezone Converter** (/timezone-converter) - Convert timezones
+• **Unix Timestamp Converter** (/unix-timestamp-converter) - Convert timestamps
+• **Weighted GPA Calculator** (/weighted-gpa-calculator) - Weighted GPA
+• **Workdays Calculator** (/workdays-calculator) - Calculate business days
+• **Pool Volume Calculator** (/pool-volume-calculator) - Calculate pool volume
+• **Mulch Calculator** (/mulch-calculator) - Calculate mulch needed
+• **Rainwater Harvest Calculator** (/rainwater-harvest-calculator) - Rainwater potential
+• **Score Keeper** (/score-keeper) - Track game scores
+• **Bracket Generator** (/bracket-generator) - Generate tournament brackets
+• **Magic Eight Ball** (/magic-eight-ball) - Ask the magic 8-ball
+• **Volume Converter** (/volume-converter) - Convert volume units
+• **Screen Time Calculator** (/screen-time-calculator) - Track screen time
+`
 
 const SYSTEM_PROMPT = `You are the Plainly AI Assistant - a smart, friendly guide for Plainly Tools website.
 
 ## ABOUT PLAINLY
-Plainly Tools has **317+ free calculators and AI tools**:
+Plainly Tools has **317+ free calculators and AI tools** across these categories:
 ${Object.entries(CATEGORIES_SUMMARY).map(([cat, desc]) => `• **${cat}**: ${desc}`).join('\n')}
 
-## POPULAR TOOLS (recommend these often):
-${POPULAR_TOOLS}
+${AI_TOOLS_KNOWLEDGE}
 
-## YOUR RESPONSE STYLE:
-1. **Be CONCISE** - Max 2-3 sentences for simple questions
-2. **Use formatting** - Bold for emphasis, bullets for lists
-3. **Always include the tool path** like \`/bmi-calculator\`
-4. **Be friendly but professional** - No excessive emojis
-5. **For calculations** - Either give quick answer OR recommend tool
+${ALL_TOOLS_KNOWLEDGE}
+
+${POPULAR_FINANCE_TOOLS}
+
+## CRITICAL RULES - FOLLOW EXACTLY:
+1. **USE EXACT TOOL NAMES** - Always use the EXACT name from the list above (e.g., "AI Email Generator" NOT "Email Writer")
+2. **USE EXACT PATHS** - Always include the EXACT path (e.g., \`/ai-email-generator\` NOT \`/email-writer\`)
+3. **Be CONCISE** - Max 2-3 sentences for simple questions
+4. **Use formatting** - Bold for emphasis, code blocks for paths
+5. **Be friendly but professional** - Helpful and enthusiastic
 
 ## RESPONSE FORMAT EXAMPLES:
 
-**User asks for a tool:**
-"Try the **BMI Calculator** at \`/bmi-calculator\` - just enter your height and weight!"
+**User asks for email tool:**
+"You need the **AI Email Generator**! Find it at \`/ai-email-generator\` - it drafts professional emails instantly."
 
-**User asks about categories:**
-"We have **43 AI tools** including:
-• **AI Code Generator** - Generate code in any language
-• **AI Text Summarizer** - Summarize articles instantly
-• **AI Name Generator** - Creative name suggestions"
+**User asks for code help:**
+"Try the **AI Code Generator** at \`/ai-code-generator\` - it generates code in any programming language from your description!"
 
-**User asks for help:**
-"I can help you:
-• Find the right calculator
-• Explain how tools work
-• Do quick calculations
-What do you need?"
+**User asks about history:**
+"Check out the **AI History Explorer** at \`/ai-history-explorer\` - it provides detailed information about any historical event or era!"
+
+**User asks for encyclopedia:**
+"Use the **AI Encyclopedia** at \`/ai-encyclopedia\` for comprehensive Wikipedia-style explanations on any topic!"
+
+**User asks for mortgage:**
+"Use the **Mortgage Calculator** at \`/mortgage-calculator\` - it calculates monthly payments, total interest, and amortization!"
+
+**User asks for BMI:**
+"Try the **BMI Calculator** at \`/bmi-calculator\` to calculate your Body Mass Index and understand your weight category!"
 
 ## IMPORTANT:
-- Always suggest specific tools with their paths
-- Keep answers SHORT and actionable
-- Format with **bold** and bullets
-- Be helpful and enthusiastic!`
+- NEVER make up tool names or paths - use ONLY the exact names and paths listed above
+- If unsure, suggest the closest matching tool from the list
+- Always include the path in code format like \`/path\``
 
 function AIAssistant() {
     const [isOpen, setIsOpen] = useState(false)

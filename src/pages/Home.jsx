@@ -45,16 +45,16 @@ function Home() {
         aiCalculators.find(c => c.path === '/ai-essay-grader'),  // NEW: AI Essay Grader
     ].filter(Boolean)
 
-    // Get latest 8 tools (newest AI Education tools)
+    // Get latest 8 tools (newest AI Knowledge & History tools)
     const latestTools = [
-        aiCalculators.find(c => c.path === '/ai-quiz-generator'),  // NEW
-        aiCalculators.find(c => c.path === '/ai-flashcard-generator'),  // NEW
-        aiCalculators.find(c => c.path === '/ai-study-guide-generator'),  // NEW
-        aiCalculators.find(c => c.path === '/ai-lesson-plan-generator'),  // NEW
-        aiCalculators.find(c => c.path === '/ai-practice-problem-generator'),  // NEW
-        aiCalculators.find(c => c.path === '/ai-citation-generator'),  // NEW
-        aiCalculators.find(c => c.path === '/ai-mind-map-generator'),  // NEW
-        aiCalculators.find(c => c.path === '/ai-mnemonic-generator'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-encyclopedia'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-history-explorer'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-biography-generator'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-fact-checker'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-timeline-generator'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-country-guide'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-science-explainer'),  // NEW
+        aiCalculators.find(c => c.path === '/ai-philosophy-explainer'),  // NEW
     ].filter(Boolean).slice(0, 8)
 
     const categories = [

@@ -199,7 +199,7 @@ export default function AIChat({ visible, onClose }: AIChatProps) {
           </View>
           <View>
             <Text style={styles.headerTitle}>Plainly AI Assistant</Text>
-            <Text style={styles.headerSubtitle}>Powered by AI • 309+ tools</Text>
+            <Text style={styles.headerSubtitle}>Powered by AI • 317+ tools</Text>
           </View>
         </View>
         <View style={styles.headerActions}>
@@ -231,7 +231,7 @@ export default function AIChat({ visible, onClose }: AIChatProps) {
               </View>
               <Text style={styles.welcomeTitle}>Hi! I'm Plainly AI</Text>
               <Text style={styles.welcomeText}>
-                Your smart assistant for 309+ calculators and AI tools. Ask me anything!
+                Your smart assistant for 317+ calculators and AI tools. Ask me anything!
               </Text>
               <View style={styles.suggestionsContainer}>
                 <Text style={styles.suggestionsTitle}>Try asking:</Text>

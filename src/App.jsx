@@ -304,6 +304,22 @@ import AIMindMapGenerator from './pages/calculators/ai/AIMindMapGenerator'
 import AIMnemonicGenerator from './pages/calculators/ai/AIMnemonicGenerator'
 import AILanguageLearningTutor from './pages/calculators/ai/AILanguageLearningTutor'
 import AIAnalogyGenerator from './pages/calculators/ai/AIAnalogyGenerator'
+// AI Knowledge & History Tools (15 NEW)
+import AIEncyclopedia from './pages/calculators/ai/AIEncyclopedia'
+import AIHistoryExplorer from './pages/calculators/ai/AIHistoryExplorer'
+import AIBiographyGenerator from './pages/calculators/ai/AIBiographyGenerator'
+import AIFactChecker from './pages/calculators/ai/AIFactChecker'
+import AITimelineGenerator from './pages/calculators/ai/AITimelineGenerator'
+import AICountryGuide from './pages/calculators/ai/AICountryGuide'
+import AIScienceExplainer from './pages/calculators/ai/AIScienceExplainer'
+import AIWordOriginFinder from './pages/calculators/ai/AIWordOriginFinder'
+import AIHistoricalComparison from './pages/calculators/ai/AIHistoricalComparison'
+import AIMythologyGuide from './pages/calculators/ai/AIMythologyGuide'
+import AICulturalExplorer from './pages/calculators/ai/AICulturalExplorer'
+import AIFamousQuotes from './pages/calculators/ai/AIFamousQuotes'
+import AIInventionHistory from './pages/calculators/ai/AIInventionHistory'
+import AIWarSummary from './pages/calculators/ai/AIWarSummary'
+import AIPhilosophyExplainer from './pages/calculators/ai/AIPhilosophyExplainer'
 
 // Converter Tools (15)
 import CookingConverter from './pages/calculators/converter/CookingConverter'
@@ -692,6 +708,22 @@ function App() {
                     <Route path="/ai-mnemonic-generator" element={<AIMnemonicGenerator />} />
                     <Route path="/ai-language-learning-tutor" element={<AILanguageLearningTutor />} />
                     <Route path="/ai-analogy-generator" element={<AIAnalogyGenerator />} />
+                    {/* AI Knowledge & History Tools (15 NEW) */}
+                    <Route path="/ai-encyclopedia" element={<AIEncyclopedia />} />
+                    <Route path="/ai-history-explorer" element={<AIHistoryExplorer />} />
+                    <Route path="/ai-biography-generator" element={<AIBiographyGenerator />} />
+                    <Route path="/ai-fact-checker" element={<AIFactChecker />} />
+                    <Route path="/ai-timeline-generator" element={<AITimelineGenerator />} />
+                    <Route path="/ai-country-guide" element={<AICountryGuide />} />
+                    <Route path="/ai-science-explainer" element={<AIScienceExplainer />} />
+                    <Route path="/ai-word-origin-finder" element={<AIWordOriginFinder />} />
+                    <Route path="/ai-historical-comparison" element={<AIHistoricalComparison />} />
+                    <Route path="/ai-mythology-guide" element={<AIMythologyGuide />} />
+                    <Route path="/ai-cultural-explorer" element={<AICulturalExplorer />} />
+                    <Route path="/ai-famous-quotes" element={<AIFamousQuotes />} />
+                    <Route path="/ai-invention-history" element={<AIInventionHistory />} />
+                    <Route path="/ai-war-summary" element={<AIWarSummary />} />
+                    <Route path="/ai-philosophy-explainer" element={<AIPhilosophyExplainer />} />
 
                     {/* Converter Tools */}
                     <Route path="/cooking-converter" element={<CookingConverter />} />

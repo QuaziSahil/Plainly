@@ -163,7 +163,16 @@ import {
     Library,
     Brain,
     Languages,
-    Lightbulb
+    Lightbulb,
+    // Knowledge & History Tools Icons
+    History,
+    Globe2,
+    Swords,
+    GitCompareArrows,
+    BookOpenCheck,
+    MessageSquareQuote,
+    Wrench,
+    BookText
 } from 'lucide-react'
 
 export const allCalculators = [
@@ -511,6 +520,22 @@ export const allCalculators = [
     { name: 'AI Mnemonic Device Generator', description: 'Create effective memory aids and acronyms for concepts.', icon: Brain, path: '/ai-mnemonic-generator', category: 'AI' },
     { name: 'AI Language Learning Tutor', description: 'Practice vocabulary and grammar in any target language.', icon: Languages, path: '/ai-language-learning-tutor', category: 'AI' },
     { name: 'AI Analogy Generator', description: 'Explain abstract concepts with vivid, relatable analogies.', icon: ArrowRightLeft, path: '/ai-analogy-generator', category: 'AI' },
+    // AI Knowledge & History Tools (15 NEW)
+    { name: 'AI Encyclopedia', description: 'Get comprehensive, Wikipedia-style explanations on any topic.', icon: Library, path: '/ai-encyclopedia', category: 'AI' },
+    { name: 'AI History Explorer', description: 'Explore historical events, eras, and figures in detail.', icon: Landmark, path: '/ai-history-explorer', category: 'AI' },
+    { name: 'AI Biography Generator', description: 'Get comprehensive biographies of famous people and historical figures.', icon: User, path: '/ai-biography-generator', category: 'AI' },
+    { name: 'AI Fact Checker', description: 'Verify claims and get accurate information with AI analysis.', icon: CheckCircle, path: '/ai-fact-checker', category: 'AI' },
+    { name: 'AI Timeline Generator', description: 'Generate chronological timelines for any topic or event.', icon: Clock, path: '/ai-timeline-generator', category: 'AI' },
+    { name: 'AI Country Guide', description: 'Get comprehensive information about any country.', icon: Globe, path: '/ai-country-guide', category: 'AI' },
+    { name: 'AI Science Explainer', description: 'Understand complex scientific concepts in simple terms.', icon: Atom, path: '/ai-science-explainer', category: 'AI' },
+    { name: 'AI Word Origin Finder', description: 'Discover the etymology and history of words.', icon: BookText, path: '/ai-word-origin-finder', category: 'AI' },
+    { name: 'AI Historical Comparison', description: 'Compare two historical events, figures, or eras.', icon: GitCompareArrows, path: '/ai-historical-comparison', category: 'AI' },
+    { name: 'AI Mythology Guide', description: 'Explore myths, legends, and folklore from around the world.', icon: Sparkles, path: '/ai-mythology-guide', category: 'AI' },
+    { name: 'AI Cultural Explorer', description: 'Learn about traditions, customs, and cultures worldwide.', icon: Globe2, path: '/ai-cultural-explorer', category: 'AI' },
+    { name: 'AI Famous Quotes Finder', description: 'Find famous quotes about any topic with context and meaning.', icon: MessageSquareQuote, path: '/ai-famous-quotes', category: 'AI' },
+    { name: 'AI Invention History', description: 'Discover the fascinating stories behind great inventions.', icon: Lightbulb, path: '/ai-invention-history', category: 'AI' },
+    { name: 'AI War Summary', description: 'Get balanced educational summaries of historical conflicts.', icon: Swords, path: '/ai-war-summary', category: 'AI' },
+    { name: 'AI Philosophy Explainer', description: 'Understand philosophical concepts in simple terms.', icon: Brain, path: '/ai-philosophy-explainer', category: 'AI' },
 ]
 
 
