@@ -55,271 +55,290 @@ function AIInfographicDesigner() {
         const selectedLayout = layouts.find(l => l.value === layout)
         const selectedColors = colorSchemes.find(c => c.value === colorScheme)
 
-        const systemPrompt = `You are an expert infographic designer creating presentation-ready HTML infographics. Output ONLY valid HTML code.
+        const systemPrompt = `You are a world-class infographic designer with expertise in visual storytelling, data visualization, and content strategy. You create STUNNING, PROFESSIONAL-GRADE infographics that could be published in major magazines or presentations.
 
-## CRITICAL OUTPUT RULES:
-1. Start with <!DOCTYPE html> - no other text before it
-2. All CSS must be in <style> tags inside <head>
-3. No external dependencies - everything self-contained
-4. No markdown code blocks - just raw HTML
+## YOUR MISSION:
+Create an infographic that is BOTH beautiful AND deeply informative. The quality should match professional design agencies. Every element must have purpose and polish.
 
-## COLOR SCHEME: ${selectedColors?.label}
+## CRITICAL OUTPUT FORMAT:
+- Start IMMEDIATELY with <!DOCTYPE html>
+- NO markdown code blocks, NO explanations
+- ALL CSS in <style> tags, ALL content in <body>
+- SELF-CONTAINED: no external fonts, icons, or libraries
+
+## DESIGN EXCELLENCE PRINCIPLES:
+
+### 1. TYPOGRAPHY HIERARCHY (Critical for Professional Look):
+- **Main Title**: Large (36-48px), can use serif font (Georgia) for elegance or sans-serif for modern
+- **Subtitles**: Italicized or different weight, slightly smaller
+- **Section Headings**: Bold, 20-24px, clear visual weight
+- **Body Text**: 15-16px, comfortable reading, 1.6-1.8 line-height
+- **Labels/Captions**: 12-13px, uppercase with letter-spacing for emphasis
+- **Numbers/Stats**: Extra bold, 32-48px, can use accent colors
+
+### 2. VISUAL STRUCTURE:
+- **Hero Section**: Commanding presence, sets the tone
+- **Clear Sections**: Each topic area visually distinct
+- **Card-Based Layout**: Rounded corners (12-20px), subtle shadows or borders
+- **Consistent Spacing**: 24-32px between major sections, 16px internal padding
+- **Visual Rhythm**: Alternating layouts keep it interesting
+
+### 3. COLOR APPLICATION:
+Use the specified color scheme: ${selectedColors?.label}
 ${selectedColors?.colors}
 
-## DESIGN STYLE: ${selectedStyle?.label}
+- Primary color for headings, accents, key numbers
+- Secondary color for highlights, progress bars, icons
+- Background should enhance readability
+- Ensure sufficient contrast (4.5:1 minimum)
+
+### 4. RICH VISUAL ELEMENTS:
+- **Emoji Icons**: Use relevant emojis (🏛️ 📊 💡 ⚡ 🎯 etc.) as section icons
+- **Stats Grid**: 3-4 key numbers in a visually striking grid
+- **Progress Bars**: For percentages and comparisons
+- **Info Cards**: For grouped facts with icon + title + description
+- **Highlight Boxes**: For quotes, key insights, or warnings
+- **Visual Separators**: Borders, backgrounds to define sections
+
+### 5. CONTENT DEPTH (This is what makes it professional):
+You MUST include:
+- 6-10 REAL, ACCURATE facts researched from your knowledge
+- Specific numbers, dates, statistics (not vague statements)
+- Historical context or background where relevant
+- Multiple perspectives or categories within the topic
+- Practical insights or "did you know" elements
+- Sources of data mentioned where appropriate
+
+### 6. DESIGN STYLE: ${selectedStyle?.label}
 ${selectedStyle?.desc}
 
-## LAYOUT: ${selectedLayout?.label}
+### 7. LAYOUT TYPE: ${selectedLayout?.label}
 ${selectedLayout?.desc}
 
-## REQUIRED HTML STRUCTURE:
+## HTML STRUCTURE TO FOLLOW:
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infographic</title>
+    <title>[Topic] Infographic</title>
     <style>
-        /* CSS Variables */
         :root {
-            --bg: [background color];
+            --bg: [background];
             --text: [text color];
+            --text-muted: [muted text];
             --primary: [primary accent];
             --secondary: [secondary accent];
+            --card-bg: [card background];
+            --border: [border color];
         }
         
-        /* Reset */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.6;
-            padding: 32px 24px;
+            line-height: 1.7;
+            padding: 40px 24px;
         }
         
-        .container {
-            max-width: 680px;
-            margin: 0 auto;
-        }
+        .container { max-width: 720px; margin: 0 auto; }
         
-        /* Hero section with gradient */
+        /* Hero - Make it commanding */
         .hero {
             text-align: center;
-            padding: 40px 24px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 20px;
-            margin-bottom: 32px;
+            margin-bottom: 40px;
+            padding: 48px 32px;
+            background: [gradient or solid];
+            border-radius: 24px;
         }
         
         .hero h1 {
-            font-size: 32px;
+            font-size: 42px;
             font-weight: 800;
-            margin-bottom: 12px;
-            color: white;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            margin-bottom: 16px;
+            line-height: 1.2;
         }
         
-        .hero p {
-            font-size: 16px;
-            opacity: 0.95;
-            color: white;
+        .hero .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 500px;
+            margin: 0 auto;
         }
         
-        /* Stats grid */
+        /* Stats Grid - Impactful numbers */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 16px;
-            margin-bottom: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
         }
         
         .stat-card {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 24px 16px;
+            padding: 28px 20px;
             text-align: center;
         }
         
         .stat-number {
-            font-size: 36px;
+            font-size: 40px;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary);
+            line-height: 1;
         }
         
         .stat-label {
-            font-size: 13px;
-            opacity: 0.7;
-            margin-top: 8px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-top: 12px;
         }
         
-        /* Content sections */
+        /* Content Sections */
         .section {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 24px;
         }
         
         .section-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 16px;
+            margin-bottom: 20px;
         }
         
-        .section-icon {
-            font-size: 28px;
-        }
+        .section-icon { font-size: 32px; }
         
         .section-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
         }
         
         .section-content {
             font-size: 15px;
-            opacity: 0.9;
-            margin-bottom: 16px;
+            color: var(--text);
+            line-height: 1.8;
         }
         
-        /* Progress bar */
-        .progress-container {
-            margin-top: 16px;
+        .section-content p { margin-bottom: 16px; }
+        .section-content p:last-child { margin-bottom: 0; }
+        
+        /* Progress/Metric Bars */
+        .metric {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
         }
         
-        .progress-label {
+        .metric-header {
             display: flex;
             justify-content: space-between;
-            font-size: 13px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
         }
         
-        .progress-bar {
-            height: 10px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 5px;
+        .metric-bar {
+            height: 12px;
+            background: rgba(128,128,128,0.2);
+            border-radius: 6px;
             overflow: hidden;
         }
         
-        .progress-fill {
+        .metric-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 5px;
+            border-radius: 6px;
+        }
+        
+        /* Highlight Box */
+        .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin: 32px 0;
+            text-align: center;
+        }
+        
+        .highlight-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        /* Quote Block */
+        .quote {
+            padding: 24px;
+            border-left: 4px solid var(--primary);
+            background: var(--card-bg);
+            margin: 24px 0;
+            font-style: italic;
         }
         
         /* Footer */
         .footer {
             text-align: center;
-            padding: 24px;
+            padding: 32px 20px;
+            color: var(--text-muted);
             font-size: 13px;
-            opacity: 0.5;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            margin-top: 32px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
         }
         
-        /* CRITICAL: Print styles for PDF export */
+        /* Print Styles */
         @media print {
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                color-adjust: exact !important;
-            }
-            body {
-                background: var(--bg) !important;
-                padding: 20px !important;
-            }
-            .hero {
-                background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
-            }
-            .stat-card, .section {
-                background: rgba(128,128,128,0.2) !important;
-                border: 1px solid rgba(128,128,128,0.3) !important;
-            }
-            .stat-number {
-                -webkit-text-fill-color: var(--primary) !important;
-                color: var(--primary) !important;
-            }
-            .progress-fill {
-                background: var(--primary) !important;
-            }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body { padding: 20px !important; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Hero Section -->
-        <div class="hero">
-            <h1>[Title]</h1>
-            <p>[Subtitle hook]</p>
-        </div>
-        
-        <!-- Stats Grid - 3-4 key numbers -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">[Number]</div>
-                <div class="stat-label">[Label]</div>
-            </div>
-            <!-- More stat cards -->
-        </div>
-        
-        <!-- Content Sections with facts and progress bars -->
-        <div class="section">
-            <div class="section-header">
-                <span class="section-icon">[Emoji]</span>
-                <h2 class="section-title">[Title]</h2>
-            </div>
-            <p class="section-content">[2-3 sentences of real facts]</p>
-            <div class="progress-container">
-                <div class="progress-label">
-                    <span>[Label]</span>
-                    <span>[Percentage]%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: [X]%;"></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- More sections... -->
-        
-        <div class="footer">Created with Plainly AI</div>
+        <!-- Build a complete infographic with all sections filled with real content -->
     </div>
 </body>
 </html>
 
-## CONTENT REQUIREMENTS:
-1. Include 5-7 REAL, accurate facts about "${topic}"
-2. Use actual statistics and numbers from your knowledge
-3. Each section should be educational with real data
-4. Include at least 3 progress bars or visual metrics
-5. Make content presentation-ready and professional
+## REMEMBER:
+1. RESEARCH the topic thoroughly - include REAL facts, dates, numbers
+2. Make it VISUALLY stunning - professional designers would approve
+3. Make it INFORMATIVE - readers should learn something valuable
+4. Create 5-7 distinct content sections minimum
+5. Use the exact color scheme, style, and layout specified
+6. Include a compelling title and subtitle in the hero
+7. End with "Created with Plainly AI" footer
 
-## OUTPUT:
-Return ONLY the HTML code starting with <!DOCTYPE html>. No explanations, no markdown.`
+OUTPUT: Return ONLY the complete HTML. Start with <!DOCTYPE html>`
 
-        const prompt = `Create a professional infographic about: "${topic}"
+        const prompt = `Create a PROFESSIONAL-GRADE infographic about: "${topic}"
 
-Style: ${selectedStyle?.label}
-Colors: ${selectedColors?.label}
-Layout: ${selectedLayout?.label}
+DESIGN SPECIFICATIONS:
+- Style: ${selectedStyle?.label} (${selectedStyle?.desc})
+- Colors: ${selectedColors?.label} (${selectedColors?.colors})
+- Layout: ${selectedLayout?.label} (${selectedLayout?.desc})
 
-Requirements:
-- Hero with gradient and compelling title
-- 3-4 key statistics in a grid
-- 4-5 content sections with real facts
-- Progress bars showing relevant metrics
-- Professional typography and spacing
+CONTENT REQUIREMENTS:
+- Write a compelling, creative title (not just the topic name)
+- Add a subtitle that hooks the reader
+- Include 3-4 impressive statistics in a grid
+- Create 5-7 content sections with different aspects of the topic
+- Each section needs: emoji icon, bold title, 2-3 sentences of REAL facts
+- Add progress bars or metrics where data allows
+- Include historical context, practical insights, or surprising facts
+- End with a memorable quote or key takeaway if appropriate
 
-Generate complete, valid HTML now.`
+QUALITY STANDARD: This should look like it was designed by a professional agency.
+
+Generate the complete HTML now.`
 
         try {
             const response = await askGroq(prompt, systemPrompt, { maxTokens: 8000 })
@@ -361,7 +380,6 @@ Generate complete, valid HTML now.`
                     sunset: '#fef3c7',
                     neon: '#ffffff'
                 }
-
                 htmlCode = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -430,7 +448,7 @@ ${htmlCode}
 
             // Write the HTML with export instructions
             printWindow.document.write(`
-                ${generatedCode.replace('</body>', `
+                    ${generatedCode.replace('</body>', `
                     <div style="position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 16px 24px; border-radius: 12px; font-family: system-ui; z-index: 9999; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
                         <strong>📥 To Save:</strong><br>
                         • <b>PDF:</b> Press Ctrl+P → Save as PDF<br>
@@ -438,7 +456,7 @@ ${htmlCode}
                         <button onclick="this.parentElement.remove()" style="margin-top: 10px; padding: 6px 12px; border: none; background: #666; color: white; border-radius: 6px; cursor: pointer;">Got it!</button>
                     </div>
                 </body>`)}
-            `)
+                    `)
             printWindow.document.close()
         } catch (err) {
             console.error('Export error:', err)
