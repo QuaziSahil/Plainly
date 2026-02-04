@@ -76,12 +76,22 @@ Create an infographic that is BOTH beautiful AND deeply informative. The quality
 - **Labels/Captions**: 12-13px, uppercase with letter-spacing for emphasis
 - **Numbers/Stats**: Extra bold, 32-48px, can use accent colors
 
-### 2. VISUAL STRUCTURE:
-- **Hero Section**: Commanding presence, sets the tone
-- **Clear Sections**: Each topic area visually distinct
-- **Card-Based Layout**: Rounded corners (12-20px), subtle shadows or borders
-- **Consistent Spacing**: 24-32px between major sections, 16px internal padding
-- **Visual Rhythm**: Alternating layouts keep it interesting
+### 2. LAYOUT RULES (CRITICAL - FOLLOW EXACTLY):
+⚠️ VERTICAL STACKING ONLY for content sections:
+- ALL content sections must be FULL WIDTH and stack VERTICALLY
+- NEVER use horizontal columns for content sections (causes text cutoff)
+- ONLY the stats grid can use grid columns (max 3-4 items)
+- Each section takes 100% width, one below the other
+- Container max-width: 720px centered
+
+CORRECT structure:
+- Hero (full width, centered)
+- Stats Grid (3-4 small cards in a row - OK)
+- Section 1 (full width card)
+- Section 2 (full width card)
+- Section 3 (full width card)
+- Quote/Highlight (full width)
+- Footer (full width)
 
 ### 3. COLOR APPLICATION:
 Use the specified color scheme: ${selectedColors?.label}
@@ -324,21 +334,26 @@ OUTPUT: Return ONLY the complete HTML. Start with <!DOCTYPE html>`
 DESIGN SPECIFICATIONS:
 - Style: ${selectedStyle?.label} (${selectedStyle?.desc})
 - Colors: ${selectedColors?.label} (${selectedColors?.colors})
-- Layout: ${selectedLayout?.label} (${selectedLayout?.desc})
+- Layout: VERTICAL SCROLL - all sections stacked vertically, full width
+
+⚠️ CRITICAL LAYOUT RULE:
+- Content sections must be FULL WIDTH, stacked VERTICALLY (one below another)
+- DO NOT put content sections side-by-side in columns
+- Only the stats grid (3-4 numbers) can be horizontal
+- Each section takes 100% width of container
 
 CONTENT REQUIREMENTS:
-- Write a compelling, creative title (not just the topic name)
-- Add a subtitle that hooks the reader
-- Include 3-4 impressive statistics in a grid
-- Create 5-7 content sections with different aspects of the topic
-- Each section needs: emoji icon, bold title, 2-3 sentences of REAL facts
-- Add progress bars or metrics where data allows
-- Include historical context, practical insights, or surprising facts
-- End with a memorable quote or key takeaway if appropriate
+- Compelling, creative title (not just topic name)
+- Subtitle that hooks the reader
+- 3-4 statistics in a horizontal grid (numbers only)
+- 5-7 FULL WIDTH content sections stacked vertically
+- Each section: emoji icon, bold title, 2-3 sentences of real facts
+- Progress bars or metrics where relevant
+- End with a quote or key takeaway
 
-QUALITY STANDARD: This should look like it was designed by a professional agency.
+QUALITY: Professional agency level design.
 
-Generate the complete HTML now.`
+Generate complete HTML now.`
 
         try {
             const response = await askGroq(prompt, systemPrompt, { maxTokens: 8000 })
