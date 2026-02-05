@@ -2,11 +2,29 @@ import { useState, useMemo } from 'react'
 import { FileSpreadsheet } from 'lucide-react'
 import CalculatorLayout from '../../../components/Calculator/CalculatorLayout'
 
+// Currency definitions with locale mappings
+const CURRENCIES = [
+    { code: 'USD', name: 'US Dollar', symbol: '$', locale: 'en-US' },
+    { code: 'EUR', name: 'Euro', symbol: '€', locale: 'de-DE' },
+    { code: 'GBP', name: 'British Pound', symbol: '£', locale: 'en-GB' },
+    { code: 'INR', name: 'Indian Rupee', symbol: '₹', locale: 'en-IN' },
+    { code: 'CAD', name: 'Canadian Dollar', symbol: 'C$', locale: 'en-CA' },
+    { code: 'AUD', name: 'Australian Dollar', symbol: 'A$', locale: 'en-AU' },
+    { code: 'JPY', name: 'Japanese Yen', symbol: '¥', locale: 'ja-JP' },
+    { code: 'CNY', name: 'Chinese Yuan', symbol: '¥', locale: 'zh-CN' },
+    { code: 'CHF', name: 'Swiss Franc', symbol: 'CHF', locale: 'de-CH' },
+    { code: 'BRL', name: 'Brazilian Real', symbol: 'R$', locale: 'pt-BR' },
+]
+
 function AmortizationCalculator() {
     const [loanAmount, setLoanAmount] = useState(250000)
     const [interestRate, setInterestRate] = useState(6.5)
     const [loanTerm, setLoanTerm] = useState(30)
     const [extraPayment, setExtraPayment] = useState(0)
+    const [currency, setCurrency] = useState('USD')
+
+    // Get current currency configuration
+    const currentCurrency = CURRENCIES.find(c => c.code === currency) || CURRENCIES[0]
 
     const results = useMemo(() => {
         const monthlyRate = interestRate / 100 / 12
@@ -65,11 +83,13 @@ function AmortizationCalculator() {
     }, [loanAmount, interestRate, loanTerm, extraPayment])
 
     const formatCurrency = (value) => {
-        return new Intl.NumberFormat('en-US', {
+        // Handle JPY which doesn't use decimal places
+        const fractionDigits = currentCurrency.code === 'JPY' ? 0 : 2
+        return new Intl.NumberFormat(currentCurrency.locale, {
             style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+            currency: currentCurrency.code,
+            minimumFractionDigits: fractionDigits,
+            maximumFractionDigits: fractionDigits
         }).format(value)
     }
 
@@ -109,13 +129,15 @@ function AmortizationCalculator() {
             <div className="input-row">
                 <div className="input-group">
                     <label className="input-label">Loan Term (Years)</label>
-                    <select value={loanTerm} onChange={(e) => setLoanTerm(Number(e.target.value))}>
-                        <option value={10}>10 years</option>
-                        <option value={15}>15 years</option>
-                        <option value={20}>20 years</option>
-                        <option value={25}>25 years</option>
-                        <option value={30}>30 years</option>
-                    </select>
+                    <input
+                        type="number"
+                        value={loanTerm}
+                        onChange={(e) => setLoanTerm(Number(e.target.value))}
+                        min={1}
+                        max={50}
+                        step={1}
+                        placeholder="Enter years"
+                    />
                 </div>
                 <div className="input-group">
                     <label className="input-label">Extra Monthly Payment</label>
@@ -125,6 +147,22 @@ function AmortizationCalculator() {
                         onChange={(e) => setExtraPayment(Number(e.target.value))}
                         min={0}
                     />
+                </div>
+            </div>
+
+            <div className="input-row">
+                <div className="input-group" style={{ flex: 1 }}>
+                    <label className="input-label">Currency</label>
+                    <select
+                        value={currency}
+                        onChange={(e) => setCurrency(e.target.value)}
+                    >
+                        {CURRENCIES.map(curr => (
+                            <option key={curr.code} value={curr.code}>
+                                {curr.code} ({curr.symbol}) - {curr.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
             </div>
 
