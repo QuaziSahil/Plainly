@@ -251,17 +251,25 @@ function BugReportModal({ isOpen, onClose, calculatorName }) {
                         <div style={{ marginBottom: '16px' }}>
                             <label style={{
                                 display: 'block',
-                                marginBottom: '8px',
+                                marginBottom: '4px',
                                 fontSize: '14px',
                                 fontWeight: 500
                             }}>
                                 Your Email (optional)
                             </label>
+                            <p style={{
+                                margin: '0 0 8px 0',
+                                fontSize: '12px',
+                                color: '#a78bfa',
+                                opacity: 0.9
+                            }}>
+                                📧 We'll notify you when this issue is fixed
+                            </p>
                             <input
                                 type="email"
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                placeholder="For follow-up questions"
+                                placeholder="Enter your email for fix notification"
                                 style={{
                                     width: '100%',
                                     padding: '12px',
