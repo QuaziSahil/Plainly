@@ -28,7 +28,7 @@ export default function ExploreScreen() {
       setSelectedCategory(categoryParam);
     }
   }, [categoryParam]);
-  const { addToFavorites, removeFromFavorites, favorites, addToHistory } = useStorageStore();
+  const { favorites, addToHistory } = useStorageStore();
 
   // Find category name from ID for filtering
   const getCategoryName = (categoryId: string) => {

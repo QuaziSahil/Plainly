@@ -13,16 +13,16 @@ const IMAGE_MODELS = [
   'kontext',
 ];
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
-};
+import {
+  buildCorsHeaders,
+  checkRateLimit,
+  enforceAllowedOrigin,
+  handleCorsOptions,
+} from '../../../_shared/security.js';
 
 function withCorsHeaders(headers = {}) {
-  return {
-    ...headers,
-    ...CORS_HEADERS,
-  };
+  // Deprecated in favor of buildCorsHeaders() usage below.
+  return headers;
 }
 
 function json(data, status = 200) {
@@ -47,15 +47,34 @@ function buildPollinationsUrl(prompt, model, width, height, seed, apiKey) {
   return `https://gen.pollinations.ai/image/${encodedPrompt}?${params.toString()}`;
 }
 
-export async function onRequestOptions() {
-  return new Response(null, {
-    status: 204,
-    headers: CORS_HEADERS,
-  });
+export async function onRequestOptions(context) {
+  return handleCorsOptions(context.request, context.env, 'GET, OPTIONS');
 }
 
 export async function onRequestGet(context) {
   const { request, env } = context;
+
+  const originError = enforceAllowedOrigin(request, env);
+  if (originError) {
+    return new Response(JSON.stringify({ error: originError }), {
+      status: 403,
+      headers: buildCorsHeaders(request, env, 'GET, OPTIONS', { 'Content-Type': 'application/json' }),
+    });
+  }
+
+  const rateLimitMax = Number(env.IMAGE_RATE_LIMIT_MAX || 30);
+  const rateLimitWindowMs = Number(env.IMAGE_RATE_LIMIT_WINDOW_MS || 60_000);
+  const rate = checkRateLimit(request, 'image', rateLimitMax, rateLimitWindowMs);
+  if (!rate.allowed) {
+    return new Response(JSON.stringify({ error: 'Too many image requests. Please try again shortly.' }), {
+      status: 429,
+      headers: buildCorsHeaders(request, env, 'GET, OPTIONS', {
+        'Content-Type': 'application/json',
+        'Retry-After': String(rate.retryAfter),
+      }),
+    });
+  }
+
   const url = new URL(request.url);
   const prompt = (url.searchParams.get('prompt') || '').trim();
   const width = Number(url.searchParams.get('width') || 1024);
@@ -63,7 +82,10 @@ export async function onRequestGet(context) {
   const seed = Number(url.searchParams.get('seed') || Math.floor(Math.random() * 1000000));
 
   if (!prompt) {
-    return json({ error: 'Missing prompt query param.' }, 400);
+    return new Response(JSON.stringify({ error: 'Missing prompt query param.' }), {
+      status: 400,
+      headers: buildCorsHeaders(request, env, 'GET, OPTIONS', { 'Content-Type': 'application/json' }),
+    });
   }
 
   const errors = [];
@@ -87,7 +109,7 @@ export async function onRequestGet(context) {
 
       return new Response(upstream.body, {
         status: 200,
-        headers: withCorsHeaders({
+        headers: buildCorsHeaders(request, env, 'GET, OPTIONS', {
           'Content-Type': contentType,
           'Cache-Control': 'no-store',
           'X-Plainly-Model': model,
@@ -98,5 +120,8 @@ export async function onRequestGet(context) {
     }
   }
 
-  return json({ error: 'All image models failed.', details: errors }, 503);
+  return new Response(JSON.stringify({ error: 'All image models failed.', details: errors }), {
+    status: 503,
+    headers: buildCorsHeaders(request, env, 'GET, OPTIONS', { 'Content-Type': 'application/json' }),
+  });
 }

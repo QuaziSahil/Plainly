@@ -14,29 +14,32 @@ function BugReportModal({ isOpen, onClose, calculatorName }) {
     const [submitted, setSubmitted] = useState(false)
     const [error, setError] = useState('')
 
+    const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'https://plainly.live').replace(/\/$/, '')
+    const FEEDBACK_URL = `${API_BASE_URL}/api/feedback/submit`
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setSubmitting(true)
         setError('')
 
         try {
-            // Using Web3Forms for email - free, no signup for basic use
-            const response = await fetch('https://api.web3forms.com/submit', {
+            // Send via Plainly server proxy (keeps provider keys off the client)
+            const response = await fetch(FEEDBACK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    access_key: 'f9e0f867-ad62-44d0-8996-2101d22e9281',
+                    type: 'bug_report',
                     subject: `🐛 Bug Report: ${calculatorName}`,
                     from_name: 'Plainly Bug Report',
-                    calculator: calculatorName,
-                    calculator_url: window.location.href,
-                    issue_type: formData.issueType,
+                    calculatorName: calculatorName,
+                    calculatorUrl: window.location.href,
+                    issueType: formData.issueType,
                     description: formData.description,
-                    expected_behavior: formData.expectedBehavior,
-                    steps_to_reproduce: formData.steps,
-                    reporter_email: formData.email || 'Not provided',
-                    browser_info: formData.browser,
-                    timestamp: new Date().toISOString()
+                    expectedBehavior: formData.expectedBehavior,
+                    steps: formData.steps,
+                    email: formData.email || '',
+                    browser: formData.browser,
+                    website: ''
                 })
             })
 

@@ -14,6 +14,9 @@ function ToolRequestWidget() {
     const [submitted, setSubmitted] = useState(false)
     const [error, setError] = useState('')
 
+    const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'https://plainly.live').replace(/\/$/, '')
+    const FEEDBACK_URL = `${API_BASE_URL}/api/feedback/submit`
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (!formData.description.trim()) return
@@ -22,20 +25,20 @@ function ToolRequestWidget() {
         setError('')
 
         try {
-            // Using Web3Forms for email - same as bug report
-            const response = await fetch('https://api.web3forms.com/submit', {
+            // Send via Plainly server proxy (keeps provider keys off the client)
+            const response = await fetch(FEEDBACK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    access_key: 'f9e0f867-ad62-44d0-8996-2101d22e9281',
+                    type: 'tool_request',
                     subject: `💡 Tool Suggestion: ${formData.toolName || 'New Tool Request'}`,
                     from_name: 'Plainly Tool Suggestion',
-                    tool_name: formData.toolName || 'Not specified',
+                    toolName: formData.toolName || '',
                     description: formData.description,
-                    suggested_category: formData.category,
-                    submitter_email: formData.email || 'Not provided',
-                    page_url: window.location.href,
-                    timestamp: new Date().toISOString()
+                    category: formData.category,
+                    email: formData.email || '',
+                    pageUrl: window.location.href,
+                    website: ''
                 })
             })
 

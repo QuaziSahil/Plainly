@@ -20,19 +20,25 @@ const FALLBACK_CHAIN = [
   MODELS.creative,
 ];
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
+import {
+  buildCorsHeaders,
+  checkRateLimit,
+  enforceAllowedOrigin,
+  handleCorsOptions,
+} from '../../_shared/security.js';
 
 function json(data, status = 200) {
+  // Backwards-compatible helper; prefer jsonWithCors below when request is available.
+  return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
+}
+
+function jsonWithCors(request, env, data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: {
+    headers: buildCorsHeaders(request, env, 'POST, OPTIONS', {
       'Content-Type': 'application/json',
-      ...CORS_HEADERS,
-    },
+      ...extraHeaders,
+    }),
   });
 }
 
@@ -98,30 +104,45 @@ async function callGroq(env, payload) {
   return { response, data };
 }
 
-export async function onRequestOptions() {
-  return new Response(null, {
-    status: 204,
-    headers: CORS_HEADERS,
-  });
+export async function onRequestOptions(context) {
+  return handleCorsOptions(context.request, context.env, 'POST, OPTIONS');
 }
 
 export async function onRequestPost(context) {
   const { request, env } = context;
 
   if (!env.GROQ_API_KEY) {
-    return json({ error: 'Server is missing GROQ_API_KEY secret.' }, 500);
+    return jsonWithCors(request, env, { error: 'Server is missing GROQ_API_KEY secret.' }, 500);
+  }
+
+  const originError = enforceAllowedOrigin(request, env);
+  if (originError) {
+    return jsonWithCors(request, env, { error: originError }, 403);
+  }
+
+  const rateLimitMax = Number(env.AI_RATE_LIMIT_MAX || 60);
+  const rateLimitWindowMs = Number(env.AI_RATE_LIMIT_WINDOW_MS || 60_000);
+  const rate = checkRateLimit(request, 'ai', rateLimitMax, rateLimitWindowMs);
+  if (!rate.allowed) {
+    return jsonWithCors(
+      request,
+      env,
+      { error: 'Too many requests. Please try again shortly.' },
+      429,
+      { 'Retry-After': String(rate.retryAfter) }
+    );
   }
 
   let body;
   try {
     body = await request.json();
   } catch {
-    return json({ error: 'Invalid JSON request body.' }, 400);
+    return jsonWithCors(request, env, { error: 'Invalid JSON request body.' }, 400);
   }
 
   const messages = normalizeMessages(body);
   if (!messages.length) {
-    return json({ error: 'Missing prompt/messages.' }, 400);
+    return jsonWithCors(request, env, { error: 'Missing prompt/messages.' }, 400);
   }
 
   const options = body?.options || {};
@@ -143,7 +164,7 @@ export async function onRequestPost(context) {
     const { response, data } = await callGroq(env, payload);
     if (response.ok) {
       const content = data?.choices?.[0]?.message?.content || '';
-      return json({ content, model });
+      return jsonWithCors(request, env, { content, model });
     }
 
     const errorMsg = data?.error?.message || `Groq API error (${response.status})`;
@@ -162,9 +183,9 @@ export async function onRequestPost(context) {
 
     lastError = errorMsg;
     if (!shouldTryNext) {
-      return json({ error: errorMsg, model }, response.status);
+      return jsonWithCors(request, env, { error: errorMsg, model }, response.status);
     }
   }
 
-  return json({ error: lastError }, 503);
+  return jsonWithCors(request, env, { error: lastError }, 503);
 }

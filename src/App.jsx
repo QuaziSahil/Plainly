@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import Layout from './components/Layout/Layout'
 import Home from './pages/Home'
 import AllCalculators from './pages/AllCalculators'
@@ -15,7 +15,8 @@ import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import Contact from './pages/Contact'
 import Sitemap from './pages/Sitemap'
-import QATestPage from './pages/QATestPage'
+
+const QATestPage = import.meta.env.DEV ? lazy(() => import('./pages/QATestPage')) : null
 
 // Financial Calculators (38)
 import MortgageCalculator from './pages/calculators/finance/MortgageCalculator'
@@ -407,7 +408,16 @@ function App() {
                     <Route path="/terms" element={<Terms />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/sitemap" element={<Sitemap />} />
-                    <Route path="/qa-test" element={<QATestPage />} />
+                    {import.meta.env.DEV && QATestPage && (
+                        <Route
+                            path="/qa-test"
+                            element={(
+                                <Suspense fallback={null}>
+                                    <QATestPage />
+                                </Suspense>
+                            )}
+                        />
+                    )}
 
                     {/* Category Pages */}
                     <Route path="/finance" element={<FinanceCategory />} />

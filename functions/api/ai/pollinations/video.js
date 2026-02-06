@@ -5,16 +5,16 @@ const VIDEO_MODELS = [
   'veo',
 ];
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
-};
+import {
+  buildCorsHeaders,
+  checkRateLimit,
+  enforceAllowedOrigin,
+  handleCorsOptions,
+} from '../../../_shared/security.js';
 
 function withCorsHeaders(headers = {}) {
-  return {
-    ...headers,
-    ...CORS_HEADERS,
-  };
+  // Deprecated in favor of buildCorsHeaders() usage below.
+  return headers;
 }
 
 function json(data, status = 200) {
@@ -36,20 +36,42 @@ function buildPollinationsVideoUrl(prompt, model, apiKey) {
   return `https://gen.pollinations.ai/video/${encodedPrompt}?${params.toString()}`;
 }
 
-export async function onRequestOptions() {
-  return new Response(null, {
-    status: 204,
-    headers: CORS_HEADERS,
-  });
+export async function onRequestOptions(context) {
+  return handleCorsOptions(context.request, context.env, 'GET, OPTIONS');
 }
 
 export async function onRequestGet(context) {
   const { request, env } = context;
+
+  const originError = enforceAllowedOrigin(request, env);
+  if (originError) {
+    return new Response(JSON.stringify({ error: originError }), {
+      status: 403,
+      headers: buildCorsHeaders(request, env, 'GET, OPTIONS', { 'Content-Type': 'application/json' }),
+    });
+  }
+
+  const rateLimitMax = Number(env.VIDEO_RATE_LIMIT_MAX || 10);
+  const rateLimitWindowMs = Number(env.VIDEO_RATE_LIMIT_WINDOW_MS || 60_000);
+  const rate = checkRateLimit(request, 'video', rateLimitMax, rateLimitWindowMs);
+  if (!rate.allowed) {
+    return new Response(JSON.stringify({ error: 'Too many video requests. Please try again shortly.' }), {
+      status: 429,
+      headers: buildCorsHeaders(request, env, 'GET, OPTIONS', {
+        'Content-Type': 'application/json',
+        'Retry-After': String(rate.retryAfter),
+      }),
+    });
+  }
+
   const url = new URL(request.url);
   const prompt = (url.searchParams.get('prompt') || '').trim();
 
   if (!prompt) {
-    return json({ error: 'Missing prompt query param.' }, 400);
+    return new Response(JSON.stringify({ error: 'Missing prompt query param.' }), {
+      status: 400,
+      headers: buildCorsHeaders(request, env, 'GET, OPTIONS', { 'Content-Type': 'application/json' }),
+    });
   }
 
   const errors = [];
@@ -73,7 +95,7 @@ export async function onRequestGet(context) {
 
       return new Response(upstream.body, {
         status: 200,
-        headers: withCorsHeaders({
+        headers: buildCorsHeaders(request, env, 'GET, OPTIONS', {
           'Content-Type': contentType,
           'Cache-Control': 'no-store',
           'X-Plainly-Model': model,
@@ -84,5 +106,8 @@ export async function onRequestGet(context) {
     }
   }
 
-  return json({ error: 'All video models failed.', details: errors }, 503);
+  return new Response(JSON.stringify({ error: 'All video models failed.', details: errors }), {
+    status: 503,
+    headers: buildCorsHeaders(request, env, 'GET, OPTIONS', { 'Content-Type': 'application/json' }),
+  });
 }
