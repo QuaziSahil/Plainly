@@ -14,9 +14,10 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Sparkles, Send, X, User, Bot, Trash2, ArrowRight, Calculator } from 'lucide-react-native';
 import { Colors } from '@/constants/Colors';
-import { chatWithGroq, AI_ASSISTANT_PROMPT, Message, extractToolPath, getToolFromPath, TOOL_DATABASE } from '@/services/groqAI';
+import { chatWithGroq, Message, getToolFromPath } from '@/services/groqAI';
 import { useRouter } from 'expo-router';
 import { allTools } from '@/constants/Tools';
+import AIOutputFormatter from '@/components/AIOutputFormatter';
 
 interface ChatMessage extends Message {
   id: string;
@@ -28,6 +29,45 @@ interface AIChatProps {
   visible: boolean;
   onClose: () => void;
 }
+
+const CATEGORY_SUMMARY: Record<string, string> = {
+  Finance: 'Loans, investment, taxes, salary, retirement, EMI, ROI, and budget tools',
+  Health: 'BMI, calories, body metrics, fitness and wellness calculators',
+  Math: 'Percentage, algebra, geometry, randomizers, and statistics tools',
+  Converter: 'Unit, currency, crypto, temperature, and measurement converters',
+  AI: 'Writing, coding, design, history, education, and content AI tools',
+  Fun: 'Games, random generators, compatibility and entertainment tools',
+  Tech: 'QR, hash, base64, regex, JSON, and dev utility tools',
+  Text: 'Word, slug, readability, sort/reverse/format text tools',
+  'Real Estate': 'Flooring, yield, paint, concrete, fence, tile, wallpaper tools',
+  Sustainability: 'Solar, EV, carbon, rainwater, and footprint tools',
+  Other: 'Date/time, GPA, discount, utility, and productivity tools',
+};
+
+const TOOL_INDEX_COMPACT = allTools
+  .map((tool) => `- ${tool.name} (${tool.path})`)
+  .join('\n');
+
+const MOBILE_ASSISTANT_PROMPT = `You are the Plainly AI Assistant - an in-app Plainly expert.
+
+Platform categories:
+${Object.entries(CATEGORY_SUMMARY).map(([cat, desc]) => `- ${cat}: ${desc}`).join('\n')}
+
+Exact tool index (name + path):
+${TOOL_INDEX_COMPACT}
+
+Rules:
+1. Use ONLY exact tool names and exact paths from the index.
+2. Recommend Plainly tools first; do not suggest third-party products unless explicitly asked.
+3. Sound smart, friendly, and accurate.
+4. If user is vague, ask one short clarifying question and still give 2 good starter options.
+5. Never invent tool names or paths.
+6. Use markdown formatting:
+   - Start with a heading using #
+   - Use bullet points for recommendations
+   - Use **bold** tool names and include backticked paths
+   - Include "Why this tool" as one short line
+   - End with one clear next step.`;
 
 export default function AIChat({ visible, onClose }: AIChatProps) {
   const insets = useSafeAreaInsets();
@@ -68,7 +108,7 @@ export default function AIChat({ visible, onClose }: AIChatProps) {
     return null;
   };
 
-  // Format message text - convert markdown to clean display text
+  // Format user message text safely
   const formatMessageText = (text: string) => {
     let formatted = text;
 
@@ -137,17 +177,28 @@ export default function AIChat({ visible, onClose }: AIChatProps) {
     }, 100);
 
     try {
-      // Build conversation history
-      const conversationHistory: Message[] = messages.map(m => ({
-        role: m.role,
-        content: m.content,
-      }));
-      conversationHistory.push({ role: 'user', content: userMessage.content });
+      // Build concise conversation history for continuity
+      const recentContext = messages
+        .slice(-4)
+        .map((m) => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content}`)
+        .join('\n');
+
+      const composedPrompt = `Current user request:
+${userMessage.content}
+
+Recent context (secondary, use only if relevant):
+${recentContext || 'None'}
+
+Important: prioritize the current user request and recommend Plainly tools with exact paths.`;
+
+      const conversationHistory: Message[] = [
+        { role: 'user', content: composedPrompt },
+      ];
 
       const response = await chatWithGroq(conversationHistory, {
-        systemPrompt: AI_ASSISTANT_PROMPT,
+        systemPrompt: MOBILE_ASSISTANT_PROMPT,
         maxTokens: 500,
-        temperature: 0.7,
+        temperature: 0.55,
       });
 
       // Parse tool suggestion from response
@@ -269,11 +320,24 @@ export default function AIChat({ visible, onClose }: AIChatProps) {
                   ) : (
                     <Bot size={14} color="#a78bfa" />
                   )}
-                  <Text style={styles.messageRole}>
+                  <Text
+                    style={[
+                      styles.messageRole,
+                      message.role === 'user' ? styles.userMessageRole : styles.assistantMessageRole,
+                    ]}
+                  >
                     {message.role === 'user' ? 'You' : 'Plainly AI'}
                   </Text>
                 </View>
-                <Text style={styles.messageText}>{formatMessageText(message.content)}</Text>
+                {message.role === 'assistant' ? (
+                  <View style={styles.assistantFormattedWrapper}>
+                    <AIOutputFormatter text={message.content} />
+                  </View>
+                ) : (
+                  <Text style={[styles.messageText, styles.userMessageText]}>
+                    {formatMessageText(message.content)}
+                  </Text>
+                )}
               </View>
 
               {/* Tool Recommendation Card - like website */}
@@ -463,7 +527,9 @@ const styles = StyleSheet.create({
   },
   userBubble: {
     alignSelf: 'flex-end',
-    backgroundColor: 'rgba(167, 139, 250, 0.2)',
+    backgroundColor: '#7c5cff',
+    borderWidth: 1,
+    borderColor: 'rgba(233, 220, 255, 0.32)',
     borderBottomRightRadius: 4,
   },
   assistantBubble: {
@@ -482,10 +548,23 @@ const styles = StyleSheet.create({
     color: '#888',
     fontWeight: '600',
   },
+  userMessageRole: {
+    color: '#f3ecff',
+  },
+  assistantMessageRole: {
+    color: '#9b9b9b',
+  },
   messageText: {
     fontSize: 15,
     color: '#e0e0e0',
     lineHeight: 22,
+  },
+  userMessageText: {
+    color: '#ffffff',
+    fontWeight: '700',
+  },
+  assistantFormattedWrapper: {
+    marginTop: 2,
   },
   loadingContainer: {
     flexDirection: 'row',
