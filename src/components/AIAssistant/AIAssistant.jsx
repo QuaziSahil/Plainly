@@ -5,65 +5,86 @@ import { askGroq, MODELS } from '../../services/groqAI'
 import { allCalculators } from '../../data/calculators'
 import './AIAssistant.css'
 
-// Simple markdown parser for formatting - handles *, -, • bullets cleanly
+// Markdown parser for headings, lists, and paragraph formatting
+const escapeHtml = (value = '') =>
+    value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+
+const formatInlineMarkdown = (value = '') => {
+    let line = escapeHtml(value)
+    line = line.replace(/`([^`]+)`/g, '<code>$1</code>')
+    line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    line = line.replace(/__(.*?)__/g, '<strong>$1</strong>')
+    line = line.replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    line = line.replace(/(^|\s)(\/[\w-]+)/g, '$1<code class="tool-path">$2</code>')
+    return line
+}
+
 const parseMarkdown = (text) => {
     if (!text) return ''
 
-    // Process line by line for better control
-    const lines = text.split('\n')
-    let result = []
-    let inList = false
+    const lines = text.replace(/\r\n/g, '\n').split('\n')
+    const result = []
+    let listType = null
 
-    lines.forEach((line) => {
-        // Trim the line for processing
-        const trimmedLine = line.trim()
+    const closeList = () => {
+        if (!listType) return
+        result.push(listType === 'ol' ? '</ol>' : '</ul>')
+        listType = null
+    }
 
-        // Bold: **text** or __text__
-        line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        line = line.replace(/__(.*?)__/g, '<strong>$1</strong>')
+    lines.forEach((rawLine) => {
+        const trimmedLine = rawLine.trim()
 
-        // Code: `text` - do this BEFORE italic processing
-        line = line.replace(/`([^`]+)`/g, '<code>$1</code>')
+        if (!trimmedLine) {
+            closeList()
+            return
+        }
 
-        // Tool paths: /path-name - make them clickable-looking
-        line = line.replace(/\s(\/[\w-]+)/g, ' <code class="tool-path">$1</code>')
+        const h1 = trimmedLine.match(/^#\s+(.+)/)
+        const h2 = trimmedLine.match(/^##\s+(.+)/)
+        const h3 = trimmedLine.match(/^###\s+(.+)/)
+        const bulletMatch = trimmedLine.match(/^[\-*\u2022]\s+(.+)/)
+        const numberedMatch = trimmedLine.match(/^(\d+)\.\s+(.+)/)
 
-        // Bullet lists: *, -, •, or numbered (1., 2., etc)
-        const bulletMatch = trimmedLine.match(/^[\*\-\•]\s+(.*)/)
-        const numberedMatch = trimmedLine.match(/^\d+\.\s+(.*)/)
+        if (h3 || h2 || h1) {
+            closeList()
+            const content = h3?.[1] || h2?.[1] || h1?.[1] || ''
+            const className = h3 ? 'ai-md-h3' : h2 ? 'ai-md-h2' : 'ai-md-h1'
+            result.push(`<h3 class="${className}">${formatInlineMarkdown(content)}</h3>`)
+            return
+        }
 
         if (bulletMatch) {
-            if (!inList) {
+            if (listType !== 'ul') {
+                closeList()
                 result.push('<ul class="ai-list">')
-                inList = true
+                listType = 'ul'
             }
-            // Remove the bullet and wrap in li
-            line = '<li>' + bulletMatch[1]
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/`([^`]+)`/g, '<code>$1</code>') + '</li>'
-        } else if (numberedMatch) {
-            if (!inList) {
-                result.push('<ol class="ai-list">')
-                inList = 'ol'
-            }
-            line = '<li>' + numberedMatch[1]
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/`([^`]+)`/g, '<code>$1</code>') + '</li>'
-        } else if (inList && trimmedLine === '') {
-            result.push(inList === 'ol' ? '</ol>' : '</ul>')
-            inList = false
-            line = ''
+            result.push(`<li>${formatInlineMarkdown(bulletMatch[1])}</li>`)
+            return
         }
 
-        if (line.trim()) {
-            result.push(line)
+        if (numberedMatch) {
+            if (listType !== 'ol') {
+                closeList()
+                result.push('<ol class="ai-list">')
+                listType = 'ol'
+            }
+            result.push(`<li value="${numberedMatch[1]}">${formatInlineMarkdown(numberedMatch[2])}</li>`)
+            return
         }
+
+        closeList()
+        result.push(`<p class="ai-md-p">${formatInlineMarkdown(trimmedLine)}</p>`)
     })
 
-    // Close any open list
-    if (inList) result.push(inList === 'ol' ? '</ol>' : '</ul>')
-
-    return result.join('<br/>')
+    closeList()
+    return result.join('')
 }
 
 // Build knowledge base from all calculators
@@ -470,7 +491,7 @@ const TOOL_INDEX_COMPACT = allCalculators
     .map((tool) => `- ${tool.name} (${tool.path})`)
     .join('\n')
 
-const SYSTEM_PROMPT = `You are the Plainly AI Assistant - a smart, friendly guide for Plainly Tools.
+const SYSTEM_PROMPT = `You are the Plainly AI Assistant - an in-product Plainly expert.
 
 Platform categories:
 ${Object.entries(CATEGORIES_SUMMARY).map(([cat, desc]) => `- ${cat}: ${desc}`).join('\n')}
@@ -480,15 +501,16 @@ ${TOOL_INDEX_COMPACT}
 
 Rules:
 1. Use ONLY exact tool names and paths from the index.
-2. Always include the recommended path in backticks, like \`/ai-email-generator\`.
-3. Keep answers concise (2-4 short lines unless user asks for detail).
-4. If multiple tools match, suggest top 1-3.
-5. Never invent tools or paths.
-6. Format answers with clean markdown:
-   - Start with one short heading line.
-   - Use bullet points for recommendations.
-   - Bold tool names and put paths in backticks.
-   - Add a short "Why this tool" line when recommending.`
+2. Always include recommended paths in backticks, like \`/ai-email-generator\`.
+3. Sound smart, accurate, and friendly.
+4. If the request is broad, ask one concise clarifying question and still suggest 2 starter tools.
+5. Never invent tool names or paths.
+6. Use this markdown format:
+   - Start with a heading using #
+   - Use bullet points for tool recommendations
+   - Use **bold** tool names and include a short "Why this tool" line
+   - End with one clear next step.
+7. Recommend Plainly tools first. Do not suggest third-party websites/apps unless explicitly asked.`
 
 function AIAssistant() {
     const [isOpen, setIsOpen] = useState(false)
@@ -552,23 +574,24 @@ function AIAssistant() {
         setSuggestedTool(null)
 
         try {
-            // Build conversation context
-            const conversationHistory = messages.slice(-6).map(m => ({
-                role: m.role,
-                content: m.content
-            }))
+            // Build concise conversation context for continuity
+            const conversationHistory = messages
+                .slice(-4)
+                .map(m => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content}`)
+                .join('\n')
 
-            // Create the prompt with context
-            const prompt = `User question: ${userMessage}
+            const prompt = `Current user request:
+${userMessage}
 
-Previous conversation context: ${JSON.stringify(conversationHistory)}
+Recent context (secondary, use only if relevant):
+${conversationHistory || 'None'}
 
-Respond helpfully and concisely. If recommending a tool, include its path.`
+Important: prioritize the current user request and recommend Plainly tools with exact paths.`
 
             const response = await askGroq(prompt, SYSTEM_PROMPT, {
                 model: MODELS.primary,
                 maxTokens: 500,
-                temperature: 0.7
+                temperature: 0.55
             })
 
             setMessages(prev => [...prev, { role: 'assistant', content: response }])
@@ -715,4 +738,5 @@ Respond helpfully and concisely. If recommending a tool, include its path.`
 }
 
 export default AIAssistant
+
 
