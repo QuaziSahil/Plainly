@@ -125,6 +125,7 @@ export async function onRequestPost(context) {
   }
 
   const options = body?.options || {};
+  const useSearch = Boolean(body?.search);
   const maxTokens = Number(options.maxTokens ?? 1024);
   const temperature = Number(options.temperature ?? 0.7);
 
@@ -147,8 +148,17 @@ export async function onRequestPost(context) {
 
     const errorMsg = data?.error?.message || `Groq API error (${response.status})`;
     const isRateLimit = response.status === 429 || /rate|limit/i.test(errorMsg);
+    const isServerRetryable = response.status >= 500;
+    const isSearchAccessIssue =
+      useSearch &&
+      (response.status === 401 ||
+        response.status === 403 ||
+        response.status === 404 ||
+        /forbidden|permission|access|not found|decommission|unavailable/i.test(errorMsg));
+    const shouldTryNext = isRateLimit || isServerRetryable || isSearchAccessIssue;
+
     lastError = errorMsg;
-    if (!isRateLimit) {
+    if (!shouldTryNext) {
       return json({ error: errorMsg, model }, response.status);
     }
   }
