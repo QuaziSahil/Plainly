@@ -1,24 +1,29 @@
 /**
- * Plainly AI - Image Generation Service (Mobile)
- * Powered by Pollinations.AI with automatic model fallback
- * Updated Feb 2026: Using gen.pollinations.ai unified API
+ * Plainly AI - Image & Video Generation Service (Mobile)
+ * Secure mode: uses server-side proxy endpoints so provider keys never ship in app binaries.
  */
 
-const POLLINATIONS_API_KEY = process.env.EXPO_PUBLIC_POLLINATIONS_API_KEY;
+const API_BASE_URL = (process.env.EXPO_PUBLIC_API_BASE_URL || 'https://plainly.live').replace(/\/$/, '');
+const IMAGE_PROXY_URL = `${API_BASE_URL}/api/ai/pollinations/image`;
+const VIDEO_PROXY_URL = `${API_BASE_URL}/api/ai/pollinations/video`;
 
-// Image models ranked from BEST to WORST quality
-// User has unlimited access to all models
+// Kept exported for compatibility with existing imports/UI assumptions.
 export const IMAGE_MODELS = [
-  'flux',           // Flux Schnell - most reliable
-  'turbo',          // SDXL Turbo - fast and reliable  
-  'seedream',       // Seedream 4.0 - artistic
-  'gptimage',       // GPT Image 1 Mini
-  'klein',          // FLUX.2 Klein 4B
-  'seedream-pro',   // Seedream 4.5 Pro - premium
-  'gptimage-large', // GPT Image 1.5 - high quality
-  'klein-large',    // FLUX.2 Klein 9B
-  'nanobanana',     // NanoBanana - experimental
+  'flux',
+  'turbo',
+  'seedream',
+  'gptimage',
+  'klein',
+  'seedream-pro',
+  'gptimage-large',
+  'klein-large',
+  'nanobanana',
+  'nanobanana-pro',
+  'zimage',
+  'kontext',
 ];
+
+export const VIDEO_MODELS = ['wan', 'seedance', 'seedance-pro', 'veo'];
 
 export interface ImageOptions {
   width?: number;
@@ -26,76 +31,68 @@ export interface ImageOptions {
   seed?: number;
 }
 
-// Timeout for image generation
-const IMAGE_TIMEOUT = 90000; // 90 seconds
+const IMAGE_TIMEOUT = 90000;
+const VIDEO_TIMEOUT = 300000;
 
-/**
- * Generate image using gen.pollinations.ai unified endpoint
- */
-export async function generateImage(prompt: string, options: ImageOptions = {}): Promise<string> {
-  const {
-    width = 1024,
-    height = 1024,
-    seed = Math.floor(Math.random() * 1000000),
-  } = options;
+function buildImageProxyUrl(prompt: string, options: ImageOptions = {}): string {
+  const width = options.width ?? 1024;
+  const height = options.height ?? 1024;
+  const seed = options.seed ?? Math.floor(Math.random() * 1000000);
+  const params = new URLSearchParams({
+    prompt,
+    width: String(width),
+    height: String(height),
+    seed: String(seed),
+  });
+  return `${IMAGE_PROXY_URL}?${params.toString()}`;
+}
 
-  const encodedPrompt = encodeURIComponent(prompt);
-  const errors: string[] = [];
+function buildVideoProxyUrl(prompt: string): string {
+  const params = new URLSearchParams({ prompt });
+  return `${VIDEO_PROXY_URL}?${params.toString()}`;
+}
 
-  console.log('🎨 Mobile Image Generation Started');
-  console.log('API Key present:', !!POLLINATIONS_API_KEY);
+async function validateProxyAsset(url: string, timeoutMs: number, expectedPrefix: 'image/' | 'video/'): Promise<void> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-  // Try each model in order
-  for (let i = 0; i < IMAGE_MODELS.length; i++) {
-    const model = IMAGE_MODELS[i];
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeoutId);
 
-    try {
-      console.log(`🎨 Trying: ${model} (${i + 1}/${IMAGE_MODELS.length})`);
-
-      // Build URL with gen.pollinations.ai unified endpoint
-      const params = new URLSearchParams({
-        width: width.toString(),
-        height: height.toString(),
-        seed: seed.toString(),
-        nologo: 'true',
-        model: model,
-      });
-
-      if (POLLINATIONS_API_KEY) {
-        params.append('key', POLLINATIONS_API_KEY);
+    if (!response.ok) {
+      let message = `Generation failed (${response.status})`;
+      try {
+        const data = await response.json();
+        message = data?.error || message;
+      } catch {
+        // ignore JSON parse failure
       }
-
-      const imageUrl = `https://gen.pollinations.ai/image/${encodedPrompt}?${params.toString()}`;
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), IMAGE_TIMEOUT);
-
-      const response = await fetch(imageUrl, { signal: controller.signal });
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        console.log(`❌ ${model}: HTTP ${response.status}`);
-        errors.push(`${model}: HTTP ${response.status}`);
-        continue;
-      }
-
-      const contentType = response.headers.get('content-type');
-      if (contentType?.startsWith('image/')) {
-        console.log(`✅ SUCCESS: ${model}`);
-        return imageUrl;
-      }
-
-      errors.push(`${model}: Not an image`);
-    } catch (error: any) {
-      const errMsg = error?.message || 'Unknown error';
-      console.log(`❌ ${model}: ${errMsg}`);
-      errors.push(`${model}: ${errMsg}`);
-      continue;
+      throw new Error(message);
     }
-  }
 
-  console.error('🚨 All models failed:', errors);
-  throw new Error('Image service is temporarily unavailable. Please try again in a few minutes.');
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.startsWith(expectedPrefix)) {
+      throw new Error(`Invalid response type (${contentType || 'unknown'})`);
+    }
+  } catch (error: any) {
+    if (error?.name === 'AbortError') {
+      throw new Error('Request timed out');
+    }
+    throw error;
+  }
+}
+
+export async function generateImage(prompt: string, options: ImageOptions = {}): Promise<string> {
+  const proxyUrl = buildImageProxyUrl(prompt, options);
+  await validateProxyAsset(proxyUrl, IMAGE_TIMEOUT, 'image/');
+  return proxyUrl;
+}
+
+export async function generateVideo(prompt: string): Promise<string> {
+  const proxyUrl = buildVideoProxyUrl(prompt);
+  await validateProxyAsset(proxyUrl, VIDEO_TIMEOUT, 'video/');
+  return proxyUrl;
 }
 
 export function isConfigured() {
@@ -103,12 +100,14 @@ export function isConfigured() {
 }
 
 export function hasApiKey() {
-  return !!POLLINATIONS_API_KEY;
+  return true;
 }
 
 export default {
   generateImage,
+  generateVideo,
   isConfigured,
   hasApiKey,
   IMAGE_MODELS,
+  VIDEO_MODELS,
 };

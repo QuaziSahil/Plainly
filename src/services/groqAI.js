@@ -1,8 +1,8 @@
 // Groq AI Service for Plainly
 // PRIORITIZE high-limit models for maximum daily capacity!
 
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'https://plainly.live').replace(/\/$/, '')
+const GROQ_PROXY_URL = `${API_BASE_URL}/api/ai/groq`
 
 // Model rate limits (from Groq console):
 // llama-3.1-8b-instant:     14,400 req/day  ← PRIMARY
@@ -23,6 +23,7 @@ export const MODELS = {
 
     // LOW LIMIT - Use sparingly (250/day)
     complex: 'groq/compound-mini',
+    search: 'groq/compound',
 
     // Default = primary (highest limit)
     default: 'llama-3.1-8b-instant',
@@ -31,16 +32,28 @@ export const MODELS = {
     randomNames: 'llama-3.1-8b-instant'   // For fun/random generation tools
 }
 
-// Fallback chain: if one model hits limit, try the next
-const FALLBACK_CHAIN = [
-    MODELS.primary,    // 14.4K/day - llama-3.1-8b-instant
-    MODELS.secondary,  // 7K/day - allam-2-7b
-    'moonshotai/kimi-k2-instruct',  // 1K/day - Kimi K2
-    MODELS.versatile,  // 1K/day - llama-3.3-70b-versatile
-    MODELS.analytical, // 1K/day - Scout
-    MODELS.creative,   // 1K/day - Maverick
-]
-// Total capacity: ~26,400 requests/day
+async function callGroqProxy(payload) {
+    const response = await fetch(GROQ_PROXY_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+
+    let data = null
+    try {
+        data = await response.json()
+    } catch {
+        throw new Error('Invalid AI proxy response')
+    }
+
+    if (!response.ok) {
+        throw new Error(data?.error || 'AI request failed')
+    }
+
+    return data?.content || ''
+}
 
 /**
  * Send a prompt to Groq AI with automatic fallback on rate limits
@@ -56,57 +69,37 @@ export async function askGroq(prompt, systemPrompt = '', options = {}) {
         temperature = 0.7
     } = options
 
-    const messages = []
-    if (systemPrompt) {
-        messages.push({ role: 'system', content: systemPrompt })
-    }
-    messages.push({ role: 'user', content: prompt })
+    return callGroqProxy({
+        prompt,
+        systemPrompt,
+        options: {
+            model,
+            maxTokens,
+            temperature
+        },
+        search: false
+    })
+}
 
-    // Build fallback chain starting with requested model
-    const modelsToTry = [model, ...FALLBACK_CHAIN.filter(m => m !== model)]
+/**
+ * Send a prompt using web-search-capable Groq models only.
+ * Used for fact-checking and truth verification workflows.
+ */
+async function askGroqWithWebSearch(prompt, systemPrompt = '', options = {}) {
+    const {
+        maxTokens = 1800,
+        temperature = 0.2
+    } = options
 
-    for (const tryModel of modelsToTry) {
-        try {
-            const response = await fetch(GROQ_API_URL, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${GROQ_API_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    model: tryModel,
-                    messages,
-                    max_tokens: maxTokens,
-                    temperature
-                })
-            })
-
-            if (!response.ok) {
-                const error = await response.json()
-                const errorMsg = error.error?.message || ''
-
-                // If rate limited, try next model in chain
-                if (response.status === 429 || errorMsg.includes('rate') || errorMsg.includes('limit')) {
-                    console.warn(`Rate limited on ${tryModel}, trying fallback...`)
-                    continue
-                }
-                throw new Error(errorMsg || 'Groq API error')
-            }
-
-            const data = await response.json()
-            return data.choices[0]?.message?.content || ''
-        } catch (error) {
-            // If it's our last model, throw the error
-            if (tryModel === modelsToTry[modelsToTry.length - 1]) {
-                console.error('All models exhausted:', error)
-                throw error
-            }
-            // Otherwise continue to next model
-            console.warn(`Error with ${tryModel}:`, error.message)
-        }
-    }
-
-    throw new Error('All AI models are currently unavailable. Please try again later.')
+    return callGroqProxy({
+        prompt,
+        systemPrompt,
+        options: {
+            maxTokens,
+            temperature
+        },
+        search: true
+    })
 }
 
 /**
@@ -1149,13 +1142,18 @@ FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
 [Detailed explanation of why the claim is rated this way - 2-3 paragraphs]
 
 ### 📚 Supporting Evidence
-1. [Evidence point with source type]
-2. [Another evidence point]
-3. [Third evidence point]
+1. [Evidence point with source + URL]
+2. [Another evidence point with source + URL]
+3. [Third evidence point with source + URL]
 
 ### ⚠️ Important Context
 - [Context that affects how the claim should be understood]
 - [Any nuances or caveats]
+
+### 🔗 Sources (URLs)
+1. [Source title](https://...)
+2. [Source title](https://...)
+3. [Source title](https://...)
 
 ### 💡 The Full Picture
 [What people should actually understand about this topic]
@@ -1163,12 +1161,11 @@ FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
 ---
 *Fact-checked by Plainly AI - Always verify important claims with official sources*`
 
-    const systemPrompt = `You are a professional fact-checker. Analyze claims objectively using logical reasoning and widely accepted knowledge. Use proper markdown formatting. Be balanced, cite reasoning clearly, and acknowledge when claims are partially true or need context. Note: You cannot access real-time data, so base analysis on well-established facts.`
+    const systemPrompt = `You are a professional fact-checker using live web research. Verify claims with up-to-date online sources, prioritize authoritative references, and provide direct source URLs. Be balanced, cite reasoning clearly, and acknowledge uncertainty where evidence is mixed. Use proper markdown formatting exactly as requested.`
 
-    return await askGroq(prompt, systemPrompt, {
-        model: MODELS.primary,
+    return await askGroqWithWebSearch(prompt, systemPrompt, {
         temperature: 0.2,
-        maxTokens: 1500
+        maxTokens: 1900
     })
 }
 

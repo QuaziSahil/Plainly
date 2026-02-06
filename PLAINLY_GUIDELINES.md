@@ -58,18 +58,22 @@ Required standards:
 - Return source links/citations in the final answer whenever factual verification is required.
 - Apply this rule for both website and mobile implementations.
 
-### 1b. Pollinations AI - Image/Video/Text Generation
-Use Pollinations AI for image, video, and advanced text generation. Service file: `src/services/pollinationsAI.js`
+### 1b. Pollinations AI - Image/Video Generation
+Use Pollinations AI for image/video tools only. Text tools must use Groq via proxy. Service file: `src/services/pollinationsAI.js`
 
-**API Key:** Set `VITE_POLLINATIONS_API_KEY` in environment variables
+**Security:** Pollinations key must be server-side only (`POLLINATIONS_API_KEY` secret). Never expose it in `VITE_` or `EXPO_PUBLIC_` variables.
 **Budget:** Unlimited | **Models:** 41 (All)
 
 #### API Endpoints:
 | Type | Endpoint | Method |
 |------|----------|--------|
-| Text | `https://text.pollinations.ai/{prompt}?model=MODEL&key=KEY` | GET |
-| Image | `https://image.pollinations.ai/prompt/{prompt}?model=MODEL&key=KEY` | GET |
-| Video | `https://gen.pollinations.ai/video/{prompt}?model=MODEL&key=KEY` | GET |
+| Text (via Groq proxy) | `/api/ai/groq` | POST |
+| Image (via Pollinations proxy) | `/api/ai/pollinations/image?prompt=...&model=...` | GET |
+| Video (via Pollinations proxy) | `/api/ai/pollinations/video?prompt=...&model=...` | GET |
+
+Notes:
+- Never call provider endpoints directly from web/mobile clients.
+- Provider keys are injected only in server functions (`functions/api/ai/*`).
 
 #### Image Models (12):
 | Model | API ID | Notes |
@@ -89,21 +93,25 @@ Use Pollinations AI for image, video, and advanced text generation. Service file
 | Seedance Lite | `seedance` |
 | Veo 3.1 Fast | `veo` |
 
-#### Text Models (21): 
-Claude (`claude`, `claude-fast`, `claude-large`), GPT (`openai`, `openai-fast`, `openai-large`), Gemini (`gemini`, `gemini-fast`, `gemini-large`), DeepSeek (`deepseek`), Grok (`grok`), Perplexity (`perplexity-reasoning`), Qwen Coder (`qwen-coder`), and more.
+#### Text Models (Reference only):
+Pollinations text models exist, but Plainly text tools must use Groq proxy for consistency and fallback behavior.
 
-### 1c. API Keys - Shared Across Web & Mobile
-**IMPORTANT**: When adding a new API key or service, add it to BOTH platforms:
+### 1c. API Keys - Server-Side Only (MANDATORY)
+**IMPORTANT**: Private provider keys must live only in server secrets.
 
-| Service | Web (.env) | Mobile (.env) |
-|---------|------------|---------------|
-| Groq AI | `VITE_GROQ_API_KEY` | `EXPO_PUBLIC_GROQ_API_KEY` |
-| Pollinations AI | `VITE_POLLINATIONS_API_KEY` | `EXPO_PUBLIC_POLLINATIONS_API_KEY` |
+| Secret Type | Location |
+|-------------|----------|
+| `GROQ_API_KEY` | Cloudflare Pages Function secret |
+| `POLLINATIONS_API_KEY` | Cloudflare Pages Function secret |
 
-- Web uses `VITE_` prefix for Vite bundler
-- Mobile uses `EXPO_PUBLIC_` prefix for Expo
-- **Same API key value** should be used in both platforms
-- Always update both `.env` files when adding new services
+Client apps must only use public base URL config:
+- Web: `VITE_API_BASE_URL`
+- Mobile: `EXPO_PUBLIC_API_BASE_URL`
+
+Never put provider keys in:
+- `VITE_*`
+- `EXPO_PUBLIC_*`
+- Client-side source code
 
 ### 2. Existing Code is SACRED
 - **DO NOT** modify, refactor, or delete ANY existing tool without explicit user permission
@@ -1256,10 +1264,10 @@ The Plainly project contains **two separate deployable apps** in one repository:
 **1. NEVER put hard-coded API keys in `mobile/` folder:**
 ```typescript
 // ❌ WRONG - Will block GitHub push (secret scanning)
-const API_KEY = 'gsk_xxxxxx';
+const API_KEY = 'your-real-provider-key';
 
-// ✅ CORRECT - Use environment variable
-const API_KEY = process.env.EXPO_PUBLIC_GROQ_API_KEY || '';
+// ✅ CORRECT - Use secure API proxy base URL only
+const API_BASE = process.env.EXPO_PUBLIC_API_BASE_URL || 'https://plainly.live';
 ```
 
 **2. NEVER make `mobile/` a git submodule:**
@@ -1268,8 +1276,8 @@ const API_KEY = process.env.EXPO_PUBLIC_GROQ_API_KEY || '';
 - Cloudflare fails if `mobile/` is a submodule without `.gitmodules` URL
 
 **3. The `mobile/.env` file is gitignored:**
-- API keys stored in `mobile/.env` (not pushed to GitHub)
-- Format: `EXPO_PUBLIC_GROQ_API_KEY=your_key_here`
+- No provider keys in mobile env
+- Format: `EXPO_PUBLIC_API_BASE_URL=https://plainly.live`
 - Copy from `mobile/.env.example` if missing
 
 **4. Cloudflare ONLY builds the website:**
