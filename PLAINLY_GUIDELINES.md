@@ -49,6 +49,15 @@ Always use the Groq AI fallback chain in `src/services/groqAI.js`:
 
 All AI functions use `askGroq()` which auto-falls back to the next model if rate limited.
 
+### 1a. Online Search for Latest/Time-Sensitive Facts (MANDATORY)
+If a tool needs current, recent, or verifiable real-world facts (news, prices, regulations, statistics, dates, events, or claims), it MUST use online search-enabled Groq calls instead of plain text-only inference.
+
+Required standards:
+- Do not guess current facts from model memory when freshness matters.
+- Use search-capable Groq flow for fact-checking and latest-information features.
+- Return source links/citations in the final answer whenever factual verification is required.
+- Apply this rule for both website and mobile implementations.
+
 ### 1b. Pollinations AI - Image/Video/Text Generation
 Use Pollinations AI for image, video, and advanced text generation. Service file: `src/services/pollinationsAI.js`
 
@@ -185,6 +194,19 @@ Use `AIOutputFormatter` component:
 - Copy button functionality
 - Beautiful card-style presentation
 
+### 5b. AI Tool Function Quality + Interactivity (MANDATORY WHEN POSSIBLE)
+For AI tools, do not stop at plain text output if an interactive UX is feasible.
+
+Required standards:
+- Improve helper/service functions to support reliable structured output when needed (prefer typed/structured responses for interactive tools)
+- Add resilient parsing and fallback handling for AI responses so features do not break on format drift
+- Implement real interactive flows for suitable tools (examples: selectable quiz answers with correctness feedback, flashcard flip + study rating, progress and scoring)
+- Show immediate user feedback (correct/incorrect states, explanations, completion summaries, retry actions)
+- Keep all interactive UI native, mobile-friendly, and visually consistent with existing Plainly design system
+- Preserve API separation rules: Groq for text-based tools, Pollinations for image/video tools
+
+If interactivity is not practical for a specific tool, provide the best structured output experience and clearly maintain robust error/loading states.
+
 ### 6. Creative Content Types (CRITICAL)
 When using `generateCreativeContent()` from `groqAI.js`, use the CORRECT type:
 
@@ -278,6 +300,7 @@ Before submitting any new tool, verify:
 
 - [ ] Tool doesn't already exist
 - [ ] Uses `askGroq()` for AI features (with fallback)
+- [ ] Uses online-search Groq path when latest/time-sensitive facts are required, with citations
 - [ ] Uses `CodePreview` for code output OR `AIOutputFormatter` for text output
 - [ ] Matches existing design system
 - [ ] Mobile responsive (tested at 375px width)
@@ -403,6 +426,32 @@ npm run build
 
 # Deploy (auto via Cloudflare Pages on git push)
 git add . && git commit -m "message" && git push origin main
+```
+
+### 🐞 Build Troubleshooting
+
+#### 1. Metaspace OutOfMemory Error
+If the Android build fails at ~85-95% with `java.lang.OutOfMemoryError: Metaspace`:
+- **Reason**: The JVM ran out of space for class metadata (common in large React Native projects).
+- **Fix**: Increase allocation in `mobile/android/gradle.properties`:
+  ```properties
+  org.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=512m
+  ```
+
+#### 2. Windows File Lock (IOException)
+If the build fails with `Unable to delete directory` or `Couldn't delete R.jar`:
+- **Reason**: A background `java.exe` or `adb.exe` process is holding a file lock.
+- **Fix**: Force-kill the processes and retry:
+  ```powershell
+  taskkill /F /IM java.exe
+  taskkill /F /IM adb.exe
+  ```
+
+#### 3. Required Environment Variables
+Always ensure these are set before building to avoid path-related failures:
+```powershell
+$env:GRADLE_USER_HOME="C:\gradle_home"
+$env:ANDROID_HOME="$env:LOCALAPPDATA\Android\Sdk"
 ```
 
 ---
