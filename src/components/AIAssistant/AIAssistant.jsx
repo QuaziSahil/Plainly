@@ -466,49 +466,29 @@ const ALL_TOOLS_KNOWLEDGE = `
 • **Screen Time Calculator** (/screen-time-calculator) - Track screen time
 `
 
-const SYSTEM_PROMPT = `You are the Plainly AI Assistant - a smart, friendly guide for Plainly Tools website.
+const TOOL_INDEX_COMPACT = allCalculators
+    .map((tool) => `- ${tool.name} (${tool.path})`)
+    .join('\n')
 
-## ABOUT PLAINLY
-Plainly Tools has **317+ free calculators and AI tools** across these categories:
-${Object.entries(CATEGORIES_SUMMARY).map(([cat, desc]) => `• **${cat}**: ${desc}`).join('\n')}
+const SYSTEM_PROMPT = `You are the Plainly AI Assistant - a smart, friendly guide for Plainly Tools.
 
-${AI_TOOLS_KNOWLEDGE}
+Platform categories:
+${Object.entries(CATEGORIES_SUMMARY).map(([cat, desc]) => `- ${cat}: ${desc}`).join('\n')}
 
-${ALL_TOOLS_KNOWLEDGE}
+Exact tool index (name + path):
+${TOOL_INDEX_COMPACT}
 
-${POPULAR_FINANCE_TOOLS}
-
-## CRITICAL RULES - FOLLOW EXACTLY:
-1. **USE EXACT TOOL NAMES** - Always use the EXACT name from the list above (e.g., "AI Email Generator" NOT "Email Writer")
-2. **USE EXACT PATHS** - Always include the EXACT path (e.g., \`/ai-email-generator\` NOT \`/email-writer\`)
-3. **Be CONCISE** - Max 2-3 sentences for simple questions
-4. **Use formatting** - Bold for emphasis, code blocks for paths
-5. **Be friendly but professional** - Helpful and enthusiastic
-
-## RESPONSE FORMAT EXAMPLES:
-
-**User asks for email tool:**
-"You need the **AI Email Generator**! Find it at \`/ai-email-generator\` - it drafts professional emails instantly."
-
-**User asks for code help:**
-"Try the **AI Code Generator** at \`/ai-code-generator\` - it generates code in any programming language from your description!"
-
-**User asks about history:**
-"Check out the **AI History Explorer** at \`/ai-history-explorer\` - it provides detailed information about any historical event or era!"
-
-**User asks for encyclopedia:**
-"Use the **AI Encyclopedia** at \`/ai-encyclopedia\` for comprehensive Wikipedia-style explanations on any topic!"
-
-**User asks for mortgage:**
-"Use the **Mortgage Calculator** at \`/mortgage-calculator\` - it calculates monthly payments, total interest, and amortization!"
-
-**User asks for BMI:**
-"Try the **BMI Calculator** at \`/bmi-calculator\` to calculate your Body Mass Index and understand your weight category!"
-
-## IMPORTANT:
-- NEVER make up tool names or paths - use ONLY the exact names and paths listed above
-- If unsure, suggest the closest matching tool from the list
-- Always include the path in code format like \`/path\``
+Rules:
+1. Use ONLY exact tool names and paths from the index.
+2. Always include the recommended path in backticks, like \`/ai-email-generator\`.
+3. Keep answers concise (2-4 short lines unless user asks for detail).
+4. If multiple tools match, suggest top 1-3.
+5. Never invent tools or paths.
+6. Format answers with clean markdown:
+   - Start with one short heading line.
+   - Use bullet points for recommendations.
+   - Bold tool names and put paths in backticks.
+   - Add a short "Why this tool" line when recommending.`
 
 function AIAssistant() {
     const [isOpen, setIsOpen] = useState(false)
@@ -735,3 +715,4 @@ Respond helpfully and concisely. If recommending a tool, include its path.`
 }
 
 export default AIAssistant
+
