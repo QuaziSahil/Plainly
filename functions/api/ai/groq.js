@@ -149,13 +149,16 @@ export async function onRequestPost(context) {
     const errorMsg = data?.error?.message || `Groq API error (${response.status})`;
     const isRateLimit = response.status === 429 || /rate|limit/i.test(errorMsg);
     const isServerRetryable = response.status >= 500;
+    const isContextTooLong =
+      response.status === 413 ||
+      /reduce the length|context|too long|maximum context|token limit/i.test(errorMsg);
     const isSearchAccessIssue =
       useSearch &&
       (response.status === 401 ||
         response.status === 403 ||
         response.status === 404 ||
         /forbidden|permission|access|not found|decommission|unavailable/i.test(errorMsg));
-    const shouldTryNext = isRateLimit || isServerRetryable || isSearchAccessIssue;
+    const shouldTryNext = isRateLimit || isServerRetryable || isSearchAccessIssue || isContextTooLong;
 
     lastError = errorMsg;
     if (!shouldTryNext) {
